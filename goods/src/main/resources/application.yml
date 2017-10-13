@@ -1,0 +1,23 @@
+info:
+ name: avatar-goods
+ company: rain
+
+spring:
+ application:
+  name: avatar-goods
+ output:
+   ansi:
+     enabled: always
+
+server:
+ port: 8121
+
+eureka:
+ client:
+  serviceUrl:
+   defaultZone: http://localhost:8001/eureka
+ instance:
+  metadataMap:
+   instanceId: ${spring.application.name}:${server.port}
+  # 在eureka上显示此微服务的ip地址
+   prefer-ip-address: true

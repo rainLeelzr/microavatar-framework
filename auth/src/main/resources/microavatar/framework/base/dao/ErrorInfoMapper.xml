@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="microavatar.framework.base.dao.ErrorInfoDao">
+
+    <!-- 本文件由powerDesigner自动生成，请勿修改本文件任何内容。如需自定义本entity的sql，请在同目录下添加ErrorInfoMapperExt.xml -->
+
+    <sql id="_tableName">Base_ErrorInfo</sql>
+
+    <sql id="_allCloumns"> id, keyStr, code, msg </sql>
+
+    <sql id="_selectCondition">
+        <choose>
+            <when test="_select_all_columns">
+                <include refid="_allCloumns"/>
+            </when>
+            <otherwise>
+                <foreach collection="_selects" item="_item" index="index" separator=",">${_item}</foreach>
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="_whereCondition">
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="keyStr != null">and keyStr = #{keyStr}</if>
+            <if test="code != null">and code = #{code}</if>
+            <if test="code_gt != null">and code &gt; #{code_gt}</if>
+            <if test="code_gt_eq != null">and code &gt;= #{code_gt_eq}</if>
+            <if test="code_lt != null">and code &lt; #{code_lt}</if>
+            <if test="code_lt_eq != null">and code &lt;= #{code_lt_eq}</if>
+            <if test="msg != null">and msg = #{msg}</if>
+        </where>
+    </sql>
+
+    <insert id="save" parameterType="microavatar.framework.base.entity.ErrorInfo">
+        INSERT INTO
+        <include refid="_tableName"/>
+        (
+        <include refid="_allCloumns"/>
+        )
+        VALUES
+        (
+        #{id,jdbcType=VARCHAR},
+        #{keyStr,jdbcType=VARCHAR},
+        #{code,jdbcType=INTEGER},
+        #{msg,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="batchSave" parameterType="collection">
+        INSERT INTO
+        <include refid="_tableName"/>
+        (
+        <include refid="_allCloumns"/>
+        )
+        VALUES
+        <foreach collection="collection" item="item" index="index" separator=",">
+            (
+            #{item.id,jdbcType=VARCHAR},
+            #{item.keyStr,jdbcType=VARCHAR},
+            #{item.code,jdbcType=INTEGER},
+            #{item.msg,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteById" parameterType="string">
+        DELETE FROM
+        <include refid="_tableName"/>
+        WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="collection">
+        DELETE FROM
+        <include refid="_tableName"/>
+        WHERE id IN
+        <foreach collection="collection" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <update id="update" parameterType="microavatar.framework.base.entity.ErrorInfo">
+        UPDATE
+        <include refid="_tableName"/>
+        <set>
+            <if test="keyStr != null">keyStr=#{keyStr},</if>
+            <if test="code != null">code=#{code},</if>
+            <if test="msg != null">msg=#{msg}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="getById" parameterType="string" resultType="microavatar.framework.base.entity.ErrorInfo">
+        SELECT
+        <include refid="_allCloumns"/>
+        FROM
+        <include refid="_tableName"/>
+        WHERE id = #{id}
+    </select>
+
+    <select id="findPage" parameterType="map" resultType="microavatar.framework.base.entity.ErrorInfo">
+        SELECT
+        <include refid="_selectCondition"/>
+        FROM
+        <include refid="_tableName"/>
+        <include refid="_whereCondition"/>
+    </select>
+
+    <select id="countAll" resultType="long">
+        SELECT
+        count(1)
+        FROM
+        <include refid="_tableName"/>
+    </select>
+
+</mapper>

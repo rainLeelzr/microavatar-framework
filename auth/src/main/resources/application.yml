@@ -1,0 +1,54 @@
+#数据库配置
+spring:
+ application:
+  name: avatar888
+ datasource:
+  type: com.alibaba.druid.pool.DruidDataSource
+  driver-class-name: com.mysql.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/avatar
+  username: root
+  password: 123456
+  filters: stat
+  maxActive: 20
+  initialSize: 1
+  maxWait: 60000
+  minIdle: 1
+  timeBetweenEvictionRunsMillis: 60000
+  minEvictableIdleTimeMillis: 300000
+  validationQuery: select 'x'
+  testWhileIdle: true
+  testOnBorrow: false
+  testOnReturn: false
+  poolPreparedStatements: true
+  maxOpenPreparedStatements: 20
+ cache:
+  custom-type: avatarCache
+  enableL1Cache: true
+  enableL2Cache: true
+  jcache:
+   config: classpath:ehcache.xml
+
+ redis:
+  host: 127.0.0.1
+  port: 6379
+  database: 1
+  pool:
+   min-idle: 0
+   max-idle: 8
+   max-active: 8
+   max-wait: 5000
+
+server:
+ port: 8080
+
+auth:
+ # 静态资源、首页、登录页面、登录接口
+ noInterceptUrls: /static/**,/,/index.html,/login.html,/auth/login
+
+ interceptUrls: /**
+
+ loginUrl: /login.html
+
+ logoutUrl: /logout
+
+

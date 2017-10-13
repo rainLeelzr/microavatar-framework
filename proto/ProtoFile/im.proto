@@ -1,0 +1,19 @@
+package Platform.Model;
+option java_package = "microavatar.framework.im.protobuf";
+option java_outer_classname = "IM";
+
+// 请求_发送文本信息给好友
+message SendTextToUserC2S {
+	required int32 toUserId = 1; // 好友的用户id
+	required string message = 2; // 消息内容
+	optional int32 opt = 3;
+}
+
+// 响应_发送文本信息给好友
+message SendTextToUserS2C {
+	required bool status = 1; // 状态
+}
+
+// 请求_空
+message EmptyC2S {
+}

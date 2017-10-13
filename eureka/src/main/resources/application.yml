@@ -1,0 +1,28 @@
+info:
+ name: avatar-eureka
+ company: rain
+
+spring:
+ application:
+  name: avatar-eureka
+
+# server.port配置eureka服务器端口号。
+server:
+ port: 8001
+
+# Eureka的配置属性都在开源项目spring-cloud-netflix-master中定义（spring boot连文档都没有，只能看源码了）
+# 在这个项目中有两个类EurekaInstanceConfigBean 和EurekaClientConfigBean
+# 分别含有eureka.instance和eureka.client相关属性的解释和定义。
+# registerWithEureka表示是否注册自身到eureka服务器，因为当前这个应用就是eureka服务器，没必要注册自身，所以这里是false。
+# fetchRegistry表示是否从eureka服务器获取注册信息，同上，这里不需要。
+# defaultZone就比较重要了，是设置eureka服务器所在的地址，查询服务和注册服务都需要依赖这个地址。
+# 在eureka上显示此微服务的ip地址
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
