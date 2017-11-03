@@ -2,7 +2,7 @@ package microavatar.framework.core.mq.rocketmq;
 
 import microavatar.framework.core.mq.rocketmq.property.RocketmqProperties;
 import microavatar.framework.core.mq.rocketmq.property.Subscription;
-import microavatar.framework.core.util.log.LogUtil;
+import microavatar.framework.common.util.log.LogUtil;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;

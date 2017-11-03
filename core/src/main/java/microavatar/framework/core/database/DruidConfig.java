@@ -5,6 +5,7 @@ import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -19,6 +20,12 @@ import java.sql.SQLException;
 public class DruidConfig {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Value("${druid.loginUsername}")
+    private String loginUsername;
+
+    @Value("${druid.loginPassword}")
+    private String loginPassword;
 
     private String url;
 
@@ -185,8 +192,8 @@ public class DruidConfig {
         ServletRegistrationBean reg = new ServletRegistrationBean();
         reg.setServlet(new StatViewServlet());
         reg.addUrlMappings("/druid/*");
-        reg.addInitParameter("loginUsername", "druid");
-        reg.addInitParameter("loginPassword", "druid888888");
+        reg.addInitParameter("loginUsername", loginUsername);
+        reg.addInitParameter("loginPassword", loginPassword);
         return reg;
     }
 

@@ -1,7 +1,7 @@
 package microavatar.framework.im;
 
 import microavatar.framework.core.mq.rocketmq.RocketmqEvent;
-import microavatar.framework.core.util.log.LogUtil;
+import microavatar.framework.common.util.log.LogUtil;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 

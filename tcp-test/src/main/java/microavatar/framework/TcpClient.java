@@ -3,7 +3,7 @@ package microavatar.framework;
 import microavatar.framework.core.net.tcp.coder.AvatarDecoder;
 import microavatar.framework.core.net.tcp.coder.AvatarEncoder;
 import microavatar.framework.core.net.tcp.netpackage.TcpPacket;
-import microavatar.framework.core.util.log.LogUtil;
+import microavatar.framework.common.util.log.LogUtil;
 import microavatar.framework.im.protobuf.IM;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.TextFormat;
@@ -98,8 +98,9 @@ public class TcpClient {
                                     if (!"远程主机强迫关闭了一个现有的连接。".equals(cause.getMessage())) {
                                         LogUtil.getLogger().error(cause.getMessage(), cause);
                                     }
-                                    if (cause instanceof java.io.IOException)
+                                    if (cause instanceof java.io.IOException) {
                                         return;
+                                    }
                                     ctx.close();
                                 }
 
@@ -154,7 +155,7 @@ public class TcpClient {
     }
 
     private TcpPacket getJsonPackage() {
-        String json = "{\"toUserId\": 10,\"message\": \"hello你好！\",\"user\": {\"id\": \"ididid\",\"account\": \"acc\",\"pwd\": \"p\",\"createTime\": 22222,\"status\": 2}}";
+        String json = "{\"toUserId\": 10,\"message\": \"hello你好！\",\"perm\": {\"id\": \"ididid\",\"account\": \"acc\",\"pwd\": \"p\",\"createTime\": 22222,\"status\": 2}}";
 
         TcpPacket packet = TcpPacket.buildJsonPackage(TcpPacket.MethodEnum.POST, "/im/test/hello/52", json);
         return packet;

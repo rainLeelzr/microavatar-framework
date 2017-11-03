@@ -1,6 +1,6 @@
 package microavatar.framework.core.mq.rocketmq;
 
-import microavatar.framework.core.util.log.LogUtil;
+import microavatar.framework.common.util.log.LogUtil;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.springframework.context.ApplicationEvent;

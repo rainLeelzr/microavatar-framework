@@ -1,6 +1,6 @@
 package microavatar.framework.core.database;
 
-import microavatar.framework.common.BaseEntity;
+import microavatar.framework.core.mvc.BaseEntity;
 
 import java.util.*;
 

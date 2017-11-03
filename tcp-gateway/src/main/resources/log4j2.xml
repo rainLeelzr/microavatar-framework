@@ -5,8 +5,8 @@
 <Configuration status="OFF">
     <!-- 日志文件目录和压缩文件目录配置 -->
     <Properties>
-        <Property name="fileName">/home/kylin/log/knight/spring_log</Property>
-        <Property name="fileGz">/home/kylin/log/knight/spring_log/7z</Property>
+        <Property name="fileName">./log</Property>
+        <Property name="fileGz">./log/7z</Property>
     </Properties>
 
     <Appenders>
@@ -60,9 +60,14 @@
             <appender-ref ref="errorFile"/>
         </root>
 
-        <logger name="avatar.rain" level="trace" additivity="false">
+        <logger name="microavatar.framework.common.util.log.LogUtil" level="trace" additivity="false">
             <appender-ref ref="console"/>
             <appender-ref ref="infoFile"/>
+            <appender-ref ref="errorFile"/>
+        </logger>
+
+        <logger name="RocketmqClient" level="warn" additivity="false">
+            <appender-ref ref="console"/>
             <appender-ref ref="errorFile"/>
         </logger>
 

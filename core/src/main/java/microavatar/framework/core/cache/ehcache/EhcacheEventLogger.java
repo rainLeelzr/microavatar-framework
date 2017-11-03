@@ -1,6 +1,6 @@
 package microavatar.framework.core.cache.ehcache;
 
-import microavatar.framework.core.util.log.LogUtil;
+import microavatar.framework.common.util.log.LogUtil;
 import org.ehcache.event.CacheEvent;
 import org.ehcache.event.CacheEventListener;
 

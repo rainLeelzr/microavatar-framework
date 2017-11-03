@@ -17,16 +17,32 @@
     <packaging>pom</packaging>
 
     <modules>
+        <!-- 应用服务，供外部调用（需要经过网关调用） -->
+        <!-- 8001 -->
+        <module>eureka</module>
+        <!-- 8131 8132 -->
+        <module>tcp-gateway</module>
+        <module>tcp-test</module>
+        <!-- 8101 8102-->
+        <module>im</module>
+        <!-- 8111-->
+        <module>order</module>
+        <!-- 8121-->
+        <module>goods</module>
+
+        <!-- 基础服务，供上层服务调用 -->
+        <!-- 8011 8012-->
+        <module>perm</module>
+
+
+        <!-- 基础组件，供上层服务依赖 -->
         <module>core</module>
         <module>common</module>
         <module>common-protobuf</module>
-        <module>eureka</module>
-        <module>tcp-gateway</module>
-        <module>auth</module>
-        <module>tcp-test</module>
-        <module>im</module>
-        <module>order</module>
-        <module>goods</module>
+
+        <module>perm-api</module>
+
+
     </modules>
 
     <properties>
@@ -53,6 +69,12 @@
             <dependency>
                 <groupId>microavatar.framework</groupId>
                 <artifactId>core</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>microavatar.framework</groupId>
+                <artifactId>perm-api</artifactId>
                 <version>1.0.0</version>
             </dependency>
 
@@ -164,7 +186,6 @@
         <!--<type>pom</type>-->
         <!--<scope>import</scope>-->
         <!--</dependency>-->
-
 
 
         <!-- 日志 -->

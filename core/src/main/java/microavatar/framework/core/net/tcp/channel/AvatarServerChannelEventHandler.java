@@ -6,7 +6,7 @@ import microavatar.framework.core.net.tcp.request.AvatarServerRequestManager;
 import microavatar.framework.core.net.tcp.session.ATCPPSession;
 import microavatar.framework.core.net.tcp.session.AvatarSessionManager;
 import microavatar.framework.core.net.tcp.session.Session;
-import microavatar.framework.core.util.log.LogUtil;
+import microavatar.framework.common.util.log.LogUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleState;

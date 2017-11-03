@@ -1,7 +1,7 @@
 package microavatar.framework.core.cache.redis;
 
 import microavatar.framework.core.cache.CacheConfig;
-import microavatar.framework.core.util.log.LogUtil;
+import microavatar.framework.common.util.log.LogUtil;
 import org.slf4j.Logger;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.redis.cache.RedisCache;

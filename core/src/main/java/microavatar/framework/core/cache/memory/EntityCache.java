@@ -1,7 +1,7 @@
 package microavatar.framework.core.cache.memory;
 
-import microavatar.framework.common.BaseEntity;
-import microavatar.framework.core.util.log.LogUtil;
+import microavatar.framework.core.mvc.BaseEntity;
+import microavatar.framework.common.util.log.LogUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.scheduling.annotation.Scheduled;
 
@@ -18,7 +18,7 @@ public abstract class EntityCache<T extends BaseEntity> implements InitializingB
     /**
      * 参数表，缓存在内存中，定期刷新最新数据
      */
-    private List<T> PARAMS_CACHE = Collections.emptyList();
+    private List<T> paramsCache = Collections.emptyList();
 
     /**
      * 第一次加载实体，用于系统启动时调用，当抛异常时，终止启动系统
@@ -27,7 +27,7 @@ public abstract class EntityCache<T extends BaseEntity> implements InitializingB
         try {
             List<T> newEntitys = doLoad();
             if (checkLoaded(newEntitys)) {
-                PARAMS_CACHE = newEntitys;
+                paramsCache = newEntitys;
             }
         } catch (Exception e) {
             throw new Error(e);
@@ -42,7 +42,7 @@ public abstract class EntityCache<T extends BaseEntity> implements InitializingB
         try {
             List<T> newEntitys = doLoad();
             if (checkLoaded(newEntitys)) {
-                PARAMS_CACHE = newEntitys;
+                paramsCache = newEntitys;
             }
         } catch (Exception e) {
             LogUtil.getLogger().error("忽略本次参数reload，请尽快检查修正！{}", e.getMessage(), e);

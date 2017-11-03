@@ -1,12 +1,12 @@
 package microavatar.framework.core.cache;
 
-import microavatar.framework.core.cache.redis.AvatarRedisCachePrefix;
-import microavatar.framework.core.cache.redis.RedisEventMessageListener;
-import microavatar.framework.core.cache.redis.L2RedisCacheManager;
-import microavatar.framework.core.util.log.LogUtil;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import microavatar.framework.common.util.log.LogUtil;
+import microavatar.framework.core.cache.redis.AvatarRedisCachePrefix;
+import microavatar.framework.core.cache.redis.L2RedisCacheManager;
+import microavatar.framework.core.cache.redis.RedisEventMessageListener;
 import org.ehcache.jsr107.EhcacheCachingProvider;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +32,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 
+/**
+ * @author Administrator
+ */
 @Configuration
 @Conditional(StarterCacheCondition.class)
 public class CacheConfig extends CachingConfigurerSupport {
@@ -39,7 +42,9 @@ public class CacheConfig extends CachingConfigurerSupport {
     @Value("${spring.application.name}")
     private String projectName;
 
-    // 缓存过期时间,秒
+    /**
+     * 缓存过期时间,秒
+     */
     private long defaultExpiration = 60;
 
     private String createEventTopic = "";

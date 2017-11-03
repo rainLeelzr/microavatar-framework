@@ -6,7 +6,7 @@ import microavatar.framework.core.api.ServerApi;
 import microavatar.framework.core.net.tcp.netpackage.TcpPacket;
 import microavatar.framework.core.net.tcp.request.ATCPRequest;
 import microavatar.framework.core.serialization.ProtobufSerializationManager;
-import microavatar.framework.core.util.log.LogUtil;
+import microavatar.framework.common.util.log.LogUtil;
 import com.google.protobuf.GeneratedMessage;
 import com.googlecode.protobuf.format.JsonFormat;
 import org.springframework.http.HttpEntity;
@@ -26,7 +26,7 @@ import java.util.concurrent.BlockingQueue;
  */
 public class RequestHandleWorker extends Thread {
 
-    private static final int maxQueueSize = Math.min(1000, 1000);//要设置配置
+    private static final int MAX_QUEUE_SIZE = Math.min(1000, 1000);//要设置配置
 
     private volatile boolean running = true;
 
@@ -56,7 +56,7 @@ public class RequestHandleWorker extends Thread {
         this.microServerService = microServerService;
         this.protobufSerializationManager = protobufSerializationManager;
         this.serverNameMapping = serverNameMapping;
-        this.blockingQueue = new ArrayBlockingQueue<>(maxQueueSize);
+        this.blockingQueue = new ArrayBlockingQueue<>(MAX_QUEUE_SIZE);
         this.setDaemon(true);
     }
 
@@ -128,8 +128,8 @@ public class RequestHandleWorker extends Thread {
         }
 
         /*
-            /im/user/{id}/mm/{ij}
-            /im/user/xxx-xxxx/mm/uu
+            /im/perm/{id}/mm/{ij}
+            /im/perm/xxx-xxxx/mm/uu
          */
         String[] split = requestUrlWithoutServerName.split("/");
 

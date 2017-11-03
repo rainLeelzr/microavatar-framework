@@ -1,6 +1,6 @@
 package microavatar.framework.core.api;
 
-import microavatar.framework.core.util.log.LogUtil;
+import microavatar.framework.common.util.log.LogUtil;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;

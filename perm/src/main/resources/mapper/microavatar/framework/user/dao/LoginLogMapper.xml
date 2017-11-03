@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="microavatar.framework.perm.dao.LoginLogDao">
+
+    <!-- 本文件由powerDesigner自动生成，请勿修改本文件任何内容。如需自定义本entity的sql，请在同目录下添加LoginLogMapperExt.xml -->
+
+    <sql id="_tableName">Auth_LoginLog</sql>
+
+    <sql id="_allCloumns"> id, userId, loginType, clientIp, loginTime, logoutTime, status </sql>
+
+    <sql id="_selectCondition">
+        <choose>
+            <when test="_select_all_columns">
+                <include refid="_allCloumns"/>
+            </when>
+            <otherwise>
+                <foreach collection="_selects" item="_item" index="index" separator=",">${_item}</foreach>
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="_whereCondition">
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="userId != null">and userId = #{userId}</if>
+            <if test="loginType != null">and loginType = #{loginType}</if>
+            <if test="loginType_gt != null">and loginType &gt; #{loginType_gt}</if>
+            <if test="loginType_gt_eq != null">and loginType &gt;= #{loginType_gt_eq}</if>
+            <if test="loginType_lt != null">and loginType &lt; #{loginType_lt}</if>
+            <if test="loginType_lt_eq != null">and loginType &lt;= #{loginType_lt_eq}</if>
+            <if test="clientIp != null">and clientIp = #{clientIp}</if>
+            <if test="loginTime != null">and loginTime = #{loginTime}</if>
+            <if test="loginTime_gt != null">and loginTime &gt; #{loginTime_gt}</if>
+            <if test="loginTime_gt_eq != null">and loginTime &gt;= #{loginTime_gt_eq}</if>
+            <if test="loginTime_lt != null">and loginTime &lt; #{loginTime_lt}</if>
+            <if test="loginTime_lt_eq != null">and loginTime &lt;= #{loginTime_lt_eq}</if>
+            <if test="logoutTime != null">and logoutTime = #{logoutTime}</if>
+            <if test="logoutTime_gt != null">and logoutTime &gt; #{logoutTime_gt}</if>
+            <if test="logoutTime_gt_eq != null">and logoutTime &gt;= #{logoutTime_gt_eq}</if>
+            <if test="logoutTime_lt != null">and logoutTime &lt; #{logoutTime_lt}</if>
+            <if test="logoutTime_lt_eq != null">and logoutTime &lt;= #{logoutTime_lt_eq}</if>
+            <if test="status != null">and status = #{status}</if>
+            <if test="status_gt != null">and status &gt; #{status_gt}</if>
+            <if test="status_gt_eq != null">and status &gt;= #{status_gt_eq}</if>
+            <if test="status_lt != null">and status &lt; #{status_lt}</if>
+            <if test="status_lt_eq != null">and status &lt;= #{status_lt_eq}</if>
+        </where>
+    </sql>
+
+    <insert id="save" parameterType="microavatar.framework.perm.entity.LoginLog">
+        INSERT INTO
+        <include refid="_tableName"/>
+        (
+        <include refid="_allCloumns"/>
+        )
+        VALUES
+        (
+        #{id,jdbcType=VARCHAR},
+        #{userId,jdbcType=VARCHAR},
+        #{loginType,jdbcType=TINYINT},
+        #{clientIp,jdbcType=VARCHAR},
+        #{loginTime,jdbcType=BIGINT},
+        #{logoutTime,jdbcType=BIGINT},
+        #{status,jdbcType=TINYINT}
+        )
+    </insert>
+
+    <insert id="batchSave" parameterType="collection">
+        INSERT INTO
+        <include refid="_tableName"/>
+        (
+        <include refid="_allCloumns"/>
+        )
+        VALUES
+        <foreach collection="collection" item="item" index="index" separator=",">
+            (
+            #{item.id,jdbcType=VARCHAR},
+            #{item.userId,jdbcType=VARCHAR},
+            #{item.loginType,jdbcType=TINYINT},
+            #{item.clientIp,jdbcType=VARCHAR},
+            #{item.loginTime,jdbcType=BIGINT},
+            #{item.logoutTime,jdbcType=BIGINT},
+            #{item.status,jdbcType=TINYINT}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteById" parameterType="string">
+        DELETE FROM
+        <include refid="_tableName"/>
+        WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="collection">
+        DELETE FROM
+        <include refid="_tableName"/>
+        WHERE id IN
+        <foreach collection="collection" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <update id="update" parameterType="microavatar.framework.perm.entity.LoginLog">
+        UPDATE
+        <include refid="_tableName"/>
+        <set>
+            <if test="userId != null">userId=#{userId},</if>
+            <if test="loginType != null">loginType=#{loginType},</if>
+            <if test="clientIp != null">clientIp=#{clientIp},</if>
+            <if test="loginTime != null">loginTime=#{loginTime},</if>
+            <if test="logoutTime != null">logoutTime=#{logoutTime},</if>
+            <if test="status != null">status=#{status}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="getById" parameterType="string" resultType="microavatar.framework.perm.entity.LoginLog">
+        SELECT
+        <include refid="_allCloumns"/>
+        FROM
+        <include refid="_tableName"/>
+        WHERE id = #{id}
+    </select>
+
+    <select id="findPage" parameterType="map" resultType="microavatar.framework.perm.entity.LoginLog">
+        SELECT
+        <include refid="_selectCondition"/>
+        FROM
+        <include refid="_tableName"/>
+        <include refid="_whereCondition"/>
+    </select>
+
+    <select id="countAll" resultType="long">
+        SELECT
+        count(1)
+        FROM
+        <include refid="_tableName"/>
+    </select>
+
+</mapper>

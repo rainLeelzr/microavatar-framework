@@ -2,6 +2,11 @@ info:
  company: rain
 
 spring:
+ application:
+  #应用名称
+  name: avatar-im
+
+ #数据库配置
  datasource:
   type: com.alibaba.druid.pool.DruidDataSource
   driver-class-name: com.mysql.jdbc.Driver
@@ -38,11 +43,19 @@ spring:
    max-active: 8
    max-wait: 5000
 
+eureka:
+ client:
+  serviceUrl:
+   defaultZone: http://avatar:123456@localhost:8001/eureka
+ instance:
+  metadataMap:
+   instanceId: ${spring.application.name}:${server.port}
+   # 在eureka上显示此微服务的ip地址
+   prefer-ip-address: true
+
 ---
 spring:
  profiles: dev1
- application:
-   name: avatar-im
 
 info:
  name: avatar-im1
@@ -50,34 +63,12 @@ info:
 server:
  port: 8101
 
-eureka:
- client:
-  serviceUrl:
-   defaultZone: http://localhost:8001/eureka
- instance:
-  metadataMap:
-   instanceId: ${spring.application.name}:${server.port}
-   # 在eureka上显示此微服务的ip地址
-   prefer-ip-address: true
-
 ---
 spring:
  profiles: dev2
- application:
-  name: avatar-im
 
 info:
  name: avatar-im2
 
 server:
  port: 8102
-
-eureka:
- client:
-  serviceUrl:
-   defaultZone: http://localhost:8001/eureka
- instance:
-  metadataMap:
-   instanceId: ${spring.application.name}:${server.port}
-   # 在eureka上显示此微服务的ip地址
-   prefer-ip-address: true

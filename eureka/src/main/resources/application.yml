@@ -26,3 +26,11 @@ eureka:
     fetchRegistry: false
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+#访问eureka时需要密码
+security:
+  basic:
+    enabled: true
+  user:
+    name: avatar
+    password: 123456

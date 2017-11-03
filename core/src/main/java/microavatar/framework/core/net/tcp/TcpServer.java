@@ -1,7 +1,7 @@
 package microavatar.framework.core.net.tcp;
 
 import microavatar.framework.core.net.tcp.channel.AvatarServerChannelInitializer;
-import microavatar.framework.core.util.log.LogUtil;
+import microavatar.framework.common.util.log.LogUtil;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;

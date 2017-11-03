@@ -25,6 +25,11 @@
             <artifactId>core</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>microavatar.framework</groupId>
+            <artifactId>perm-api</artifactId>
+        </dependency>
+
         <!-- common-protobuf-->
         <dependency>
             <groupId>microavatar.framework</groupId>
@@ -55,6 +60,12 @@
             </exclusions>
         </dependency>
 
+        <!-- spring security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
         <!-- rest客户端 feign -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -65,6 +76,18 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-zuul</artifactId>
+        </dependency>
+
+        <!-- freemarker -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>

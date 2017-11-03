@@ -21,7 +21,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@MapperScan(basePackages = "avatar.rain")
+@MapperScan(basePackages = "microavatar.framework")
 public class SessionFactoryConfig implements TransactionManagementConfigurer {
     /**
      * mybatis 配置路径
@@ -47,7 +47,7 @@ public class SessionFactoryConfig implements TransactionManagementConfigurer {
         pageInterceptor.setProperties(properties);
 
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath*:avatar/**/dao/*Mapper*.xml"));
+        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath*:mapper/**/dao/*Mapper*.xml"));
         sqlSessionFactoryBean.setDataSource(dataSource);
         sqlSessionFactoryBean.setPlugins(new Interceptor[]{pageInterceptor});
 

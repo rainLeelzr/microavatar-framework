@@ -1,7 +1,7 @@
 package microavatar.framework.core.net.tcp.session;
 
 import microavatar.framework.core.net.tcp.netpackage.TcpPacket;
-import microavatar.framework.core.util.log.LogUtil;
+import microavatar.framework.common.util.log.LogUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;

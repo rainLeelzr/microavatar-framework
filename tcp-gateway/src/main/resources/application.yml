@@ -68,6 +68,16 @@ avatar:
  tcpServer:
   enable: true
 
+eureka:
+ client:
+  serviceUrl:
+   defaultZone: http://avatar:123456@localhost:8001/eureka
+ instance:
+  metadataMap:
+   instanceId: ${spring.application.name}:${server.port}
+   # 在eureka上显示此微服务的ip地址
+   prefer-ip-address: true
+
 ---
 spring:
  profiles: dev1
@@ -78,16 +88,6 @@ info:
 server:
  port: 8131
 
-eureka:
- client:
-  serviceUrl:
-   defaultZone: http://localhost:8001/eureka
- instance:
-  metadataMap:
-   instanceId: ${spring.application.name}:${server.port}
-   # 在eureka上显示此微服务的ip地址
-   prefer-ip-address: true
-
 ---
 spring:
  profiles: dev2
@@ -97,13 +97,3 @@ info:
 
 server:
  port: 8132
-
-eureka:
- client:
-  serviceUrl:
-   defaultZone: http://localhost:8001/eureka
- instance:
-  metadataMap:
-   instanceId: ${spring.application.name}:${server.port}
-   # 在eureka上显示此微服务的ip地址
-   prefer-ip-address: true
