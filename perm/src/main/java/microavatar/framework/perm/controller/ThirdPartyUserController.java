@@ -29,8 +29,8 @@ public class ThirdPartyUserController extends BaseController<ThirdPartyUserServi
 
     @Override
     @RequestMapping("/id/{id}")
-    public ThirdPartyUser getEntityById(@PathVariable String id) {
-        return super.getEntityById(id);
+    public ThirdPartyUser getById(@PathVariable String id) {
+        return super.getById(id);
     }
 
 }

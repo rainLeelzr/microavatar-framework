@@ -29,8 +29,8 @@ public class RoleSysPermissionController extends BaseController<RoleSysPermissio
 
     @Override
     @RequestMapping("/id/{id}")
-    public RoleSysPermission getEntityById(@PathVariable String id) {
-        return super.getEntityById(id);
+    public RoleSysPermission getById(@PathVariable String id) {
+        return super.getById(id);
     }
 
 }

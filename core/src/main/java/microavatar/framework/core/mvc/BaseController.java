@@ -7,7 +7,7 @@ public abstract class BaseController<S extends BaseService<E, D>, D extends Base
 
     protected abstract S getService();
 
-    public E getEntityById(String id) {
+    public E getById(String id) {
         return getService().getById(id);
     }
 }

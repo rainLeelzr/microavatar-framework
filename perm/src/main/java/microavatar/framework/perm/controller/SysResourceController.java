@@ -29,8 +29,8 @@ public class SysResourceController extends BaseController<SysResourceService, Sy
 
     @Override
     @RequestMapping("/id/{id}")
-    public SysResource getEntityById(@PathVariable String id) {
-        return super.getEntityById(id);
+    public SysResource getById(@PathVariable String id) {
+        return super.getById(id);
     }
 
 }

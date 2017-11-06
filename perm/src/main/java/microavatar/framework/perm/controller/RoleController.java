@@ -32,8 +32,8 @@ public class RoleController extends BaseController<RoleService, RoleDao, Role> {
 
     @Override
     @RequestMapping("/id/{id}")
-    public Role getEntityById(@PathVariable String id) {
-        return super.getEntityById(id);
+    public Role getById(@PathVariable String id) {
+        return super.getById(id);
     }
 
 }

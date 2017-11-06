@@ -29,8 +29,8 @@ public class UserOrgController extends BaseController<UserOrgService, UserOrgDao
 
     @Override
     @RequestMapping("/id/{id}")
-    public UserOrg getEntityById(@PathVariable String id) {
-        return super.getEntityById(id);
+    public UserOrg getById(@PathVariable String id) {
+        return super.getById(id);
     }
 
 }

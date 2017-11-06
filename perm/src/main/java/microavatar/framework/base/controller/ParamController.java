@@ -29,8 +29,8 @@ public class ParamController extends BaseController<ParamService, ParamDao, Para
 
     @Override
     @RequestMapping("/id/{id}")
-    public Param getEntityById(@PathVariable String id) {
-        return super.getEntityById(id);
+    public Param getById(@PathVariable String id) {
+        return super.getById(id);
     }
 
 }

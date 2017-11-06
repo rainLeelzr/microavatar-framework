@@ -29,8 +29,8 @@ public class UserRoleController extends BaseController<UserRoleService, UserRole
 
     @Override
     @RequestMapping("/id/{id}")
-    public UserRole getEntityById(@PathVariable String id) {
-        return super.getEntityById(id);
+    public UserRole getById(@PathVariable String id) {
+        return super.getById(id);
     }
 
 }

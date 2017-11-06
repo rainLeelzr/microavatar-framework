@@ -29,8 +29,8 @@ public class UserInfoController extends BaseController<UserInfoService, UserInfo
 
     @Override
     @RequestMapping("/id/{id}")
-    public UserInfo getEntityById(@PathVariable String id) {
-        return super.getEntityById(id);
+    public UserInfo getById(@PathVariable String id) {
+        return super.getById(id);
     }
 
 }

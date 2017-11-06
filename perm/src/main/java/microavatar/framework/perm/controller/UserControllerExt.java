@@ -17,8 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
+/**
+ * @author Administrator
+ */
 @RestController
-@RequestMapping("/perm/perm")
+@RequestMapping("/perm/user")
 public class UserControllerExt extends BaseController<UserService, UserDao, User> {
 
     @Resource
@@ -30,9 +33,8 @@ public class UserControllerExt extends BaseController<UserService, UserDao, User
     }
 
     @RequestMapping("/name/{name}")
-    public User getEntityByName(@PathVariable String name) {
+    public User getByName(@PathVariable String name) {
         return userServiceExt.getByAccount(name);
     }
-
 
 }

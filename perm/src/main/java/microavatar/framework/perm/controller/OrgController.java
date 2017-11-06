@@ -32,8 +32,8 @@ public class OrgController extends BaseController<OrgService, OrgDao, Org> {
 
     @Override
     @RequestMapping("/id/{id}")
-    public Org getEntityById(@PathVariable String id) {
-        return super.getEntityById(id);
+    public Org getById(@PathVariable String id) {
+        return super.getById(id);
     }
 
 }

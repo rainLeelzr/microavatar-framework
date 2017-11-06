@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping("/perm/perm")
+@RequestMapping("/perm/user")
 public class UserController extends BaseController<UserService, UserDao, User> {
 
     @Resource
@@ -29,8 +29,8 @@ public class UserController extends BaseController<UserService, UserDao, User> {
 
     @Override
     @RequestMapping("/id/{id}")
-    public User getEntityById(@PathVariable String id) {
-        return super.getEntityById(id);
+    public User getById(@PathVariable String id) {
+        return super.getById(id);
     }
 
 }

@@ -32,8 +32,8 @@ public class LoginLogController extends BaseController<LoginLogService, LoginLog
 
     @Override
     @RequestMapping("/id/{id}")
-    public LoginLog getEntityById(@PathVariable String id) {
-        return super.getEntityById(id);
+    public LoginLog getById(@PathVariable String id) {
+        return super.getById(id);
     }
 
 }
