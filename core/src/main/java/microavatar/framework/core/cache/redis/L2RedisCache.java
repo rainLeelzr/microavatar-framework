@@ -49,12 +49,22 @@ public class L2RedisCache extends RedisCache {
 
     @Override
     public ValueWrapper get(Object key) {
+        if (key == null) {
+            return null;
+        }
+
         String cacheName = super.getName();
         Cache l1Cache = l1CacheManager.getCache(cacheName);
         logger.debug("get,l1CacheManager:{}", l1CacheManager);
         logger.debug("get,cacheName:{}", cacheName);
         logger.debug("get,l1Cache:{}", l1Cache);
-        ValueWrapper valueWrapper = l1Cache.get(key);
+        ValueWrapper valueWrapper = null;
+        if (l1Cache == null) {
+            logger.warn("没有配置缓存名称为[]的L1缓存。", cacheName);
+        } else {
+            valueWrapper = l1Cache.get(key);
+        }
+
         Object value = null;
 
         if (logger.isDebugEnabled()) {
@@ -74,7 +84,7 @@ public class L2RedisCache extends RedisCache {
                 logger.debug("获取L2缓存: key: {}, value: {}", key, value);
             }
 
-            if (value != null) {
+            if (l1Cache != null && value != null) {
                 l1Cache.put(key, valueWrapper.get());
             }
         }
@@ -83,9 +93,15 @@ public class L2RedisCache extends RedisCache {
 
     @Override
     public void put(final Object key, final Object value) {
+        if (key == null || value == null) {
+            return;
+        }
+
         String cacheName = super.getName();
         Cache l1Cache = l1CacheManager.getCache(cacheName);
-        l1Cache.put(key, value);
+        if (l1Cache != null) {
+            l1Cache.put(key, value);
+        }
         super.put(key, value);
         l2RedisCacheManager.onCacheChanged(EventType.CREATED, super.getName(), key);
     }
@@ -94,7 +110,9 @@ public class L2RedisCache extends RedisCache {
     public void evict(Object key) {
         String cacheName = super.getName();
         Cache l1Cache = l1CacheManager.getCache(cacheName);
-        l1Cache.evict(key);
+        if (l1Cache != null) {
+            l1Cache.evict(key);
+        }
         super.evict(key);
         l2RedisCacheManager.onCacheChanged(EventType.REMOVED, super.getName(), key);
     }
@@ -102,9 +120,14 @@ public class L2RedisCache extends RedisCache {
 
     @Override
     public ValueWrapper putIfAbsent(Object key, final Object value) {
+        if (key == null || value == null) {
+            return null;
+        }
         String cacheName = super.getName();
         Cache l1Cache = l1CacheManager.getCache(cacheName);
-        l1Cache.putIfAbsent(key, value);
+        if (l1Cache != null) {
+            l1Cache.putIfAbsent(key, value);
+        }
         ValueWrapper wrapper = super.putIfAbsent(key, value);
         l2RedisCacheManager.onCacheChanged(EventType.CREATED, super.getName(), key);
         return wrapper;

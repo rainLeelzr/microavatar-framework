@@ -1,6 +1,7 @@
 package microavatar.framework.security.auth.service;
 
 import microavatar.framework.perm.entity.User;
+import microavatar.framework.perm.fegin.UserFegin;
 import microavatar.framework.perm.status.UserStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,11 +18,11 @@ import java.util.Collections;
 public class AvatarUserDetailsService implements UserDetailsService {
 
     @Resource
-    private UserServiceExt userServiceExt;
+    private UserFegin userFegin;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userServiceExt.getByAccount(username);
+        User user = userFegin.getByName(username);
         if (user == null) {
             throw new UsernameNotFoundException("用户不存在");
         }

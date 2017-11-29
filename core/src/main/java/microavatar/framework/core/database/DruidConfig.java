@@ -6,6 +6,7 @@ import com.alibaba.druid.support.http.WebStatFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -17,14 +18,15 @@ import java.sql.SQLException;
 
 @Configuration
 @ConfigurationProperties(prefix = "spring.datasource")
+@ConditionalOnProperty(prefix = "spring.datasource", name = "type")
 public class DruidConfig {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Value("${druid.loginUsername}")
+    @Value("${druid.loginUsername:druid}")
     private String loginUsername;
 
-    @Value("${druid.loginPassword}")
+    @Value("${druid.loginPassword:druid888888}")
     private String loginPassword;
 
     private String url;

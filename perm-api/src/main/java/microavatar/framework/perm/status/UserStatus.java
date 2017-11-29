@@ -6,8 +6,8 @@ package microavatar.framework.perm.status;
  */
 public enum UserStatus {
 
-    NOT_ACTIVE((byte) 1, "未激活"),
-    ENABLE((byte) 2, "启用"),
+    ENABLE((byte) 1, "启用"),
+    NOT_ACTIVE((byte) 2, "未激活"),
     DISABLE((byte) 3, "禁用");
 
     private byte id;

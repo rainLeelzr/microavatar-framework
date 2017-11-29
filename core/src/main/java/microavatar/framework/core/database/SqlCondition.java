@@ -35,7 +35,7 @@ public class SqlCondition {
     public Map<String, Object> build() {
         /*
         如果没有包含_selects，则查询全部字段
-        如果包含_selects，切_selects中含有_all_columns，则查询全部字段
+        如果包含_selects，且_selects中含有_all_columns，则查询全部字段
         其余情况，查询_selects中包含的字段
          */
         if (!conditions.containsKey(SELECTS_KEY) ||
