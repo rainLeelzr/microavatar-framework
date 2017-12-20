@@ -60,7 +60,7 @@
 
         var o = form.getData();           var json = mini.encode(o);
         $.ajax({
-          url: "/perm/roleSysPermission!save.action",
+          url: "/perm/roleSysPermission!add.action",
           type: 'post',
           data: { 
             data: json             ,fileIds:attacheIds          },

@@ -1,6 +1,6 @@
 package microavatar.framework.core.api;
 
-import microavatar.framework.common.util.log.LogUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class LocalApiManager implements ApplicationContextAware {
 
     private ServerApi serverApi;
@@ -28,7 +29,7 @@ public class LocalApiManager implements ApplicationContextAware {
      * 需要在所有spring bean加载完后，才调用本方法
      */
     public void init() {
-        LogUtil.getLogger().info("正在初始化ApiManager...");
+        log.info("正在初始化ApiManager...");
         try {
             Map<String, List<Api>> tempApis = new HashMap<>();
 
@@ -67,7 +68,7 @@ public class LocalApiManager implements ApplicationContextAware {
                             String url = classPath + methodPath;
                             // 过滤掉空内容的url
                             if (url.length() == 0) {
-                                LogUtil.getLogger().info("url为空，已过滤：{}", targetApiMethod);
+                                log.info("url为空，已过滤：{}", targetApiMethod);
                                 continue;
                             }
                             List<Api> urlApis = tempApis.computeIfAbsent(url, k -> new ArrayList<>());
@@ -75,7 +76,7 @@ public class LocalApiManager implements ApplicationContextAware {
                                 if (urlApi.getRequestMethods() == methodRequestMapping.method()) {
                                     // 这个url可能会重复，但在一般的业务逻辑中，我们不会写出重复的url。在spring提供的功能中，会有重复url
                                     // 例如BasicErrorController的@RequestMapping(produces = "text/html")和@RequestMapping
-                                    LogUtil.getLogger().debug(
+                                    log.debug(
                                             "方法[{}]的requestMapping与[{}]重复, 请注意",
                                             targetApiMethod.toString(),
                                             urlApi.getMethodName());
@@ -93,7 +94,7 @@ public class LocalApiManager implements ApplicationContextAware {
                             api.setReturnType(returnType.toString());
                             urlApis.add(api);
 
-                            LogUtil.getLogger().debug("加载到{}", url);
+                            log.debug("加载到{}", url);
                         }
                     }
                 }
@@ -101,7 +102,7 @@ public class LocalApiManager implements ApplicationContextAware {
 
             this.serverApi = new ServerApi(System.currentTimeMillis(), tempApis);
         } catch (Throwable e) {
-            LogUtil.getLogger().error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
             System.exit(0);
         }
     }

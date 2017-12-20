@@ -72,7 +72,7 @@
 
         var o = form.getData();           var json = mini.encode(o);
         $.ajax({
-          url: "/base/param!save.action",
+          url: "/base/param!add.action",
           type: 'post',
           data: { 
             data: json             ,fileIds:attacheIds          },

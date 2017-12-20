@@ -5,8 +5,8 @@
 
 package microavatar.framework.perm.service;
 
-import microavatar.framework.perm.entity.User;
 import microavatar.framework.perm.dao.UserDaoExt;
+import microavatar.framework.perm.entity.User;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class UserServiceExt extends UserService {
 
     @Override
     @Cacheable("perm:id")
-    public User getById(String id) {
+    public User getById(Long id) {
         return super.getById(id);
     }
 

@@ -32,7 +32,7 @@
         
             <div field="name" headerAlign="center" allowSort="true" width="60px">角色名</div>
         
-            <div field="code" headerAlign="center" allowSort="true" width="60px">代码</div>
+            <div field="errorCode" headerAlign="center" allowSort="true" width="60px">代码</div>
         
             <div field="orderNum" headerAlign="center" allowSort="true" width="60px">顺序</div>
         

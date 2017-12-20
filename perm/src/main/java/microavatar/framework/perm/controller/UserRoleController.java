@@ -29,7 +29,7 @@ public class UserRoleController extends BaseController<UserRoleService, UserRole
 
     @Override
     @RequestMapping("/id/{id}")
-    public UserRole getById(@PathVariable String id) {
+    public UserRole getById(@PathVariable Long id) {
         return super.getById(id);
     }
 

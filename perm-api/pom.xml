@@ -15,9 +15,14 @@
     <version>1.0.0</version>
 
     <dependencies>
+        <!-- core -->
         <dependency>
             <groupId>microavatar.framework</groupId>
             <artifactId>core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>microavatar.framework</groupId>
+            <artifactId>core-mvc</artifactId>
         </dependency>
 
         <!-- rest客户端 feign -->

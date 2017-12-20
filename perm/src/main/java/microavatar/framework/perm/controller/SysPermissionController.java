@@ -29,7 +29,7 @@ public class SysPermissionController extends BaseController<SysPermissionService
 
     @Override
     @RequestMapping("/id/{id}")
-    public SysPermission getById(@PathVariable String id) {
+    public SysPermission getById(@PathVariable Long id) {
         return super.getById(id);
     }
 

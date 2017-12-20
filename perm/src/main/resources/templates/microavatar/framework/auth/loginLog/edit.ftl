@@ -72,7 +72,7 @@
 
         var o = form.getData();           var json = mini.encode(o);
         $.ajax({
-          url: "/perm/loginLog!save.action",
+          url: "/perm/loginLog!add.action",
           type: 'post',
           data: { 
             data: json             ,fileIds:attacheIds          },

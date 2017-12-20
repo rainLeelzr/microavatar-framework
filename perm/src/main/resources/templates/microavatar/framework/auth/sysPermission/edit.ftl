@@ -28,7 +28,7 @@
             <td class="tdcontent">              <input class="mini-textbox" id="name" name="name" emptyText="请输入名称" vtype="maxLength:64" required="true" .if(false)onvalidation="onUniqueValidate".endif/>            </td>
           </tr>          <tr>
             <td class="tdtitle">代码：</td>
-            <td class="tdcontent">              <input class="mini-textbox" id="code" name="code" emptyText="请输入代码" vtype="maxLength:64" required="false" .if(false)onvalidation="onUniqueValidate".endif/>            </td>
+            <td class="tdcontent">              <input class="mini-textbox" id="errorCode" name="errorCode" emptyText="请输入代码" vtype="maxLength:64" required="false" .if(false)onvalidation="onUniqueValidate".endif/>            </td>
           </tr>          <tr>
             <td class="tdtitle">顺序：</td>
             <td class="tdcontent">              <input class="mini-textbox" id="orderNum" name="orderNum" emptyText="请输入顺序" vtype="maxLength:0" required="false" .if(false)onvalidation="onUniqueValidate".endif/>            </td>
@@ -69,7 +69,7 @@
 
         var o = form.getData();           var json = mini.encode(o);
         $.ajax({
-          url: "/perm/sysPermission!save.action",
+          url: "/perm/sysPermission!add.action",
           type: 'post',
           data: { 
             data: json             ,fileIds:attacheIds          },

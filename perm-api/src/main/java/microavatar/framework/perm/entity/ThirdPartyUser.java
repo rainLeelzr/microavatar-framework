@@ -9,6 +9,7 @@
 
 package microavatar.framework.perm.entity;
 
+
 import microavatar.framework.core.mvc.BaseEntity;
 
 public class ThirdPartyUser extends BaseEntity {

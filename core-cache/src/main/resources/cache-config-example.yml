@@ -1,0 +1,16 @@
+spring:
+  cache:
+    custom-type: avatarCache
+    enableL1Cache: true
+    enableL2Cache: true
+  jcache:
+    config: classpath:ehcache.xml
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 1
+    pool:
+      min-idle: 0
+      max-idle: 8
+      max-active: 8
+      max-wait: 5000

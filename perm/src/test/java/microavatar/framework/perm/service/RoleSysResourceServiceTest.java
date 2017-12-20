@@ -1,7 +1,7 @@
 package microavatar.framework.perm.service;
 
-import microavatar.framework.BaseServiceTestClass;
-import microavatar.framework.core.pk.PkGenerator;
+import microavatar.framework.BaseTransactionalServiceTestClass;
+import microavatar.framework.core.support.sequence.impl.UuidSequence;
 import microavatar.framework.perm.entity.RoleSysResource;
 import microavatar.framework.perm.dao.RoleSysResourceDao;
 import org.junit.FixMethodOrder;
@@ -10,21 +10,21 @@ import org.junit.runners.MethodSorters;
 import javax.annotation.Resource;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class RoleSysResourceServiceTest extends BaseServiceTestClass<RoleSysResource, RoleSysResourceDao, RoleSysResourceService> {
+public class RoleSysResourceServiceTest extends BaseTransactionalServiceTestClass<RoleSysResource, RoleSysResourceDao, RoleSysResourceService> {
 
     @Resource(name = "roleSysResourceService")
     private RoleSysResourceService roleSysResourceService;
 
     @Override
-    protected RoleSysResourceService getService() {
+    public RoleSysResourceService getService() {
         return roleSysResourceService;
     }
 
     @Override
     public RoleSysResource genEntity() {
         RoleSysResource entity = new RoleSysResource();
-        entity.setRoleId(PkGenerator.getPk());
-        entity.setSysResourceId(PkGenerator.getPk());
+        entity.setRoleId(UuidSequence.get());
+        entity.setSysResourceId(UuidSequence.get());
         return entity;
     }
 

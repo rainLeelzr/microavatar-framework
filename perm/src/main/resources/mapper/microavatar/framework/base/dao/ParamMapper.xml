@@ -39,7 +39,7 @@
         </where>
     </sql>
 
-    <insert id="save" parameterType="microavatar.framework.base.entity.Param">
+    <insert id="add" parameterType="microavatar.framework.base.entity.Param">
         INSERT INTO
         <include refid="_tableName"/>
         (
@@ -57,7 +57,7 @@
         )
     </insert>
 
-    <insert id="batchSave" parameterType="collection">
+    <insert id="batchAdd" parameterType="collection">
         INSERT INTO
         <include refid="_tableName"/>
         (

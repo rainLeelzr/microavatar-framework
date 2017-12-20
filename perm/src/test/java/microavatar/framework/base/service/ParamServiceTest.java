@@ -1,6 +1,6 @@
 package microavatar.framework.base.service;
 
-import microavatar.framework.BaseServiceTestClass;
+import microavatar.framework.BaseTransactionalServiceTestClass;
 import microavatar.framework.base.dao.ParamDao;
 import microavatar.framework.base.entity.Param;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -11,13 +11,13 @@ import org.junit.runners.MethodSorters;
 import javax.annotation.Resource;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ParamServiceTest extends BaseServiceTestClass<Param, ParamDao, ParamService> {
+public class ParamServiceTest extends BaseTransactionalServiceTestClass<Param, ParamDao, ParamService> {
 
     @Resource(name = "paramService")
     private ParamService paramService;
 
     @Override
-    protected ParamService getService() {
+    public ParamService getService() {
         return paramService;
     }
 

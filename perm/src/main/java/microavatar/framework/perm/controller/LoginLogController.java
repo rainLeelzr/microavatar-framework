@@ -32,7 +32,7 @@ public class LoginLogController extends BaseController<LoginLogService, LoginLog
 
     @Override
     @RequestMapping("/id/{id}")
-    public LoginLog getById(@PathVariable String id) {
+    public LoginLog getById(@PathVariable Long id) {
         return super.getById(id);
     }
 

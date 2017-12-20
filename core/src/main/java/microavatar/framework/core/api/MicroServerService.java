@@ -1,13 +1,14 @@
 package microavatar.framework.core.api;
 
-import microavatar.framework.common.util.log.LogUtil;
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
@@ -16,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Component
+@Slf4j
 public class MicroServerService implements InitializingBean {
 
     @Resource
@@ -89,25 +92,25 @@ public class MicroServerService implements InitializingBean {
                         index = i;
                     }
                 } catch (Exception e) {
-                    LogUtil.getLogger().debug("获取微服务[{}]提供的Api initTime失败：{}", serverName, e.getMessage());
+                    log.debug("获取微服务[{}]提供的Api initTime失败：{}", serverName, e.getMessage());
                 }
             }
 
             if (index != -1) {
-                LogUtil.getLogger().debug("正在更新微服务[{}]的api, url: {}", serverName, instances.get(index).getUri());
+                log.debug("正在更新微服务[{}]的api, url: {}", serverName, instances.get(index).getUri());
                 String getApisUrl = instances.get(index).getUri() + "/api";
                 try {
                     String json = noBalanceRestTemplate.getForObject(getApisUrl, String.class);
                     ServerApi serverApi = JSON.parseObject(json, ServerApi.class);
                     tempMicroServerApis.put(serverName.toUpperCase(), serverApi);
                     updateCount++;
-                    LogUtil.getLogger().debug("更新微服务[{}]api成功：{}", serverName, serverApi);
+                    log.debug("更新微服务[{}]api成功：{}", serverName, serverApi);
                 } catch (Exception e) {
-                    LogUtil.getLogger().info("获取微服务[{}]提供的Tcp api失败：{}", serverName, e.getMessage());
+                    log.info("获取微服务[{}]提供的Tcp api失败：{}", serverName, e.getMessage());
                 }
             }
         }
-        LogUtil.getLogger().debug("已更新[{}]个微服务的api", updateCount);
+        log.debug("已更新[{}]个微服务的api", updateCount);
         if (updateCount > 0) {
             this.microServerApis = tempMicroServerApis;
             // 发出微服务已更新的时间

@@ -78,7 +78,7 @@
 
         var o = form.getData();           var json = mini.encode(o);
         $.ajax({
-          url: "/perm/sysResource!save.action",
+          url: "/perm/sysResource!add.action",
           type: 'post',
           data: { 
             data: json             ,fileIds:attacheIds          },

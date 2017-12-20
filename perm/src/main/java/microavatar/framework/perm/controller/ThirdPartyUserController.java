@@ -29,7 +29,7 @@ public class ThirdPartyUserController extends BaseController<ThirdPartyUserServi
 
     @Override
     @RequestMapping("/id/{id}")
-    public ThirdPartyUser getById(@PathVariable String id) {
+    public ThirdPartyUser getById(@PathVariable Long id) {
         return super.getById(id);
     }
 

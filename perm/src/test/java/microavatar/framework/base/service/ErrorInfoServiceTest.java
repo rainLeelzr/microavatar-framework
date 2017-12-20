@@ -1,6 +1,6 @@
 package microavatar.framework.base.service;
 
-import microavatar.framework.BaseServiceTestClass;
+import microavatar.framework.BaseTransactionalServiceTestClass;
 import microavatar.framework.base.dao.ErrorInfoDao;
 import microavatar.framework.base.entity.ErrorInfo;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -11,13 +11,13 @@ import org.junit.runners.MethodSorters;
 import javax.annotation.Resource;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ErrorInfoServiceTest extends BaseServiceTestClass<ErrorInfo, ErrorInfoDao, ErrorInfoService> {
+public class ErrorInfoServiceTest extends BaseTransactionalServiceTestClass<ErrorInfo, ErrorInfoDao, ErrorInfoService> {
 
     @Resource(name = "errorInfoService")
     private ErrorInfoService errorInfoService;
 
     @Override
-    protected ErrorInfoService getService() {
+    public ErrorInfoService getService() {
         return errorInfoService;
     }
 

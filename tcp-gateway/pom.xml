@@ -20,9 +20,18 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- core -->
         <dependency>
             <groupId>microavatar.framework</groupId>
             <artifactId>core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>microavatar.framework</groupId>
+            <artifactId>core-net-tcp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>microavatar.framework</groupId>
+            <artifactId>core-mq</artifactId>
         </dependency>
 
         <dependency>

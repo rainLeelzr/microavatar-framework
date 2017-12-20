@@ -6,7 +6,7 @@
 
     <sql id="_tableName">Base_ErrorInfo</sql>
 
-    <sql id="_allCloumns"> id, keyStr, code, msg </sql>
+    <sql id="_allCloumns"> id, keyStr, errorCode, errorMsg </sql>
 
     <sql id="_selectCondition">
         <choose>
@@ -23,16 +23,16 @@
         <where>
             <if test="id != null">and id = #{id}</if>
             <if test="keyStr != null">and keyStr = #{keyStr}</if>
-            <if test="code != null">and code = #{code}</if>
-            <if test="code_gt != null">and code &gt; #{code_gt}</if>
-            <if test="code_gt_eq != null">and code &gt;= #{code_gt_eq}</if>
-            <if test="code_lt != null">and code &lt; #{code_lt}</if>
-            <if test="code_lt_eq != null">and code &lt;= #{code_lt_eq}</if>
-            <if test="msg != null">and msg = #{msg}</if>
+            <if test="errorCode != null">and errorCode = #{errorCode}</if>
+            <if test="code_gt != null">and errorCode &gt; #{code_gt}</if>
+            <if test="code_gt_eq != null">and errorCode &gt;= #{code_gt_eq}</if>
+            <if test="code_lt != null">and errorCode &lt; #{code_lt}</if>
+            <if test="code_lt_eq != null">and errorCode &lt;= #{code_lt_eq}</if>
+            <if test="errorMsg != null">and errorMsg = #{errorMsg}</if>
         </where>
     </sql>
 
-    <insert id="save" parameterType="microavatar.framework.base.entity.ErrorInfo">
+    <insert id="add" parameterType="microavatar.framework.base.entity.ErrorInfo">
         INSERT INTO
         <include refid="_tableName"/>
         (
@@ -42,12 +42,12 @@
         (
         #{id,jdbcType=VARCHAR},
         #{keyStr,jdbcType=VARCHAR},
-        #{code,jdbcType=INTEGER},
-        #{msg,jdbcType=VARCHAR}
+        #{errorCode,jdbcType=INTEGER},
+        #{errorMsg,jdbcType=VARCHAR}
         )
     </insert>
 
-    <insert id="batchSave" parameterType="collection">
+    <insert id="batchAdd" parameterType="collection">
         INSERT INTO
         <include refid="_tableName"/>
         (
@@ -58,8 +58,8 @@
             (
             #{item.id,jdbcType=VARCHAR},
             #{item.keyStr,jdbcType=VARCHAR},
-            #{item.code,jdbcType=INTEGER},
-            #{item.msg,jdbcType=VARCHAR}
+            #{item.errorCode,jdbcType=INTEGER},
+            #{item.errorMsg,jdbcType=VARCHAR}
             )
         </foreach>
     </insert>
@@ -84,8 +84,8 @@
         <include refid="_tableName"/>
         <set>
             <if test="keyStr != null">keyStr=#{keyStr},</if>
-            <if test="code != null">code=#{code},</if>
-            <if test="msg != null">msg=#{msg}</if>
+            <if test="errorCode != null">errorCode=#{errorCode},</if>
+            <if test="errorMsg != null">errorMsg=#{errorMsg}</if>
         </set>
         WHERE id = #{id}
     </update>

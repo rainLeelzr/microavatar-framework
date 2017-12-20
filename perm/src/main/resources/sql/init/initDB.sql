@@ -86,7 +86,7 @@ create table Auth_Role (
     id                             varchar(36) not null,
     parentId                       varchar(36),
     name                           varchar(64),
-    code                           varchar(64),
+    errorCode                           varchar(64),
     orderNum                       tinyint,
     createdUserId                  varchar(36),
     enabled                        tinyint,
@@ -153,7 +153,7 @@ create table Auth_SysPermission (
     id                             varchar(36) not null,
     sysResourceId                  varchar(36),
     name                           varchar(64),
-    code                           varchar(64),
+    errorCode                           varchar(64),
     orderNum                       tinyint,
     remark                         varchar(4096),
     primary key (id)
@@ -194,8 +194,8 @@ alter table Base_Param comment '参数表，存放所有系统参数和业务参
 create table Base_ErrorInfo (
     id                             varchar(36) not null,
     keyStr                         varchar(64) comment '错误代码的key',
-    code                           int comment '错误代码',
-    msg                            varchar(128) comment '发生错误时，具体的错误信息',
+    errorCode                           int comment '错误代码',
+    errorMsg                            varchar(128) comment '发生错误时，具体的错误信息',
     primary key (id)
 );
 

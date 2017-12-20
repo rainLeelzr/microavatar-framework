@@ -81,7 +81,7 @@
 
         var o = form.getData();           o.gender=mini.get("gender").getFormValue();        var json = mini.encode(o);
         $.ajax({
-          url: "/perm/userInfo!save.action",
+          url: "/perm/userInfo!add.action",
           type: 'post',
           data: { 
             data: json             ,fileIds:attacheIds          },

@@ -7,26 +7,21 @@ package microavatar.framework.base.service;
 
 import microavatar.framework.base.entity.ErrorInfo;
 
-import javax.annotation.Resource;
-
 // @Service
 public class ErrorInfoServiceExt extends ErrorInfoService {
-
-    @Resource
-    private ErrorInfoCache errorInfoCache;
 
     /**
      * /**
      * 根据key获取错误信息代码，不能返回null
      */
     public Integer getCodeByKey(String key) {
-        return errorInfoCache.getCodeByKey(key);
+        return null;
     }
 
     /**
      * 根据key获取错误信息，不能返回null
      */
     public ErrorInfo getByKey(String key) {
-        return errorInfoCache.getByKey(key);
+        return null;
     }
 }

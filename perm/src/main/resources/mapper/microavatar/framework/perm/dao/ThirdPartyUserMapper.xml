@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="microavatar.framework.perm.dao.ThirdPartyUserDao">
+
+    <!-- 本文件由powerDesigner自动生成，请勿修改本文件任何内容。如需自定义本entity的sql，请在同目录下添加ThirdPartyUserMapperExt.xml -->
+
+    <sql id="_tableName">Auth_ThirdPartyUser</sql>
+
+    <sql id="_allCloumns"> id, userId, loginType, accessTime, uniqueId </sql>
+
+    <sql id="_selectCondition">
+        <choose>
+            <when test="_select_all_columns">
+                <include refid="_allCloumns"/>
+            </when>
+            <otherwise>
+                <foreach collection="_selects" item="_item" index="index" separator=",">${_item}</foreach>
+            </otherwise>
+        </choose>
+    </sql>
+
+    <sql id="_whereCondition">
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="userId != null">and userId = #{userId}</if>
+            <if test="loginType != null">and loginType = #{loginType}</if>
+            <if test="loginType_gt != null">and loginType &gt; #{loginType_gt}</if>
+            <if test="loginType_gt_eq != null">and loginType &gt;= #{loginType_gt_eq}</if>
+            <if test="loginType_lt != null">and loginType &lt; #{loginType_lt}</if>
+            <if test="loginType_lt_eq != null">and loginType &lt;= #{loginType_lt_eq}</if>
+            <if test="accessTime != null">and accessTime = #{accessTime}</if>
+            <if test="accessTime_gt != null">and accessTime &gt; #{accessTime_gt}</if>
+            <if test="accessTime_gt_eq != null">and accessTime &gt;= #{accessTime_gt_eq}</if>
+            <if test="accessTime_lt != null">and accessTime &lt; #{accessTime_lt}</if>
+            <if test="accessTime_lt_eq != null">and accessTime &lt;= #{accessTime_lt_eq}</if>
+            <if test="uniqueId != null">and uniqueId = #{uniqueId}</if>
+        </where>
+    </sql>
+
+    <insert id="add" parameterType="microavatar.framework.perm.entity.ThirdPartyUser">
+        INSERT INTO
+        <include refid="_tableName"/>
+        (
+        <include refid="_allCloumns"/>
+        )
+        VALUES
+        (
+        #{id,jdbcType=VARCHAR},
+        #{userId,jdbcType=VARCHAR},
+        #{loginType,jdbcType=TINYINT},
+        #{accessTime,jdbcType=BIGINT},
+        #{uniqueId,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="batchAdd" parameterType="collection">
+        INSERT INTO
+        <include refid="_tableName"/>
+        (
+        <include refid="_allCloumns"/>
+        )
+        VALUES
+        <foreach collection="collection" item="item" index="index" separator=",">
+            (
+            #{item.id,jdbcType=VARCHAR},
+            #{item.userId,jdbcType=VARCHAR},
+            #{item.loginType,jdbcType=TINYINT},
+            #{item.accessTime,jdbcType=BIGINT},
+            #{item.uniqueId,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteById" parameterType="string">
+        DELETE FROM
+        <include refid="_tableName"/>
+        WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByIds" parameterType="collection">
+        DELETE FROM
+        <include refid="_tableName"/>
+        WHERE id IN
+        <foreach collection="collection" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <update id="update" parameterType="microavatar.framework.perm.entity.ThirdPartyUser">
+        UPDATE
+        <include refid="_tableName"/>
+        <set>
+            <if test="userId != null">userId=#{userId},</if>
+            <if test="loginType != null">loginType=#{loginType},</if>
+            <if test="accessTime != null">accessTime=#{accessTime},</if>
+            <if test="uniqueId != null">uniqueId=#{uniqueId}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="getById" parameterType="string" resultType="microavatar.framework.perm.entity.ThirdPartyUser">
+        SELECT
+        <include refid="_allCloumns"/>
+        FROM
+        <include refid="_tableName"/>
+        WHERE id = #{id}
+    </select>
+
+    <select id="findPage" parameterType="map" resultType="microavatar.framework.perm.entity.ThirdPartyUser">
+        SELECT
+        <include refid="_selectCondition"/>
+        FROM
+        <include refid="_tableName"/>
+        <include refid="_whereCondition"/>
+    </select>
+
+    <select id="countAll" resultType="long">
+        SELECT
+        count(1)
+        FROM
+        <include refid="_tableName"/>
+    </select>
+
+</mapper>

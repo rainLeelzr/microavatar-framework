@@ -15,9 +15,18 @@
     <version>1.0.0</version>
 
     <dependencies>
+        <!-- core -->
         <dependency>
             <groupId>microavatar.framework</groupId>
             <artifactId>core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>microavatar.framework</groupId>
+            <artifactId>core-database</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>microavatar.framework</groupId>
+            <artifactId>core-database-listener</artifactId>
         </dependency>
 
         <dependency>
@@ -26,14 +35,14 @@
         </dependency>
 
         <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-freemarker</artifactId>-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>org.springframework.boot</groupId>-->
-                    <!--<artifactId>spring-boot-starter-logging</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-freemarker</artifactId>-->
+        <!--<exclusions>-->
+        <!--<exclusion>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-logging</artifactId>-->
+        <!--</exclusion>-->
+        <!--</exclusions>-->
         <!--</dependency>-->
 
     </dependencies>

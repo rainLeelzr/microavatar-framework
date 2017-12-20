@@ -29,7 +29,7 @@ public class UserOrgController extends BaseController<UserOrgService, UserOrgDao
 
     @Override
     @RequestMapping("/id/{id}")
-    public UserOrg getById(@PathVariable String id) {
+    public UserOrg getById(@PathVariable Long id) {
         return super.getById(id);
     }
 

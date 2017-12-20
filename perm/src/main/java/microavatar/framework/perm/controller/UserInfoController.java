@@ -29,7 +29,7 @@ public class UserInfoController extends BaseController<UserInfoService, UserInfo
 
     @Override
     @RequestMapping("/id/{id}")
-    public UserInfo getById(@PathVariable String id) {
+    public UserInfo getById(@PathVariable Long id) {
         return super.getById(id);
     }
 

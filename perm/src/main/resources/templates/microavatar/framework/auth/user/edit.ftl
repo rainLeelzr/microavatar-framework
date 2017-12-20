@@ -54,7 +54,7 @@
 
         var o = form.getData();           var json = mini.encode(o);
         $.ajax({
-          url: "/perm/perm!save.action",
+          url: "/perm/perm!add.action",
           type: 'post',
           data: { 
             data: json           },

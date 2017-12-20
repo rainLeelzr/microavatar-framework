@@ -1,7 +1,7 @@
 package microavatar.framework.perm.service;
 
-import microavatar.framework.BaseServiceTestClass;
-import microavatar.framework.core.pk.PkGenerator;
+import microavatar.framework.BaseTransactionalServiceTestClass;
+import microavatar.framework.core.support.sequence.impl.UuidSequence;
 import microavatar.framework.perm.dao.SysResourceDao;
 import microavatar.framework.perm.entity.SysResource;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -12,20 +12,20 @@ import org.junit.runners.MethodSorters;
 import javax.annotation.Resource;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class SysResourceServiceTest extends BaseServiceTestClass<SysResource, SysResourceDao, SysResourceService> {
+public class SysResourceServiceTest extends BaseTransactionalServiceTestClass<SysResource, SysResourceDao, SysResourceService> {
 
     @Resource(name = "sysResourceService")
     private SysResourceService sysResourceService;
 
     @Override
-    protected SysResourceService getService() {
+    public SysResourceService getService() {
         return sysResourceService;
     }
 
     @Override
     public SysResource genEntity() {
         SysResource entity = new SysResource();
-        entity.setParentId(PkGenerator.getPk());
+        entity.setParentId(UuidSequence.get());
         entity.setName(RandomStringUtils.randomNumeric(5));
         entity.setType((byte) RandomUtils.nextInt(1, 5));
         entity.setHost(RandomStringUtils.randomNumeric(5));

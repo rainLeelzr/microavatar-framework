@@ -81,7 +81,7 @@
 
         var o = form.getData();           var json = mini.encode(o);
         $.ajax({
-          url: "/perm/org!save.action",
+          url: "/perm/org!add.action",
           type: 'post',
           data: { 
             data: json             ,fileIds:attacheIds          },

@@ -1,6 +1,5 @@
 package microavatar.framework;
 
-import microavatar.framework.core.api.MicroServerService;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -45,11 +44,6 @@ public class Application {
     @Bean
     public RestTemplate noBalanceRestTemplate() {
         return new RestTemplate();
-    }
-
-    @Bean
-    public MicroServerService microServerService() {
-        return new MicroServerService();
     }
 
 }

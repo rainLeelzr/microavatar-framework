@@ -13,19 +13,6 @@ public class ParamServiceTestExt extends ParamServiceTest {
     @Resource(name = "paramServiceExt")
     private ParamServiceExt paramServiceExt;
 
-    @Resource
-    private ParamCache paramCache;
-
-    @Test
-    public void testFirstLoad() {
-        paramCache.firstLoad();
-    }
-
-    @Test
-    public void testReload() {
-        paramCache.reload();
-    }
-
     @Test
     public void TestGetByParamKey() {
         String value1 = paramServiceExt.getParamObjectByKey("1", String.class);

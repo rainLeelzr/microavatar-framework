@@ -29,7 +29,7 @@ public class UserController extends BaseController<UserService, UserDao, User> {
 
     @Override
     @RequestMapping("/id/{id}")
-    public User getById(@PathVariable String id) {
+    public User getById(@PathVariable Long id) {
         return super.getById(id);
     }
 

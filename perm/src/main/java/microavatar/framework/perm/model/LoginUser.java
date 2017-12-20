@@ -36,43 +36,4 @@ public class LoginUser {
      */
     private long loginTime;
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public int getLoginType() {
-        return loginType;
-    }
-
-    public void setLoginType(int loginType) {
-        this.loginType = loginType;
-    }
-
-    public String getUniqueId() {
-        return uniqueId;
-    }
-
-    public void setUniqueId(String uniqueId) {
-        this.uniqueId = uniqueId;
-    }
-
-    public String getClientIp() {
-        return clientIp;
-    }
-
-    public void setClientIp(String clientIp) {
-        this.clientIp = clientIp;
-    }
-
-    public long getLoginTime() {
-        return loginTime;
-    }
-
-    public void setLoginTime(long loginTime) {
-        this.loginTime = loginTime;
-    }
 }

@@ -29,7 +29,7 @@ public class RoleResourceController extends BaseController<RoleResourceService, 
 
     @Override
     @RequestMapping("/id/{id}")
-    public RoleResource getById(@PathVariable String id) {
+    public RoleResource getById(@PathVariable Long id) {
         return super.getById(id);
     }
 

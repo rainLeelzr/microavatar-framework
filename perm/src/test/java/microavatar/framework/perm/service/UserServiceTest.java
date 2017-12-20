@@ -1,6 +1,6 @@
 package microavatar.framework.perm.service;
 
-import microavatar.framework.BaseServiceTestClass;
+import microavatar.framework.BaseTransactionalServiceTestClass;
 import microavatar.framework.perm.entity.User;
 import microavatar.framework.perm.dao.UserDao;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -11,13 +11,13 @@ import org.junit.runners.MethodSorters;
 import javax.annotation.Resource;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class UserServiceTest extends BaseServiceTestClass<User, UserDao, UserService> {
+public class UserServiceTest extends BaseTransactionalServiceTestClass<User, UserDao, UserService> {
 
     @Resource(name = "userService")
     private UserService userService;
 
     @Override
-    protected UserService getService() {
+    public UserService getService() {
         return userService;
     }
 

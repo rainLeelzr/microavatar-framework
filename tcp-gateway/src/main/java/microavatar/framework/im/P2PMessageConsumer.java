@@ -1,11 +1,12 @@
 package microavatar.framework.im;
 
+import lombok.extern.slf4j.Slf4j;
 import microavatar.framework.core.mq.rocketmq.RocketmqEvent;
-import microavatar.framework.common.util.log.LogUtil;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class P2PMessageConsumer implements ApplicationListener<RocketmqEvent> {
 
     @Override
@@ -16,7 +17,7 @@ public class P2PMessageConsumer implements ApplicationListener<RocketmqEvent> {
 
         String msg = event.getStringMsg();
 
-        LogUtil.getLogger().debug("解析到mq消息内容：{}", msg);
+        log.debug("解析到mq消息内容：{}", msg);
 
     }
 }

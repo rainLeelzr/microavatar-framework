@@ -12,8 +12,8 @@
       <div class="mini-toolbar" style="border-bottom:0;padding:0px;">
         <table style="width:100%;">
           <tr>
-            <td style="white-space:nowrap;">              <input class="mini-textbox" id="code" name="code" emptyText="请输入代码" style="width:150px;" onenter="onKeyEnter()"/>
-              <input class="mini-textbox" id="msg" name="msg" emptyText="请输入信息" style="width:150px;" onenter="onKeyEnter()"/>              <a class="mini-button" onclick="search()">查询</a>
+            <td style="white-space:nowrap;">              <input class="mini-textbox" id="errorCode" name="errorCode" emptyText="请输入代码" style="width:150px;" onenter="onKeyEnter()"/>
+              <input class="mini-textbox" id="errorMsg" name="errorMsg" emptyText="请输入信息" style="width:150px;" onenter="onKeyEnter()"/>              <a class="mini-button" onclick="search()">查询</a>
             </td>
           </tr>
           <tr>
@@ -31,9 +31,9 @@
       <div property="columns">
         <div type="checkcolumn" width="30px"></div>        <div field="keyStr" headerAlign="center" allowSort="true" width="60px">key</div>
         
-            <div field="code" headerAlign="center" allowSort="true" width="60px">代码</div>
+            <div field="errorCode" headerAlign="center" allowSort="true" width="60px">代码</div>
         
-            <div field="msg" headerAlign="center" allowSort="true" width="60px">信息</div>
+            <div field="errorMsg" headerAlign="center" allowSort="true" width="60px">信息</div>
         
           </div>
     </div>

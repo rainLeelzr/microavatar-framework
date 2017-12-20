@@ -15,13 +15,13 @@
             <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
             <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
             <!-- 输出日志的格式 -->
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%-20.20t] %-5level %-20.20logger{3}|%-20.20C{2}.%-12.12M %-3L - %msg%n"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%-20.20t] %-5level %-20.20logger{3}|%-20.20C{2}.%-12.12M %-3L - %errorMsg%n"/>
         </Console>
 
         <!-- 打印出所有的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档 -->
         <RollingRandomAccessFile name="infoFile" fileName="${fileName}/web-info.log" immediateFlush="false"
                                  filePattern="${fileGz}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.web-info.gz">
-            <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss} [%-20.20t] %-5level %-20.20logger{3}|%-20.20C{2}.%-12.12M %-3L - %msg%n"/>
+            <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss} [%-20.20t] %-5level %-20.20logger{3}|%-20.20C{2}.%-12.12M %-3L - %errorMsg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="6" modulate="true"/>
                 <SizeBasedTriggeringPolicy size="50 MB"/>
@@ -38,7 +38,7 @@
         <!-- 存储所有error信息 -->
         <RollingRandomAccessFile name="errorFile" fileName="${fileName}/web-error.log" immediateFlush="false"
                                  filePattern="${fileGz}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.web-error.gz">
-            <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss} [%-20.20t] %-5level %-20.20logger{3}|%-20.20C{2}.%-12.12M %-3L - %msg%n"/>
+            <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss} [%-20.20t] %-5level %-20.20logger{3}|%-20.20C{2}.%-12.12M %-3L - %errorMsg%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="6" modulate="true"/>
                 <SizeBasedTriggeringPolicy size="50 MB"/>

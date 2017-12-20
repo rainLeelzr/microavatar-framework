@@ -29,7 +29,7 @@ public class ErrorInfoController extends BaseController<ErrorInfoService, ErrorI
 
     @Override
     @RequestMapping("/id/{id}")
-    public ErrorInfo getById(@PathVariable String id) {
+    public ErrorInfo getById(@PathVariable Long id) {
         return super.getById(id);
     }
 

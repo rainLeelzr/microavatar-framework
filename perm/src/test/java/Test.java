@@ -1,9 +1,9 @@
-import microavatar.framework.core.pk.PkGenerator;
+import microavatar.framework.core.support.sequence.impl.UuidSequence;
 
 public class Test {
 
     public static void main(String[] args) {
-        System.out.println(PkGenerator.getPk());
+        System.out.println(UuidSequence.get());
     }
 
 }

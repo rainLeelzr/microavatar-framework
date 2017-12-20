@@ -24,6 +24,10 @@
             <groupId>microavatar.framework</groupId>
             <artifactId>core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>microavatar.framework</groupId>
+            <artifactId>core-net-tcp</artifactId>
+        </dependency>
 
         <!-- common-protobuf-->
         <dependency>

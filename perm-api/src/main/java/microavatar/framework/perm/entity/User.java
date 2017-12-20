@@ -13,6 +13,8 @@ package microavatar.framework.perm.entity;
 
 import microavatar.framework.core.mvc.BaseEntity;
 
+import java.util.Date;
+
 public class User extends BaseEntity {
 
     /**
@@ -52,6 +54,8 @@ public class User extends BaseEntity {
      * @see avatar.rain.auth.status.UserStatus
      */
     private Byte status;
+
+    private Date timeVersion;
 
     public static final String ACCOUNT = "account";
 
@@ -101,6 +105,14 @@ public class User extends BaseEntity {
 
     public void setStatus(Byte status) {
         this.status = status;
+    }
+
+    public Date getTimeVersion() {
+        return timeVersion;
+    }
+
+    public void setTimeVersion(Date timeVersion) {
+        this.timeVersion = timeVersion;
     }
 
     @Override

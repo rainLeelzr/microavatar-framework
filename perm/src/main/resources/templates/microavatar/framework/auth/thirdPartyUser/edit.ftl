@@ -66,7 +66,7 @@
 
         var o = form.getData();           var json = mini.encode(o);
         $.ajax({
-          url: "/perm/thirdPartyUser!save.action",
+          url: "/perm/thirdPartyUser!add.action",
           type: 'post',
           data: { 
             data: json             ,fileIds:attacheIds          },

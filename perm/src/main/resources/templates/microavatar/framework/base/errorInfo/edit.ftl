@@ -25,10 +25,10 @@
             <td class="tdcontent">              <input class="mini-textbox" id="keyStr" name="keyStr" emptyText="请输入key" vtype="maxLength:64" required="false" .if(false)onvalidation="onUniqueValidate".endif/>            </td>
           </tr>          <tr>
             <td class="tdtitle">代码：</td>
-            <td class="tdcontent">              <input class="mini-textbox" id="code" name="code" emptyText="请输入代码" vtype="maxLength:0" required="true" .if(false)onvalidation="onUniqueValidate".endif/>            </td>
+            <td class="tdcontent">              <input class="mini-textbox" id="errorCode" name="errorCode" emptyText="请输入代码" vtype="maxLength:0" required="true" .if(false)onvalidation="onUniqueValidate".endif/>            </td>
           </tr>          <tr>
             <td class="tdtitle">信息：</td>
-            <td class="tdcontent">              <input class="mini-textbox" id="msg" name="msg" emptyText="请输入信息" vtype="maxLength:128" required="true" .if(false)onvalidation="onUniqueValidate".endif/>            </td>
+            <td class="tdcontent">              <input class="mini-textbox" id="errorMsg" name="errorMsg" emptyText="请输入信息" vtype="maxLength:128" required="true" .if(false)onvalidation="onUniqueValidate".endif/>            </td>
           </tr>        </table>
       </div>      <fieldset style="width: 700px; border: solid 1px #aaa; margin:0 auto;">
         <legend>附件信息</legend>
@@ -63,7 +63,7 @@
 
         var o = form.getData();           var json = mini.encode(o);
         $.ajax({
-          url: "/base/errorInfo!save.action",
+          url: "/base/errorInfo!add.action",
           type: 'post',
           data: { 
             data: json             ,fileIds:attacheIds          },
