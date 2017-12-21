@@ -66,6 +66,8 @@ public class UserInsertEventHandler implements ApplicationListener<UserInsertEve
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        canalClient.addEventListener(null, "auth_user", CanalEntry.EventType.INSERT, UserInsertEvent.class);
+        if (canalClient != null) {
+            canalClient.addEventListener(null, "auth_user", CanalEntry.EventType.INSERT, UserInsertEvent.class);
+        }
     }
 }
