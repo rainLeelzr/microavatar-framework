@@ -5,8 +5,9 @@
 <Configuration status="OFF">
     <!-- 日志文件目录和压缩文件目录配置 -->
     <Properties>
-        <Property name="fileName">/home/kylin/log/knight/spring_log</Property>
-        <Property name="fileGz">/home/kylin/log/knight/spring_log/7z</Property>
+        <Property name="fileName">./log</Property>
+        <Property name="fileGz">./log/7z</Property>
+        <Property name="patternLayout">%d{HH:mm:ss.SSS} [%-20.20t] %-5level %-20.20logger{3}|%-20.20C{2}.%-12.12M %-3L - %msg%n</Property>
     </Properties>
 
     <Appenders>
@@ -15,13 +16,13 @@
             <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
             <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
             <!-- 输出日志的格式 -->
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%-20.20t] %-5level %-20.20logger{3}|%-20.20C{2}.%-12.12M %-3L - %msg%n"/>
+            <PatternLayout pattern="${patternLayout}"/>
         </Console>
 
         <!-- 打印出所有的信息，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档 -->
         <RollingRandomAccessFile name="infoFile" fileName="${fileName}/web-info.log" immediateFlush="false"
                                  filePattern="${fileGz}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.web-info.gz">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%-20.20t] %-5level %-20.20logger{3}|%-20.20C{2}.%-12.12M %-3L - %msg%n"/>
+            <PatternLayout pattern="${patternLayout}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="6" modulate="true"/>
                 <SizeBasedTriggeringPolicy size="50 MB"/>
@@ -38,7 +39,7 @@
         <!-- 存储所有error信息 -->
         <RollingRandomAccessFile name="errorFile" fileName="${fileName}/web-error.log" immediateFlush="false"
                                  filePattern="${fileGz}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.web-error.gz">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%-20.20t] %-5level %-20.20logger{3}|%-20.20C{2}.%-12.12M %-3L - %msg%n"/>
+            <PatternLayout pattern="${patternLayout}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="6" modulate="true"/>
                 <SizeBasedTriggeringPolicy size="50 MB"/>
@@ -54,7 +55,7 @@
         <!-- 打印出指定的信息，用于调试，每次大小超过size，则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩，作为存档 -->
         <RollingRandomAccessFile name="diyFile" fileName="${fileName}/web-diy.log" immediateFlush="false"
                                  filePattern="${fileGz}/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.web-diy.gz">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%-20.20t] %-5level %-20.20logger{3}|%-20.20C{2}.%-12.12M %-3L - %msg%n"/>
+            <PatternLayout pattern="${patternLayout}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="6" modulate="true"/>
                 <SizeBasedTriggeringPolicy size="50 MB"/>
@@ -75,19 +76,6 @@
             <appender-ref ref="infoFile"/>
             <appender-ref ref="errorFile"/>
         </root>
-
-        <logger name="avatar.rain" level="trace" additivity="false">
-            <appender-ref ref="console"/>
-            <appender-ref ref="infoFile"/>
-            <appender-ref ref="errorFile"/>
-        </logger>
-
-        <logger name="microavatar.framework.core.database.listener.CanalClient" level="info" additivity="false">
-            <appender-ref ref="console"/>
-            <appender-ref ref="infoFile"/>
-            <appender-ref ref="errorFile"/>
-            <appender-ref ref="diyFile"/>
-        </logger>
 
         <!-- AsyncRoot - 异步记录日志 - 需要LMAX Disruptor的支持 -->
         <!--<AsyncRoot level="info" additivity="false">-->

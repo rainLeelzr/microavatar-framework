@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 序列化前：string json，序列化后：byte[]
+ */
 @Configuration
 @Slf4j
 // todo 改为配置文件 是否应用此工具

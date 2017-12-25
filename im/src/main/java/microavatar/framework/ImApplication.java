@@ -14,11 +14,11 @@ import org.springframework.context.annotation.Bean;
  */
 @SpringBootApplication
 @EnableEurekaClient
-public class Application {
+public class ImApplication {
 
     //启动服务时，开启debug日志模式：java -jar xxx.jar --debug
     public static void main(String[] args) throws Exception {
-        ConfigurableApplicationContext run = new SpringApplicationBuilder(Application.class)
+        ConfigurableApplicationContext run = new SpringApplicationBuilder(ImApplication.class)
                 .web(true)
                 .run(args);
     }

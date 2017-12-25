@@ -8,11 +8,10 @@
         <groupId>microavatar.framework</groupId>
         <artifactId>parent</artifactId>
         <version>1.0.0</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>eureka</artifactId>
-    <name>eureka</name>
+    <artifactId>server-base-eureka</artifactId>
+    <name>server-base-eureka</name>
     <version>1.0.0</version>
 
     <dependencyManagement>
@@ -21,6 +20,12 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- core -->
+        <dependency>
+            <groupId>microavatar.framework</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+
         <!-- 服务注册与发现中心 eureka server-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

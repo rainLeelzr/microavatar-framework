@@ -14,11 +14,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 @SpringBootApplication
 @EnableEurekaClient
 @EnableFeignClients
-public class Application {
+public class GoodsApplication {
 
     //启动服务时，开启debug日志模式：java -jar xxx.jar --debug
     public static void main(String[] args) throws Exception {
-        ConfigurableApplicationContext run = new SpringApplicationBuilder(Application.class)
+        ConfigurableApplicationContext run = new SpringApplicationBuilder(GoodsApplication.class)
                 .web(true)
                 .run(args);
     }

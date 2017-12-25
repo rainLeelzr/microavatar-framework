@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = PermApplication.class)
 public abstract class BaseTransactionalServiceTestClass<E extends BaseEntity, D extends BaseDao<E>, S extends BaseService<E, D>>
         extends AbstractTransactionalJUnit4SpringContextTests implements ServiceTest {
 

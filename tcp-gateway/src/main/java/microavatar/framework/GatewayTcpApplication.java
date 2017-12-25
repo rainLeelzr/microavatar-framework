@@ -26,11 +26,11 @@ import org.springframework.web.client.RestTemplate;
 @EnableScheduling
 @EnableFeignClients
 @ComponentScan
-public class Application {
+public class GatewayTcpApplication {
 
     //启动服务时，开启debug日志模式：java -jar xxx.jar --debug
     public static void main(String[] args) throws Exception {
-        ConfigurableApplicationContext ctx = new SpringApplicationBuilder(Application.class)
+        ConfigurableApplicationContext ctx = new SpringApplicationBuilder(GatewayTcpApplication.class)
                 .web(true)
                 .run(args);
     }

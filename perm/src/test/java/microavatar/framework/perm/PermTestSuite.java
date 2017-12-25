@@ -19,5 +19,5 @@ import org.junit.runners.Suite;
         SysPermissionServiceTest.class,
         RoleSysPermissionServiceTest.class
 })
-public class AuthTestSuite {
+public class PermTestSuite {
 }

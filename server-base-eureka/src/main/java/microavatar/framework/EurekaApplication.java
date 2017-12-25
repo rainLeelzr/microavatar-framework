@@ -7,11 +7,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
 @EnableEurekaServer
-public class Application {
+public class EurekaApplication {
 
     //启动服务时，开启debug日志模式：java -jar xxx.jar --debug
     public static void main(String[] args) throws Exception {
-        ConfigurableApplicationContext run = new SpringApplicationBuilder(Application.class)
+        ConfigurableApplicationContext run = new SpringApplicationBuilder(EurekaApplication.class)
                 .web(true)
                 .run(args);
     }

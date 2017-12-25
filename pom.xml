@@ -17,24 +17,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <!-- 应用服务，供外部调用（需要经过网关调用） -->
-        <!-- 8001 -->
-        <module>eureka</module>
-        <!-- 8131 8132 -->
-        <module>tcp-gateway</module>
-        <module>tcp-test</module>
-        <!-- 8101 8102-->
-        <module>im</module>
-        <!-- 8111-->
-        <module>order</module>
-        <!-- 8121-->
-        <module>goods</module>
-
-        <!-- 基础服务，供上层服务调用 -->
-        <!-- 8011 8012-->
-        <module>perm</module>
-
-
         <!-- 基础组件，供上层服务依赖 -->
         <module>common-protobuf</module>
 
@@ -47,12 +29,26 @@
         <module>core-database-listener</module>
         <module>core-mq</module>
 
+        <!-- 应用组件 -->
         <module>perm-api</module>
 
+        <!-- 基础服务，端口80xx -->
+        <module>server-base-eureka</module><!-- 8001 -->
+        <module>server-base-config</module><!-- 8011 -->
+
+        <!-- 应用服务，端口81xx -->
+        <module>tcp-gateway</module><!-- 8131 8132 -->
+        <module>tcp-test</module>
+        <module>im</module><!-- 8101 8102-->
+        <module>order</module><!-- 8111-->
+        <module>goods</module><!-- 8121-->
+        <module>perm</module><!-- 8131 8132-->
     </modules>
 
     <properties>
+        <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 

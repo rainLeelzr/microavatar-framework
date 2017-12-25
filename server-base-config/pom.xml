@@ -10,8 +10,8 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>perm-api</artifactId>
-    <name>perm-api</name>
+    <artifactId>server-base-config</artifactId>
+    <name>server-base-config</name>
     <version>1.0.0</version>
 
     <dependencies>
@@ -20,18 +20,20 @@
             <groupId>microavatar.framework</groupId>
             <artifactId>core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>microavatar.framework</groupId>
-            <artifactId>core-mvc</artifactId>
-        </dependency>
 
-        <!-- rest客户端 feign -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-feign</artifactId>
+            <artifactId>spring-cloud-config-server</artifactId>
         </dependency>
+	</dependencies>
 
-
-    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
