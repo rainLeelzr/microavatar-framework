@@ -3,14 +3,13 @@ package microavatar.framework.core.serialization.impl;
 import com.google.protobuf.GeneratedMessage;
 import com.googlecode.protobuf.format.JsonFormat;
 import lombok.extern.slf4j.Slf4j;
-import microavatar.framework.core.api.Api;
-import microavatar.framework.core.api.MicroServerService;
+import microavatar.framework.core.api.MicroServerSearchService;
 import microavatar.framework.core.api.MicroServerUpdatedEvent;
-import microavatar.framework.core.api.ServerApi;
+import microavatar.framework.core.api.model.Api;
+import microavatar.framework.core.api.model.ServerApi;
 import microavatar.framework.core.serialization.SerializationMode;
 import microavatar.framework.core.serialization.Serializer;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
@@ -21,7 +20,6 @@ import java.util.Map;
 /**
  * 序列化前：string json，序列化后：byte[]
  */
-@Configuration
 @Slf4j
 // todo 改为配置文件 是否应用此工具
 public class Protobuf2Serializer implements Serializer<String, byte[]>, ApplicationListener<MicroServerUpdatedEvent> {
@@ -40,7 +38,7 @@ public class Protobuf2Serializer implements Serializer<String, byte[]>, Applicat
     private Map<String, Method> s2cBuilderMethods;
 
     @Resource
-    private MicroServerService microServerService;
+    private MicroServerSearchService microServerService;
 
     private ThreadLocal<String> protobufClass = new ThreadLocal<>();
 
@@ -70,7 +68,6 @@ public class Protobuf2Serializer implements Serializer<String, byte[]>, Applicat
     public byte[] serialize(String jsonStr) throws Exception {
         String protoClassStr = protobufClass.get();
         Method builderMethod = s2cBuilderMethods.get(protoClassStr);
-        protobufClass.remove();
 
         GeneratedMessage.Builder builder = (GeneratedMessage.Builder) builderMethod.invoke(builderMethod.getDeclaringClass());
         JsonFormat.merge(jsonStr, builder);
@@ -88,7 +85,6 @@ public class Protobuf2Serializer implements Serializer<String, byte[]>, Applicat
         String protoClassStr = protobufClass.get();
         Method parseMethod = c2sMethods.get(protoClassStr);
         GeneratedMessage protobufJavaBean = (GeneratedMessage) parseMethod.invoke(null, data);
-        protobufClass.remove();
         return JsonFormat.printToString(protobufJavaBean);
     }
 

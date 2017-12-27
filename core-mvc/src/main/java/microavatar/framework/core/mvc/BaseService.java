@@ -20,7 +20,7 @@ public abstract class BaseService<E extends BaseEntity, D extends BaseDao<E>> {
      */
     public int add(E entity) {
         if (entity.getId() == null) {
-            entity.newId();
+            entity.randomId();
         }
         return getDao().add(entity);
     }
@@ -43,7 +43,7 @@ public abstract class BaseService<E extends BaseEntity, D extends BaseDao<E>> {
         for (Collection<E> es : split) {
             for (E entity : es) {
                 if (entity.getId() == null) {
-                    entity.newId();
+                    entity.randomId();
                 }
             }
             insertCount += getDao().batchAdd(es);

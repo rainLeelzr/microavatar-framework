@@ -1,5 +1,6 @@
 package microavatar.framework.core.api;
 
+import microavatar.framework.core.api.model.ServerApi;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

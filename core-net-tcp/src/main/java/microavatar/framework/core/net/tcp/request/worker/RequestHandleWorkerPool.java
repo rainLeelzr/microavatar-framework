@@ -1,6 +1,6 @@
 package microavatar.framework.core.net.tcp.request.worker;
 
-import microavatar.framework.core.api.MicroServerService;
+import microavatar.framework.core.api.MicroServerSearchService;
 import microavatar.framework.core.net.tcp.TcpServerCondition;
 import microavatar.framework.core.net.tcp.request.ATCPRequest;
 import microavatar.framework.core.serialization.Serializer;
@@ -33,7 +33,7 @@ public class RequestHandleWorkerPool implements InitializingBean {
     private RestTemplate restTemplate;
 
     @Resource
-    private MicroServerService microServerService;
+    private MicroServerSearchService microServerService;
 
     @Resource
     private Serializer serializer;

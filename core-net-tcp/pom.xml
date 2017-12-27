@@ -20,6 +20,10 @@
             <groupId>microavatar.framework</groupId>
             <artifactId>core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>microavatar.framework</groupId>
+            <artifactId>core-mvc</artifactId>
+        </dependency>
 
         <!-- netty -->
         <dependency>

@@ -46,13 +46,13 @@
         )
         VALUES
         (
-        #{id,jdbcType=VARCHAR},
+        #{id,jdbcType=BIGINT},
         #{account,jdbcType=VARCHAR},
         #{pwd,jdbcType=VARCHAR},
         #{createTime,jdbcType=BIGINT},
         #{name,jdbcType=VARCHAR},
         #{status,jdbcType=TINYINT},
-        #{timeVersion,jdbcType=TIMESTAMP}
+        #{timeVersion,jdbcType=BIGINT}
         )
     </insert>
 
@@ -65,18 +65,18 @@
         VALUES
         <foreach collection="collection" item="item" index="index" separator=",">
             (
-            #{item.id,jdbcType=VARCHAR},
+            #{item.id,jdbcType=BIGINT},
             #{item.account,jdbcType=VARCHAR},
             #{item.pwd,jdbcType=VARCHAR},
             #{item.createTime,jdbcType=BIGINT},
             #{item.name,jdbcType=VARCHAR},
             #{item.status,jdbcType=TINYINT},
-            #{item.timeVersion,jdbcType=TIMESTAMP}
+            #{item.timeVersion,jdbcType=BIGINT}
             )
         </foreach>
     </insert>
 
-    <delete id="deleteById" parameterType="string">
+    <delete id="deleteById" parameterType="long">
         DELETE FROM
         <include refid="_tableName"/>
         WHERE id = #{id}
@@ -104,7 +104,7 @@
         WHERE id = #{id}
     </update>
 
-    <select id="getById" parameterType="string" resultType="microavatar.framework.perm.entity.User">
+    <select id="getById" parameterType="long" resultType="microavatar.framework.perm.entity.User">
         SELECT
         <include refid="_allCloumns"/>
         FROM

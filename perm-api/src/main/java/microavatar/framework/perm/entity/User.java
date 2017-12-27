@@ -11,11 +11,21 @@
 
 package microavatar.framework.perm.entity;
 
+import lombok.*;
 import microavatar.framework.core.mvc.BaseEntity;
 
-import java.util.Date;
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class User extends BaseEntity<User> {
 
-public class User extends BaseEntity {
+    public static final String ACCOUNT = "account";
+    public static final String PWD = "pwd";
+    public static final String CREATETIME = "createTime";
+    public static final String NAME = "name";
+    public static final String STATUS = "status";
 
     /**
      * 账号
@@ -55,64 +65,17 @@ public class User extends BaseEntity {
      */
     private Byte status;
 
-    private Date timeVersion;
+    @Override
+    public User randomEntity() {
+        this.randomId();
+        this.timeVersion = System.currentTimeMillis();
 
-    public static final String ACCOUNT = "account";
-
-    public static final String PWD = "pwd";
-
-    public static final String CREATETIME = "createTime";
-
-    public static final String NAME = "name";
-
-    public static final String STATUS = "status";
-
-    public String getAccount() {
-        return account;
-    }
-
-    public void setAccount(String account) {
-        this.account = account;
-    }
-
-    public String getPwd() {
-        return pwd;
-    }
-
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
-    }
-
-    public Long getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Long createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
-
-    public Date getTimeVersion() {
-        return timeVersion;
-    }
-
-    public void setTimeVersion(Date timeVersion) {
-        this.timeVersion = timeVersion;
+        this.account = randomString();
+        this.pwd = randomString();
+        this.createTime = randomLong();
+        this.name = randomString();
+        this.status = randomByte();
+        return this;
     }
 
     @Override
@@ -133,4 +96,5 @@ public class User extends BaseEntity {
                 .append('}')
                 .toString();
     }
+
 }

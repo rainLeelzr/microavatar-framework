@@ -1,6 +1,8 @@
 package microavatar.framework.core.api;
 
 import lombok.extern.slf4j.Slf4j;
+import microavatar.framework.core.api.model.Api;
+import microavatar.framework.core.api.model.ServerApi;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

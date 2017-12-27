@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public interface ServiceTest<E extends BaseEntity, D extends BaseDao<E>, S extends BaseService<E, D>> {
+public interface ServiceTest<E extends BaseEntity<E>, D extends BaseDao<E>, S extends BaseService<E, D>> {
 
     S getService();
 

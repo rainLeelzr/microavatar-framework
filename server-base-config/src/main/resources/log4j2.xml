@@ -5,8 +5,8 @@
 <Configuration status="OFF">
     <!-- 日志文件目录和压缩文件目录配置 -->
     <Properties>
-        <Property name="fileName">./log</Property>
-        <Property name="fileGz">./log/7z</Property>
+        <Property name="fileName">../log/config1/</Property>
+        <Property name="fileGz">../log/config1//7z</Property>
         <Property name="patternLayout">%d{HH:mm:ss.SSS} [%-20.20t] %-5level %-20.20logger{3}|%-20.20C{2}.%-12.12M %-3L - %msg%n</Property>
     </Properties>
 

@@ -1,8 +1,5 @@
 package microavatar.framework.security.filter;
 
-import microavatar.framework.perm.entity.Role;
-import microavatar.framework.perm.entity.RoleResource;
-import microavatar.framework.perm.entity.SysResource;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.web.FilterInvocation;
@@ -29,11 +26,12 @@ public class AvatarInvocationSecurityMetadataSource implements FilterInvocationS
      * 加载url资源和角色
      */
     private void loadResources() {
-        List<Role> roles = new ArrayList<>();
-        List<SysResource> resources = new ArrayList<>();
-        List<RoleResource> roleResources = new ArrayList<>();
+        //List<Role> roles = new ArrayList<>();
+        //List<SysResource> resources = new ArrayList<>();
+        //List<RoleResource> roleResources = new ArrayList<>();
 
-        resourceMap = new HashMap<>(roles.size());
+        //resourceMap = new HashMap<>(roles.size());
+        resourceMap = new HashMap<>();
 
         RequestMatcher matcher = new AntPathRequestMatcher("/auth/test");
         Collection<ConfigAttribute> configAttributes = new ArrayList<>(2);

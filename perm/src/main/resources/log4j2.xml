@@ -5,8 +5,8 @@
 <Configuration status="OFF">
     <!-- 日志文件目录和压缩文件目录配置 -->
     <Properties>
-        <Property name="fileName">/home/kylin/log/knight/spring_log</Property>
-        <Property name="fileGz">/home/kylin/log/knight/spring_log/7z</Property>
+        <Property name="fileName">../log/perm1/</Property>
+        <Property name="fileGz">../log/perm1/7z</Property>
     </Properties>
 
     <Appenders>

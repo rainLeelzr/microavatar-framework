@@ -14,11 +14,6 @@
     <name>server-base-eureka</name>
     <version>1.0.0</version>
 
-    <dependencyManagement>
-        <dependencies>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
         <!-- core -->
         <dependency>
@@ -58,14 +53,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>../core/src/main/resources</directory>
-                <includes>
-                    <include>banner.txt</include>
-                </includes>
-            </resource>
-        </resources>
     </build>
 
 </project>

@@ -44,16 +44,6 @@ spring:
    max-active: 8
    max-wait: 5000
 
-eureka:
- client:
-  serviceUrl:
-   defaultZone: http://avatar:123456@localhost:8001/eureka
- instance:
-  metadataMap:
-   instanceId: ${spring.application.name}:${server.port}
-   # 在eureka上显示此微服务的ip地址
-   prefer-ip-address: true
-
 druid:
  loginUsername: druid
  loginPassword: druid888888

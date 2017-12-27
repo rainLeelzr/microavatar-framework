@@ -2,12 +2,14 @@ package microavatar.framework.core.mq.rocketmq.property;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
 import static microavatar.framework.core.mq.rocketmq.property.RocketmqProperties.PREFIX;
 
 /**
  * Rocketmq配置
  */
+@Configuration
 @ConfigurationProperties(PREFIX)
 public class RocketmqProperties {
 

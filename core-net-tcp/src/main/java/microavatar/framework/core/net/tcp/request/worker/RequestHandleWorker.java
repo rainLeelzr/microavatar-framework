@@ -1,9 +1,9 @@
 package microavatar.framework.core.net.tcp.request.worker;
 
 import lombok.extern.slf4j.Slf4j;
-import microavatar.framework.core.api.Api;
-import microavatar.framework.core.api.MicroServerService;
-import microavatar.framework.core.api.ServerApi;
+import microavatar.framework.core.api.MicroServerSearchService;
+import microavatar.framework.core.api.model.ServerApi;
+import microavatar.framework.core.api.model.Api;
 import microavatar.framework.core.net.tcp.netpackage.TcpPacket;
 import microavatar.framework.core.net.tcp.request.ATCPRequest;
 import microavatar.framework.core.serialization.SerializationMode;
@@ -34,7 +34,7 @@ public class RequestHandleWorker extends Thread {
 
     private long handledTimes = 0;//处理完的个数
 
-    private MicroServerService microServerService;
+    private MicroServerSearchService microServerService;
 
     private Serializer serializer;
 
@@ -47,7 +47,7 @@ public class RequestHandleWorker extends Thread {
     private Map<String, String> serverNameMapping;
 
     public RequestHandleWorker(RestTemplate restTemplate,
-                               MicroServerService microServerService,
+                               MicroServerSearchService microServerService,
                                Serializer serializer,
                                Map<String, String> serverNameMapping,
                                String workName) {
