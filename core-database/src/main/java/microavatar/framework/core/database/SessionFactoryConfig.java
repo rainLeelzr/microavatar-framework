@@ -46,20 +46,22 @@ public class SessionFactoryConfig implements TransactionManagementConfigurer {
     public SqlSessionFactoryBean createSqlSessionFactoryBean() throws Exception {
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 
-        // 设置mybatis分页插件
-        PageInterceptor pageInterceptor = new PageInterceptor();
-        Properties properties = new Properties();
-        pageInterceptor.setProperties(properties);
-        sqlSessionFactoryBean.setPlugins(new Interceptor[]{pageInterceptor});
-
         // 设置mapper.xml
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath*:mapper/**/dao/*Mapper*.xml"));
         sqlSessionFactoryBean.setDataSource(dataSource);
 
+        // 设置configuration
         org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
         configuration.setMapUnderscoreToCamelCase(true);
         sqlSessionFactoryBean.setConfiguration(configuration);
+
+        // 设置mybatis分页插件
+        PageInterceptor pageInterceptor = new PageInterceptor();
+        Properties properties = new Properties();
+        pageInterceptor.setProperties(properties);
+
+        sqlSessionFactoryBean.setPlugins(new Interceptor[]{pageInterceptor});
 
         return sqlSessionFactoryBean;
     }

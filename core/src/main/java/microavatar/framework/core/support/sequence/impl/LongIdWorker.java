@@ -48,7 +48,7 @@ public class LongIdWorker {
     /**
      * 支持的最大数据标识id，结果是31
      */
-    private final long maxDatacenterId = -1L ^ (-1L << datacenterIdBits);
+    private final long maxDataCenterId = -1L ^ (-1L << datacenterIdBits);
 
     /**
      * 序列在id中占的位数
@@ -63,7 +63,7 @@ public class LongIdWorker {
     /**
      * 数据标识id向左移17位(12+5)
      */
-    private final long datacenterIdShift = sequenceBits + workerIdBits;
+    private final long dataCenterIdShift = sequenceBits + workerIdBits;
 
     /**
      * 时间截向左移22位(5+5+12)
@@ -104,8 +104,8 @@ public class LongIdWorker {
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
         }
 
-        if (dataCenterId > maxDatacenterId || dataCenterId < 0) {
-            throw new IllegalArgumentException(String.format("dataCenter Id can't be greater than %d or less than 0", maxDatacenterId));
+        if (dataCenterId > maxDataCenterId || dataCenterId < 0) {
+            throw new IllegalArgumentException(String.format("datacenter Id can't be greater than %d or less than 0", maxDataCenterId));
         }
 
         this.workerId = workerId;
@@ -118,12 +118,10 @@ public class LongIdWorker {
     public synchronized long nextId() {
         long timestamp = timeGen();
 
-        // 闰秒。如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过这个时候应当抛出异常
-        if (timestamp < lastTimestamp) {
-            long maxOffset = 5;
+        // 如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过这个时候应当抛出异常
+        if (timestamp < lastTimestamp) {// 闰秒
             long offset = lastTimestamp - timestamp;
-            // 如果时间差在5毫秒内，则再次获取时间，否则直接抛出异常
-            if (offset <= maxOffset) {
+            if (offset <= 5) {
                 try {
                     wait(offset << 1);
                     timestamp = timeGen();
@@ -150,14 +148,28 @@ public class LongIdWorker {
         } else {// 时间戳改变，毫秒内序列重置
             sequence = 0L;
         }
+        /*
+         // 如果是同一时间生成的，则进行毫秒内序列
+         if (lastTimestamp == timestamp) {
+         long old = sequence;
+         sequence = (sequence + 1) & sequenceMask;
+         // 毫秒内序列溢出
+         if (sequence == old) {
+         // 阻塞到下一个毫秒,获得新的时间戳
+         timestamp = tilNextMillis(lastTimestamp);
+         }
+         } else {// 时间戳改变，毫秒内序列重置
+         sequence = ThreadLocalRandom.current().nextLong(0, 2);
+         }
+         **/
 
         // 上次生成ID的时间截
         lastTimestamp = timestamp;
 
         // 移位并通过或运算拼到一起组成64位的ID
-        return ((timestamp - twepoch) << timestampLeftShift)
-                | (dataCenterId << datacenterIdShift)
-                | (workerId << workerIdShift)
+        return ((timestamp - twepoch) << timestampLeftShift) //
+                | (dataCenterId << dataCenterIdShift) //
+                | (workerId << workerIdShift) //
                 | sequence;
     }
 
@@ -167,7 +179,7 @@ public class LongIdWorker {
      * @param lastTimestamp 上次生成ID的时间截
      * @return 当前时间戳
      */
-    private long tilNextMillis(long lastTimestamp) {
+    protected long tilNextMillis(long lastTimestamp) {
         long timestamp = timeGen();
         while (timestamp <= lastTimestamp) {
             timestamp = timeGen();
@@ -181,8 +193,8 @@ public class LongIdWorker {
      *
      * @return 当前时间(毫秒)
      */
-    private long timeGen() {
-        return System.currentTimeMillis();
+    protected long timeGen() {
+        return SystemClock.now();
     }
 
 }

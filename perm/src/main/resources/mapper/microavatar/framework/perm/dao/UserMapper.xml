@@ -8,6 +8,18 @@
 
     <sql id="_allColumns"> id, account, pwd, name, status, create_time, modify_time, is_deleted </sql>
 
+    <resultMap id="userResultMap" type="microavatar.framework.perm.entity.User">
+		<id property="id" column="id"/>
+		<result property="createTime" column="create_time"/>
+		<result property="modifyTime" column="modify_time"/>
+		<result property="deleted" column="is_deleted"/>
+
+		<result property="account" column="account"/>
+		<result property="pwd" column="pwd"/>
+		<result property="name" column="name"/>
+		<result property="status" column="status"/>
+	</resultMap>
+
     <sql id="_selectCriteria">
         <choose>
             <when test="selectColumns.isEmpty()">
@@ -225,7 +237,7 @@
         WHERE id = #{id}
     </update>
 
-    <select id="getById" parameterType="long" resultType="microavatar.framework.perm.entity.User">
+    <select id="getById" parameterType="long" resultMap="userResultMap">
         SELECT
             <include refid="_allColumns"/>
         FROM
@@ -236,7 +248,7 @@
 
     <select id="findByCriteria"
             parameterType="microavatar.framework.core.mvc.BaseCriteria"
-            resultType="microavatar.framework.perm.entity.User">
+            resultMap="userResultMap">
         SELECT
             <include refid="_selectCriteria"/>
         FROM
@@ -254,7 +266,7 @@
         <include refid="_whereCriteria"/>
     </select>
 
-    <select id="findAll" resultType="microavatar.framework.perm.entity.User">
+    <select id="findAll" resultMap="userResultMap">
         SELECT
             <include refid="_allColumns"/>
         FROM

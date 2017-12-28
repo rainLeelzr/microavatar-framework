@@ -1,6 +1,7 @@
 package microavatar.framework;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import microavatar.framework.core.mvc.BaseCriteria;
 import microavatar.framework.core.mvc.BaseDao;
 import microavatar.framework.core.mvc.BaseEntity;
@@ -75,10 +76,9 @@ public interface ServiceTest<
         E entity = genEntity();
         entity.setId(LongSequence.get());
         Assert.assertEquals(1, getService().add(entity));
-        // Assert.assertEquals(entity.getId(), service.getById(entity.getId()).getId());
-        // Assert.assertEquals(entity.getId(), service.getById(entity.getId()).getId());
-        getService().getById(entity.getId());
-        getService().getById(entity.getId());
+
+        E e = getService().getById(entity.getId());
+        Assert.assertEquals(entity.getId(), e.getId());
     }
 
     default void findByCriteria() {
@@ -102,6 +102,8 @@ public interface ServiceTest<
         PageHelper.orderBy(criteria.getOrderBy());
 
         List<E> page = getService().findByCriteria(criteria);
+        PageInfo<E> pageInfo = new PageInfo<>(page);
+
         Assert.assertEquals(1, page.size());
     }
 
