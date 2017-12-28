@@ -1,8 +1,11 @@
 spring:
+  application:
+  #应用名称
+    name: avatar-perm
+
   # config 配置中心
   cloud:
     config:
-#      uri: http://localhost:8011
       label: master
       # 在没有连接配置服务端时直接启动失败
       failFast: true

@@ -1,17 +1,18 @@
 package microavatar.framework.core.mvc;
 
-import com.github.pagehelper.PageHelper;
 import microavatar.framework.core.support.CollectionUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author rain
  */
-public abstract class BaseService<E extends BaseEntity, D extends BaseDao<E>> {
+public abstract class BaseService<
+        C extends BaseCriteria,
+        D extends BaseDao<C, E>,
+        E extends BaseEntity> {
 
     protected abstract D getDao();
 
@@ -56,7 +57,7 @@ public abstract class BaseService<E extends BaseEntity, D extends BaseDao<E>> {
      * 删
      */
     public int deleteById(Long id) {
-        return getDao().deleteById(id);
+        return getDao().hardDeleteById(id);
     }
 
     public int deleteByIds(Collection<Long> ids) {
@@ -68,14 +69,14 @@ public abstract class BaseService<E extends BaseEntity, D extends BaseDao<E>> {
         int limit = 2000;
 
         if (ids.size() <= limit) {
-            return getDao().deleteByIds(ids);
+            return getDao().hardDeleteByIds(ids);
         }
 
         int count = 0;
         Collection<Collection<Long>> split = CollectionUtil
                 .split(ids instanceof List ? (List<Long>) ids : new ArrayList<>(ids), limit);
         for (Collection<Long> idArr : split) {
-            count += getDao().deleteByIds(idArr);
+            count += getDao().hardDeleteByIds(idArr);
         }
         return count;
     }
@@ -84,7 +85,7 @@ public abstract class BaseService<E extends BaseEntity, D extends BaseDao<E>> {
      * 改
      */
     public int update(E entity) {
-        return getDao().update(entity);
+        return getDao().updateAllColumnsById(entity);
     }
 
     /**
@@ -94,16 +95,16 @@ public abstract class BaseService<E extends BaseEntity, D extends BaseDao<E>> {
         return getDao().getById(id);
     }
 
-    public List<E> findPage(Map<String, ?> params) {
-        return getDao().findPage(params);
+    public List<E> findByCriteria(C criteria) {
+        return getDao().findByCriteria(criteria);
+    }
+
+    public long countByCriteria(C criteria) {
+        return getDao().countByCriteria(criteria);
     }
 
     public List<E> findAll() {
         return getDao().findAll();
-    }
-
-    public long count(Map<String, ?> params) {
-        return (int) PageHelper.count(() -> getDao().findPage(params));
     }
 
     public long countAll() {

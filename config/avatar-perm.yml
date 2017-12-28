@@ -2,10 +2,6 @@ info:
  company: rain
 
 spring:
- application:
-  #应用名称
-  name: avatar-perm
-
  #数据库配置
  datasource:
   type: com.alibaba.druid.pool.DruidDataSource
@@ -47,6 +43,10 @@ spring:
 druid:
  loginUsername: druid
  loginPassword: druid888888
+
+mybatis:
+  configuration:
+    mapUnderscoreToCamelCase: true
 
 ---
 spring:

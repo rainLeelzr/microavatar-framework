@@ -6,6 +6,7 @@
 package microavatar.framework.perm.controller;
 
 import microavatar.framework.core.mvc.BaseController;
+import microavatar.framework.perm.criteria.UserCriteria;
 import microavatar.framework.perm.entity.User;
 import microavatar.framework.perm.dao.UserDao;
 import microavatar.framework.perm.service.UserService;
@@ -17,7 +18,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/perm/user")
-public class UserController extends BaseController<UserService, UserDao, User> {
+public class UserController extends BaseController<UserCriteria, UserDao, User, UserService> {
 
     @Resource
     private UserService userService;

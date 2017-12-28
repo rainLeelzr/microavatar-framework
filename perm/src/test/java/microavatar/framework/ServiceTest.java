@@ -1,7 +1,7 @@
 package microavatar.framework;
 
 import com.github.pagehelper.PageHelper;
-import microavatar.framework.core.database.SqlCondition;
+import microavatar.framework.core.mvc.BaseCriteria;
 import microavatar.framework.core.mvc.BaseDao;
 import microavatar.framework.core.mvc.BaseEntity;
 import microavatar.framework.core.mvc.BaseService;
@@ -15,11 +15,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public interface ServiceTest<E extends BaseEntity<E>, D extends BaseDao<E>, S extends BaseService<E, D>> {
+public interface ServiceTest<
+        C extends BaseCriteria,
+        D extends BaseDao<C, E>,
+        E extends BaseEntity<E>,
+        S extends BaseService<C, D, E>> {
 
-    S getService();
+    C getCriteria();
 
     E genEntity();
+
+    S getService();
 
     default void add() {
         E entity = genEntity();
@@ -74,31 +80,38 @@ public interface ServiceTest<E extends BaseEntity<E>, D extends BaseDao<E>, S ex
         getService().getById(entity.getId());
     }
 
-    default void findPage() {
+    default void findByCriteria() {
         E entity = genEntity();
         Assert.assertEquals(1, getService().add(entity));
 
-        PageHelper.startPage(1, 20);
-        List<E> page = getService().findPage(
-                new SqlCondition()
-                        .select(BaseEntity.ID)
-                        .where(BaseEntity.ID, entity.getId())
-                        .build()
-        );
+        C criteria = getCriteria();
+        criteria.setIdEquals(entity.getId());
+        criteria.setPageNum(1);
+        criteria.setPageSize(1);
+
+        PageHelper.startPage(criteria.getPageNum(), criteria.getPageSize());
+        PageHelper.orderBy(criteria.getOrderBy());
+
+        List<E> page = getService().findByCriteria(criteria);
         Assert.assertEquals(1, page.size());
     }
 
-    default void count() {
+    default void countByCriteria() {
         E entity = genEntity();
         Assert.assertEquals(1, getService().add(entity));
 
-        long count = getService().count(
-                new SqlCondition()
-                        .select(BaseEntity.ID)
-                        .where(BaseEntity.ID, entity.getId())
-                        .build()
-        );
+        C criteria = getCriteria();
+        criteria.setIdEquals(entity.getId());
+        criteria.setPageNum(1);
+        criteria.setPageSize(1);
+
+        PageHelper.startPage(criteria.getPageNum(), criteria.getPageSize());
+        long count = getService().countByCriteria(criteria);
         Assert.assertEquals(1, count);
+    }
+
+    default void findAll() {
+        getService().findAll();
     }
 
     default void countAll() {

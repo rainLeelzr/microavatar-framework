@@ -3,7 +3,11 @@ package microavatar.framework.core.mvc;
 /**
  * @author rain
  */
-public abstract class BaseController<S extends BaseService<E, D>, D extends BaseDao<E>, E extends BaseEntity> {
+public abstract class BaseController<
+        C extends BaseCriteria,
+        D extends BaseDao<C, E>,
+        E extends BaseEntity,
+        S extends BaseService<C, D, E>> {
 
     protected abstract S getService();
 

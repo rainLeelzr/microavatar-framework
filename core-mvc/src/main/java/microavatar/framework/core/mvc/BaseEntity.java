@@ -17,18 +17,42 @@ public abstract class BaseEntity<E> implements Serializable {
 
     public static final String ID = "id";
     public static final String IDS = "ids";
+    public static final String CREATE_TIME = "create_time";
+    public static final String MODIFY_TIME = "modify_time";
+    public static final String DELETED = "id_deleted";
 
     /**
      * 主键 id
-     * bigint
+     *
+     * @dbColumnName id
+     * @dbColumnType bigint(20)
      */
     protected Long id;
 
     /**
-     * 时间版本
-     * insert、update时，需要设置为系统当前时间戳
+     * 创建时间戳
+     *
+     * @dbColumnName create_time
+     * @dbColumnType bigint(20)
      */
-    protected Long timeVersion;
+    protected Long createTime;
+
+    /**
+     * 最后修改时间戳
+     * insert、update时，需要设置为系统当前时间戳
+     *
+     * @dbColumnName modify_time
+     * @dbColumnType bigint(20)
+     */
+    protected Long modifyTime;
+
+    /**
+     * 是否删除
+     *
+     * @dbColumnName is_deleted
+     * @dbColumnType tinyint(1)
+     */
+    protected Boolean deleted;
 
     /**
      * 生成随机的entity
@@ -45,11 +69,15 @@ public abstract class BaseEntity<E> implements Serializable {
     }
 
     protected String randomString() {
-        return RandomStringUtils.randomNumeric(5);
+        return RandomStringUtils.randomGraph(5);
     }
 
     protected Byte randomByte() {
-        return (byte) RandomUtils.nextInt(0, 1);
+        return (byte) RandomUtils.nextInt(0, 6);
+    }
+
+    protected Boolean randomBoolean() {
+        return RandomUtils.nextBoolean();
     }
 
     protected Integer randomInteger() {

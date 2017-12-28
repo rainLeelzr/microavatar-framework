@@ -1,62 +1,107 @@
 package microavatar.framework.core.mvc;
 
-import org.apache.commons.collections.MapUtils;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author rain
  */
 @Mapper
-public interface BaseDao<E extends BaseEntity> {
+public interface BaseDao<
+        C extends BaseCriteria,
+        E extends BaseEntity> {
+
+    //********** 增 start **********
 
     /**
-     * 每条sql的查询结果集数量限制
-     */
-    int FIND_PAGE_COUNT_LIMIT = 10000;
-
-    /**
-     * 增
+     * 单条insert
      */
     int add(E entity);
 
+    /**
+     * 批量insert
+     */
     int batchAdd(Collection<E> entitys);
 
-    /**
-     * 删
-     */
-    int deleteById(Long id);
+    //********** 增 end **********
 
-    int deleteByIds(Collection<Long> ids);
+    //********** 删 start **********
+
+    /**
+     * 根据id硬删除记录
+     *
+     * @param id 需要硬删除的实体的id
+     * @return 硬删除成功的记录数量
+     */
+    int hardDeleteById(Long id);
+
+    /**
+     * 根据批量id硬删除记录
+     *
+     * @param ids 需要硬删除的实体的id集合
+     * @return 硬删除成功的记录数量
+     */
+    int hardDeleteByIds(Collection<Long> ids);
+
+    /**
+     * 根据id软删除记录
+     *
+     * @param id 需要软删除的实体的id
+     * @return 软删除成功的记录数量
+     */
+    int softDeleteById(Long id);
+
+    /**
+     * 根据批量id软删除记录
+     *
+     * @param ids 需要软删除的实体的id集合
+     * @return 软删除成功的记录数量
+     */
+    int softDeleteByIds(Collection<Long> ids);
+
+    //********** 删 end **********
+
+    //********** 改 start **********
+
+    /**
+     * 根据实体id更新所有字段值到数据库
+     * 字段值为null，也会更新到数据库
+     */
+    int updateAllColumnsById(E entity);
 
     /**
      * 改
      */
-    int update(E entity);
+    int updateExcludeNullFieldsById(E entity);
+
+    //********** 改 end **********
+
+    //********** 查 start **********
 
     /**
-     * 查
+     * 根据id查询一个实体
+     *
+     * @param id 需要查询的实体的id
+     * @return 完整字段数据的实体
      */
     E getById(Long id);
 
-    List<E> findPage(Map<String, ?> params);
+    /**
+     * 根据查询条件查找分页列表
+     *
+     * @param criteria 查询条件
+     * @return 结果列表
+     */
+    List<E> findByCriteria(C criteria);
 
-    @SuppressWarnings("unchecked")
-    default List<E> findAll() {
-        long count = countAll();
-        if (count > FIND_PAGE_COUNT_LIMIT) {
-            throw new IllegalArgumentException(String.format(
-                    "countAll数量为%s，超过%s，为避免影响数据库性能，禁止此条超大结果集查询，请在service层分段处理！",
-                    count,
-                    FIND_PAGE_COUNT_LIMIT));
-        }
+    long countByCriteria(C criteria);
 
-        return findPage(MapUtils.EMPTY_MAP);
-    }
+    List<E> findAll();
 
     long countAll();
+
+    //********** 查 end **********
 
 }

@@ -8,6 +8,7 @@ package microavatar.framework.perm.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import microavatar.framework.core.mvc.BaseController;
+import microavatar.framework.perm.criteria.UserCriteria;
 import microavatar.framework.perm.dao.UserDao;
 import microavatar.framework.perm.entity.User;
 import microavatar.framework.perm.service.UserService;
@@ -26,7 +27,7 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/perm/user")
 @Slf4j
-public class UserControllerExt extends BaseController<UserService, UserDao, User> {
+public class UserControllerExt extends BaseController<UserCriteria, UserDao, User, UserService> {
 
     @Resource
     private UserServiceExt userServiceExt;

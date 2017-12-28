@@ -23,7 +23,6 @@ public class User extends BaseEntity<User> {
 
     public static final String ACCOUNT = "account";
     public static final String PWD = "pwd";
-    public static final String CREATETIME = "createTime";
     public static final String NAME = "name";
     public static final String STATUS = "status";
 
@@ -40,12 +39,6 @@ public class User extends BaseEntity<User> {
     private String pwd;
 
     /**
-     * 创建时间
-     * 数据库类型：bigint
-     */
-    private Long createTime;
-
-    /**
      * 名称
      * 数据库类型：varchar(16)
      * 功能说明:
@@ -60,19 +53,18 @@ public class User extends BaseEntity<User> {
     /**
      * 状态
      * 数据库类型：tinyint
-     *
-     * @see avatar.rain.auth.status.UserStatus
      */
     private Byte status;
 
     @Override
     public User randomEntity() {
         this.randomId();
-        this.timeVersion = System.currentTimeMillis();
+        this.createTime = System.currentTimeMillis();
+        this.modifyTime = System.currentTimeMillis();
+        this.deleted = randomBoolean();
 
         this.account = randomString();
         this.pwd = randomString();
-        this.createTime = randomLong();
         this.name = randomString();
         this.status = randomByte();
         return this;

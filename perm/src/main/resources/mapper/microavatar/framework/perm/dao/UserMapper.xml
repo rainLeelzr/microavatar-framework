@@ -6,123 +6,264 @@
 
     <sql id="_tableName">Auth_User</sql>
 
-    <sql id="_allCloumns"> id, account, pwd, createTime, name, status, timeVersion </sql>
+    <sql id="_allColumns"> id, account, pwd, name, status, create_time, modify_time, is_deleted </sql>
 
-    <sql id="_selectCondition">
+    <sql id="_selectCriteria">
         <choose>
-            <when test="_select_all_columns">
-                <include refid="_allCloumns"/>
+            <when test="selectColumns.isEmpty()">
+                <include refid="_allColumns"/>
             </when>
             <otherwise>
-                <foreach collection="_selects" item="_item" index="index" separator=",">${_item}</foreach>
+                <foreach collection="selectColumns" item="item" index="index" separator=",">${item}</foreach>
             </otherwise>
         </choose>
     </sql>
 
-    <sql id="_whereCondition">
+    <sql id="_whereCriteria">
+        <!-- 建有索引且能用索引的字段查询条件排第1 -->
+        <!-- 无索引但能用索引的字段查询条件排第2 -->
+        <!-- 建有索引但不能用索引的字段查询条件排第3 -->
+        <!-- 无索引且不能用索引的字段查询条件排第4 -->
         <where>
-            <if test="id != null">and id = #{id}</if>
-            <if test="account != null">and account = #{account}</if>
-            <if test="pwd != null">and pwd = #{pwd}</if>
-            <if test="createTime != null">and createTime = #{createTime}</if>
-            <if test="createTime_gt != null">and createTime &gt; #{createTime_gt}</if>
-            <if test="createTime_gt_eq != null">and createTime &gt;= #{createTime_gt_eq}</if>
-            <if test="createTime_lt != null">and createTime &lt; #{createTime_lt}</if>
-            <if test="createTime_lt_eq != null">and createTime &lt;= #{createTime_lt_eq}</if>
-            <if test="name != null">and name = #{name}</if>
-            <if test="status != null">and status = #{status}</if>
-            <if test="status_gt != null">and status &gt; #{status_gt}</if>
-            <if test="status_gt_eq != null">and status &gt;= #{status_gt_eq}</if>
-            <if test="status_lt != null">and status &lt; #{status_lt}</if>
-            <if test="status_lt_eq != null">and status &lt;= #{status_lt_eq}</if>
+            <!-- 建有索引且能用索引的字段查询条件排第1 start -->
+            <!-- id -->
+            <if test="idLessThan != null">AND id &lt; #{idLessThan}</if>
+            <if test="idLessThanEquals != null">AND id &lt;= #{idLessThanEquals}</if>
+            <if test="idEquals != null">AND id = #{idEquals}</if>
+            <if test="idGreaterThanEquals != null">AND id &gt;= #{idGreaterThanEquals}</if>
+            <if test="idGreaterThan != null">AND id &gt; #{idGreaterThan}</if>
+            <if test="idBetweenStart != null and idBetweenEnd != null ">
+                and id between #{idBetweenStart} and #{idBetweenEnd}
+            </if>
+            <if test="idIn != null and !idIn.isEmpty()">
+                AND id in
+                <foreach collection="idIn" item="item" index="index" separator=",">
+                    (
+                        #{item,jdbcType=BIGINT}
+                    )
+                </foreach>
+            </if>
+            <if test="idNotIn != null and !idNotIn.isEmpty()">
+                AND id not in
+                <foreach collection="idNotIn" item="item" index="index" separator=",">
+                    (
+                        #{item,jdbcType=BIGINT}
+                    )
+                </foreach>
+            </if>
+            <!-- 建有索引且能用索引的字段查询条件排第1 end -->
+
+            <!-- 无索引但能用索引的字段查询条件排第2 start -->
+            <!-- createTime -->
+            <if test="createTimeLessThan != null">AND create_time &lt; #{createTimeLessThan}</if>
+            <if test="createTimeLessThanEquals != null">AND create_time &lt;= #{createTimeLessThanEquals}</if>
+            <if test="createTimeEquals != null">AND create_time = #{createTimeEquals}</if>
+            <if test="createTimeGreaterThanEquals != null">AND create_time &gt;= #{createTimeGreaterThanEquals}</if>
+            <if test="createTimeGreaterThan != null">AND create_time &gt; #{createTimeGreaterThan}</if>
+            <if test="createTimeBetweenStart != null and createTimeBetweenEnd != null ">
+                AND create_time BETWEEN #{createTimeBetweenStart} AND #{createTimeBetweenEnd}
+            </if>
+            <if test="createTimeIn != null and !createTimeIn.isEmpty()">
+                AND create_time IN
+                <foreach collection="createTimeIn" item="item" index="index" separator=",">
+                    (
+                        #{item,jdbcType=BIGINT}
+                    )
+                </foreach>
+            </if>
+            <if test="createTimeNotIn != null and !createTimeNotIn.isEmpty()">
+                AND create_time NOT IN
+                <foreach collection="createTimeNotIn" item="item" index="index" separator=",">
+                    (
+                        #{item,jdbcType=BIGINT}
+                    )
+                </foreach>
+            </if>
+
+            <!-- 账号 -->
+            <if test="accountEquals != null">AND account = #{accountEquals}</if>
+            <if test="accountStartWith != null">AND account instr(name, #{accountEquals}) = 1</if>
+            <if test="accountLike != null">AND account instr(name, #{accountLike}) > 0</if>
+            <if test="accountNotLike != null">AND account instr(name, #{accountNotLike}) = 0</if>
+            <if test="accountIn != null and !accountIn.isEmpty()">
+                AND account IN
+                <foreach collection="accountIn" item="item" index="index" separator=",">
+                    (
+                        #{item,jdbcType=VARCHAR}
+                    )
+                </foreach>
+            </if>
+            <if test="accountNotIn != null and !accountNotIn.isEmpty()">
+                AND account NOT IN
+                <foreach collection="accountNotIn" item="item" index="index" separator=",">
+                    (
+                        #{item,jdbcType=VARCHAR}
+                    )
+                </foreach>
+            </if>
+
+            <!-- 无索引但能用索引的字段查询条件排第2 end -->
+
+            <!-- 建有索引但不能用索引的字段查询条件排第3 start -->
+            <!-- id -->
+            <if test="idNotEquals != null">AND id &lt;&gt; #{idNotEquals}</if>
+            <!-- 建有索引但不能用索引的字段查询条件排第3 end -->
+
+            <!-- 无索引且不能用索引的字段查询条件排第4 start -->
+            <!-- 账号 -->
+            <if test="accountNotEquals != null">AND account &lt;&gt; #{accountNotEquals}</if>
+            <!-- 无索引且不能用索引的字段查询条件排第4 end -->
+
+
         </where>
     </sql>
 
     <insert id="add" parameterType="microavatar.framework.perm.entity.User">
         INSERT INTO
-        <include refid="_tableName"/>
+            <include refid="_tableName"/>
         (
-        <include refid="_allCloumns"/>
+            <include refid="_allColumns"/>
         )
         VALUES
-        (
-        #{id,jdbcType=BIGINT},
-        #{account,jdbcType=VARCHAR},
-        #{pwd,jdbcType=VARCHAR},
-        #{createTime,jdbcType=BIGINT},
-        #{name,jdbcType=VARCHAR},
-        #{status,jdbcType=TINYINT},
-        #{timeVersion,jdbcType=BIGINT}
-        )
+            (
+                #{id,jdbcType=BIGINT},
+                #{account,jdbcType=VARCHAR},
+                #{pwd,jdbcType=VARCHAR},
+                #{name,jdbcType=VARCHAR},
+                #{status,jdbcType=TINYINT},
+                #{createTime,jdbcType=BIGINT},
+                #{modifyTime,jdbcType=BIGINT},
+                #{deleted,jdbcType=TINYINT}
+            )
     </insert>
 
     <insert id="batchAdd" parameterType="collection">
         INSERT INTO
-        <include refid="_tableName"/>
+            <include refid="_tableName"/>
         (
-        <include refid="_allCloumns"/>
+            <include refid="_allColumns"/>
         )
         VALUES
-        <foreach collection="collection" item="item" index="index" separator=",">
-            (
-            #{item.id,jdbcType=BIGINT},
-            #{item.account,jdbcType=VARCHAR},
-            #{item.pwd,jdbcType=VARCHAR},
-            #{item.createTime,jdbcType=BIGINT},
-            #{item.name,jdbcType=VARCHAR},
-            #{item.status,jdbcType=TINYINT},
-            #{item.timeVersion,jdbcType=BIGINT}
-            )
-        </foreach>
+            <foreach collection="collection" item="item" index="index" separator=",">
+                (
+                    #{item.id,jdbcType=BIGINT},
+                    #{item.account,jdbcType=VARCHAR},
+                    #{item.pwd,jdbcType=VARCHAR},
+                    #{item.name,jdbcType=VARCHAR},
+                    #{item.status,jdbcType=TINYINT},
+                    #{item.createTime,jdbcType=BIGINT},
+                    #{item.modifyTime,jdbcType=BIGINT},
+                    #{item.deleted,jdbcType=TINYINT}
+                )
+            </foreach>
     </insert>
 
-    <delete id="deleteById" parameterType="long">
+    <delete id="hardDeleteById" parameterType="long">
         DELETE FROM
-        <include refid="_tableName"/>
-        WHERE id = #{id}
+            <include refid="_tableName"/>
+        WHERE
+            id = #{id}
     </delete>
 
-    <delete id="deleteByIds" parameterType="collection">
+    <delete id="hardDeleteByIds" parameterType="collection">
         DELETE FROM
-        <include refid="_tableName"/>
-        WHERE id IN
-        <foreach collection="collection" item="item" index="index" open="(" separator="," close=")">
-            #{item}
-        </foreach>
+            <include refid="_tableName"/>
+        WHERE
+            id IN
+            <foreach collection="collection" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
     </delete>
 
-    <update id="update" parameterType="microavatar.framework.perm.entity.User">
+    <delete id="softDeleteById" parameterType="long">
         UPDATE
-        <include refid="_tableName"/>
+            <include refid="_tableName"/>
+        SET
+            is_deleted = 1
+        WHERE
+            id = #{id}
+    </delete>
+
+    <delete id="softDeleteByIds" parameterType="collection">
+        UPDATE
+            <include refid="_tableName"/>
+        SET
+            is_deleted = 1
+        WHERE
+            id IN
+            <foreach collection="collection" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+    </delete>
+
+    <update id="updateAllColumnsById" parameterType="microavatar.framework.perm.entity.User">
+        UPDATE
+            <include refid="_tableName"/>
+        SET
+            account = #{account},
+            pwd = #{pwd},
+            name = #{name},
+            status = #{status},
+            create_time = #{createTime},
+            modify_time = #{modifyTime},
+            is_deleted = #{deleted}
+        WHERE
+            id = #{id}
+    </update>
+
+    <update id="updateExcludeNullFieldsById" parameterType="microavatar.framework.perm.entity.User">
+        UPDATE
+            <include refid="_tableName"/>
         <set>
-            <if test="account != null">account=#{account},</if>
-            <if test="pwd != null">pwd=#{pwd},</if>
-            <if test="createTime != null">createTime=#{createTime},</if>
-            <if test="name != null">name=#{name},</if>
-            <if test="status != null">status=#{status}</if>
+            <if test="account != null">account = #{account},</if>
+            <if test="pwd != null">pwd = #{pwd},</if>
+            <if test="createTime != null">createTime = #{createTime},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="modifyTime != null">modify_time = #{modifyTime}</if>
         </set>
         WHERE id = #{id}
     </update>
 
     <select id="getById" parameterType="long" resultType="microavatar.framework.perm.entity.User">
         SELECT
-        <include refid="_allCloumns"/>
+            <include refid="_allColumns"/>
         FROM
-        <include refid="_tableName"/>
-        WHERE id = #{id}
+            <include refid="_tableName"/>
+        WHERE
+            id = #{id}
     </select>
 
-    <select id="findPage" parameterType="map" resultType="microavatar.framework.perm.entity.User">
+    <select id="findByCriteria"
+            parameterType="microavatar.framework.core.mvc.BaseCriteria"
+            resultType="microavatar.framework.perm.entity.User">
         SELECT
-        <include refid="_selectCondition"/>
+            <include refid="_selectCriteria"/>
         FROM
-        <include refid="_tableName"/>
-        <include refid="_whereCondition"/>
+            <include refid="_tableName"/>
+        <include refid="_whereCriteria"/>
+    </select>
+
+    <select id="countByCriteria"
+            parameterType="microavatar.framework.core.mvc.BaseCriteria"
+            resultType="long">
+        SELECT
+            count(*)
+        FROM
+            <include refid="_tableName"/>
+        <include refid="_whereCriteria"/>
+    </select>
+
+    <select id="findAll" resultType="microavatar.framework.perm.entity.User">
+        SELECT
+            <include refid="_allColumns"/>
+        FROM
+            <include refid="_tableName"/>
     </select>
 
     <select id="countAll" resultType="long">
         SELECT
-        count(1)
+            count(*)
         FROM
         <include refid="_tableName"/>
     </select>

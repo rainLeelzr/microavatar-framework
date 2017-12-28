@@ -6,8 +6,9 @@
 package microavatar.framework.perm.dao;
 
 import microavatar.framework.core.mvc.BaseDao;
+import microavatar.framework.perm.criteria.UserCriteria;
 import microavatar.framework.perm.entity.User;
 
-public interface UserDao extends BaseDao<User> {
+public interface UserDao extends BaseDao<UserCriteria, User> {
 
 }
