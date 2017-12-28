@@ -6,6 +6,7 @@ import microavatar.framework.core.mvc.BaseDao;
 import microavatar.framework.core.mvc.BaseEntity;
 import microavatar.framework.core.mvc.BaseService;
 import microavatar.framework.core.support.sequence.impl.LongSequence;
+import microavatar.framework.perm.entity.User;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.junit.Assert;
@@ -88,6 +89,14 @@ public interface ServiceTest<
         criteria.setIdEquals(entity.getId());
         criteria.setPageNum(1);
         criteria.setPageSize(1);
+        criteria.setCreateTimeGreaterThanEquals(33L);
+
+        HashSet<String> selectColumns = new HashSet<>(2);
+        selectColumns.add(E.ID);
+        selectColumns.add(E.CREATE_TIME);
+        selectColumns.add(E.DELETED);
+        selectColumns.add(User.ACCOUNT);
+        criteria.setSelectColumns(selectColumns);
 
         PageHelper.startPage(criteria.getPageNum(), criteria.getPageSize());
         PageHelper.orderBy(criteria.getOrderBy());

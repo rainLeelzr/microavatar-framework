@@ -89,6 +89,10 @@
             <appender-ref ref="diyFile"/>
         </logger>
 
+        <logger name="microavatar.framework.perm.dao" level="trace" additivity="false">
+            <appender-ref ref="console"/>
+        </logger>
+
         <!-- AsyncRoot - 异步记录日志 - 需要LMAX Disruptor的支持 -->
         <!--<AsyncRoot level="info" additivity="false">-->
         <!--<AppenderRef ref="console"/>-->

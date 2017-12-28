@@ -21,6 +21,7 @@ import microavatar.framework.core.mvc.BaseEntity;
 @AllArgsConstructor
 public class User extends BaseEntity<User> {
 
+    // 数据库字段名
     public static final String ACCOUNT = "account";
     public static final String PWD = "pwd";
     public static final String NAME = "name";
@@ -28,12 +29,14 @@ public class User extends BaseEntity<User> {
 
     /**
      * 账号
+     * 账号/密码模式登录时，输入的账号
      * 数据库类型：varchar(16)
      */
     private String account;
 
     /**
      * 密码
+     * 账号/密码模式登录时，输入的密码
      * 数据库类型：varchar(32)
      */
     private String pwd;
@@ -72,21 +75,15 @@ public class User extends BaseEntity<User> {
 
     @Override
     public String toString() {
-        return new StringBuilder("{")
-                .append("\"id\":\"")
-                .append(id).append('\"')
-                .append(",\"account\":\"")
-                .append(account).append('\"')
-                .append(",\"pwd\":\"")
-                .append(pwd).append('\"')
-                .append(",\"createTime\":")
-                .append(createTime)
-                .append(",\"name\":\"")
-                .append(name).append('\"')
-                .append(",\"status\":")
-                .append(status)
-                .append('}')
-                .toString();
+        return "{\"User\":{"
+                + "\"id\":\"" + id + "\""
+                + ", \"account\":\"" + account + "\""
+                + ", \"pwd\":\"" + pwd + "\""
+                + ", \"name\":\"" + name + "\""
+                + ", \"status\":\"" + status + "\""
+                + ", \"createTime\":\"" + createTime + "\""
+                + ", \"modifyTime\":\"" + modifyTime + "\""
+                + ", \"deleted\":\"" + deleted + "\""
+                + "}}";
     }
-
 }

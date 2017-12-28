@@ -15,11 +15,11 @@ import java.io.Serializable;
 @Setter
 public abstract class BaseEntity<E> implements Serializable {
 
+    // 数据库字段名
     public static final String ID = "id";
-    public static final String IDS = "ids";
     public static final String CREATE_TIME = "create_time";
     public static final String MODIFY_TIME = "modify_time";
-    public static final String DELETED = "id_deleted";
+    public static final String DELETED = "is_deleted";
 
     /**
      * 主键 id
@@ -86,5 +86,15 @@ public abstract class BaseEntity<E> implements Serializable {
 
     protected Long randomLong() {
         return RandomUtils.nextLong(1, 5);
+    }
+
+    @Override
+    public String toString() {
+        return "{\"BaseEntity\":{"
+                + "\"id\":\"" + id + "\""
+                + ", \"createTime\":\"" + createTime + "\""
+                + ", \"modifyTime\":\"" + modifyTime + "\""
+                + ", \"deleted\":\"" + deleted + "\""
+                + "}}";
     }
 }
