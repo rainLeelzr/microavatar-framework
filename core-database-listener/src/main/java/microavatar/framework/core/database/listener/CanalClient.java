@@ -26,11 +26,25 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class CanalClient implements InitializingBean, DisposableBean {
 
-    @Value("${canal.server.ip:192.168.0.31}")
+    //@Value("${canal.server.ip:192.168.0.31}")
+    @Value("${canal.server.ip:192.168.0.213}")
     private String canalServerIp;
 
     @Value("${canal.server.port:11111}")
     private int canalServerPort;
+
+    /**
+     * 支持正则表达式
+     * 1. 所有表：.* or .*\\..*
+     * 2. canal schema下所有表： canal\\..*
+     * 3. canal下的以canal打头的表：canal\\.canal.*
+     * 4. canal schema下的一张表：canal.test1
+     * 5. 多个规则组合使用：canal\\..*,mysql.test1,mysql.test2 (逗号分隔)
+     * 6  匹配多个类似库: canal_.*\\..*
+     */
+    //@Value("${canal.server.subscribe:rain_boss.boss_perm.*}")
+    @Value("${canal.server.subscribe:.*}")
+    private String subscribe;
 
     /**
      * 断线重连相隔时间，毫秒
@@ -74,10 +88,10 @@ public class CanalClient implements InitializingBean, DisposableBean {
                     new InetSocketAddress(canalServerIp, canalServerPort), "example", "", "");
 
             Runtime.getRuntime().addShutdownHook(new Thread(connector::disconnect));
-            log.info("正在连接canalServer：{}:{}", canalServerIp, canalServerPort);
+            log.info("正在连接canalServer：{}:{},subscribe:{}", canalServerIp, canalServerPort, subscribe);
             try {
                 connector.connect();
-                connector.subscribe();
+                connector.subscribe(subscribe);
                 connector.rollback();
                 log.info("canalClient启动成功，正在监听的canalServerIp：{}:{}", canalServerIp, canalServerPort);
                 loopGetMessage();
@@ -107,7 +121,7 @@ public class CanalClient implements InitializingBean, DisposableBean {
             Message message = connector.getWithoutAck(batchSize, periodMills, TimeUnit.MILLISECONDS);
             long batchId = message.getId();
             int size = message.getEntries().size();
-            log.debug("接受到{}条数据库事件，batchId:{}", size, batchId);
+            log.trace("接受到{}条数据库事件，batchId:{}", size, batchId);
             try {
                 if (batchId != -1 && size > 0) {
                     processEntries(message.getEntries());

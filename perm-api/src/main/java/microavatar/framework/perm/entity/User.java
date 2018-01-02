@@ -14,6 +14,8 @@ package microavatar.framework.perm.entity;
 import lombok.*;
 import microavatar.framework.core.mvc.BaseEntity;
 
+import javax.validation.constraints.Size;
+
 @Getter
 @Setter
 @Builder
@@ -32,13 +34,14 @@ public class User extends BaseEntity<User> {
      * 账号/密码模式登录时，输入的账号
      * 数据库类型：varchar(16)
      */
+    @Size(min = 3, max = 16)
     private String account;
 
     /**
      * 密码
      * 账号/密码模式登录时，输入的密码
      * 数据库类型：varchar(32)
-     */
+     */@Size(min = 3, max = 32)
     private String pwd;
 
     /**
@@ -51,6 +54,7 @@ public class User extends BaseEntity<User> {
      * 用户的后台个人信息页面中，显示的昵称为本字段，本字段可供用户主动修改
      * 因“昵称”为常用字段，所以放在本类，以便业务快速获取
      */
+    @Size(min = 3, max = 16)
     private String name;
 
     /**

@@ -22,11 +22,11 @@
 
     <sql id="_selectCriteria">
         <choose>
-            <when test="selectColumns.isEmpty()">
+            <when test="criteria.selectColumns == null or criteria.selectColumns.isEmpty()">
                 <include refid="_allColumns"/>
             </when>
             <otherwise>
-                <foreach collection="selectColumns" item="item" index="index" separator=",">${item}</foreach>
+                <foreach collection="criteria.selectColumns" item="item" index="index" separator=",">${item}</foreach>
             </otherwise>
         </choose>
     </sql>
@@ -39,25 +39,25 @@
         <where>
             <!-- 建有索引且能用索引的字段查询条件排第1 start -->
             <!-- id -->
-            <if test="idLessThan != null">AND id &lt; #{idLessThan}</if>
-            <if test="idLessThanEquals != null">AND id &lt;= #{idLessThanEquals}</if>
-            <if test="idEquals != null">AND id = #{idEquals}</if>
-            <if test="idGreaterThanEquals != null">AND id &gt;= #{idGreaterThanEquals}</if>
-            <if test="idGreaterThan != null">AND id &gt; #{idGreaterThan}</if>
-            <if test="idBetweenStart != null and idBetweenEnd != null ">
-                and id between #{idBetweenStart} and #{idBetweenEnd}
+            <if test="criteria.idLessThan != null">AND id &lt; #{criteria.idLessThan}</if>
+            <if test="criteria.idLessThanEquals != null">AND id &lt;= #{criteria.idLessThanEquals}</if>
+            <if test="criteria.idEquals != null">AND id = #{criteria.idEquals}</if>
+            <if test="criteria.idGreaterThanEquals != null">AND id &gt;= #{criteria.idGreaterThanEquals}</if>
+            <if test="criteria.idGreaterThan != null">AND id &gt; #{criteria.idGreaterThan}</if>
+            <if test="criteria.idBetweenStart != null and idBetweenEnd != null ">
+                AND id BETWEEN #{criteria.idBetweenStart} AND #{criteria.idBetweenEnd}
             </if>
-            <if test="idIn != null and !idIn.isEmpty()">
-                AND id in
-                <foreach collection="idIn" item="item" index="index" separator=",">
+            <if test="criteria.idIn != null and !criteria.idIn.isEmpty()">
+                AND id IN
+                <foreach collection="criteria.idIn" item="item" index="index" separator=",">
                     (
                         #{item,jdbcType=BIGINT}
                     )
                 </foreach>
             </if>
-            <if test="idNotIn != null and !idNotIn.isEmpty()">
-                AND id not in
-                <foreach collection="idNotIn" item="item" index="index" separator=",">
+            <if test="criteria.idNotIn != null and !criteria.idNotIn.isEmpty()">
+                AND id NOT IN
+                <foreach collection="criteria.idNotIn" item="item" index="index" separator=",">
                     (
                         #{item,jdbcType=BIGINT}
                     )
@@ -67,25 +67,25 @@
 
             <!-- 无索引但能用索引的字段查询条件排第2 start -->
             <!-- createTime -->
-            <if test="createTimeLessThan != null">AND create_time &lt; #{createTimeLessThan}</if>
-            <if test="createTimeLessThanEquals != null">AND create_time &lt;= #{createTimeLessThanEquals}</if>
-            <if test="createTimeEquals != null">AND create_time = #{createTimeEquals}</if>
-            <if test="createTimeGreaterThanEquals != null">AND create_time &gt;= #{createTimeGreaterThanEquals}</if>
-            <if test="createTimeGreaterThan != null">AND create_time &gt; #{createTimeGreaterThan}</if>
-            <if test="createTimeBetweenStart != null and createTimeBetweenEnd != null ">
-                AND create_time BETWEEN #{createTimeBetweenStart} AND #{createTimeBetweenEnd}
+            <if test="criteria.createTimeLessThan != null">AND create_time &lt; #{criteria.createTimeLessThan}</if>
+            <if test="criteria.createTimeLessThanEquals != null">AND create_time &lt;= #{criteria.createTimeLessThanEquals}</if>
+            <if test="criteria.createTimeEquals != null">AND create_time = #{criteria.createTimeEquals}</if>
+            <if test="criteria.createTimeGreaterThanEquals != null">AND create_time &gt;= #{criteria.createTimeGreaterThanEquals}</if>
+            <if test="criteria.createTimeGreaterThan != null">AND create_time &gt; #{criteria.createTimeGreaterThan}</if>
+            <if test="criteria.createTimeBetweenStart != null and createTimeBetweenEnd != null ">
+                AND create_time BETWEEN #{criteria.createTimeBetweenStart} AND #{criteria.createTimeBetweenEnd}
             </if>
-            <if test="createTimeIn != null and !createTimeIn.isEmpty()">
+            <if test="criteria.createTimeIn != null and !criteria.createTimeIn.isEmpty()">
                 AND create_time IN
-                <foreach collection="createTimeIn" item="item" index="index" separator=",">
+                <foreach collection="criteria.createTimeIn" item="item" index="index" separator=",">
                     (
                         #{item,jdbcType=BIGINT}
                     )
                 </foreach>
             </if>
-            <if test="createTimeNotIn != null and !createTimeNotIn.isEmpty()">
+            <if test="criteria.createTimeNotIn != null and !criteria.createTimeNotIn.isEmpty()">
                 AND create_time NOT IN
-                <foreach collection="createTimeNotIn" item="item" index="index" separator=",">
+                <foreach collection="criteria.createTimeNotIn" item="item" index="index" separator=",">
                     (
                         #{item,jdbcType=BIGINT}
                     )
@@ -93,21 +93,21 @@
             </if>
 
             <!-- 账号 -->
-            <if test="accountEquals != null">AND account = #{accountEquals}</if>
-            <if test="accountStartWith != null">AND account instr(name, #{accountEquals}) = 1</if>
-            <if test="accountLike != null">AND account instr(name, #{accountLike}) > 0</if>
-            <if test="accountNotLike != null">AND account instr(name, #{accountNotLike}) = 0</if>
-            <if test="accountIn != null and !accountIn.isEmpty()">
+            <if test="criteria.accountEquals != null">AND account = #{criteria.accountEquals}</if>
+            <if test="criteria.accountStartWith != null">AND account instr(name, #{criteria.accountEquals}) = 1</if>
+            <if test="criteria.accountLike != null">AND account instr(name, #{criteria.accountLike}) > 0</if>
+            <if test="criteria.accountNotLike != null">AND account instr(name, #{criteria.accountNotLike}) = 0</if>
+            <if test="criteria.accountIn != null and !accountIn.isEmpty()">
                 AND account IN
-                <foreach collection="accountIn" item="item" index="index" separator=",">
+                <foreach collection="criteria.accountIn" item="item" index="index" separator=",">
                     (
                         #{item,jdbcType=VARCHAR}
                     )
                 </foreach>
             </if>
-            <if test="accountNotIn != null and !accountNotIn.isEmpty()">
+            <if test="criteria.accountNotIn != null and !accountNotIn.isEmpty()">
                 AND account NOT IN
-                <foreach collection="accountNotIn" item="item" index="index" separator=",">
+                <foreach collection="criteria.accountNotIn" item="item" index="index" separator=",">
                     (
                         #{item,jdbcType=VARCHAR}
                     )
@@ -118,12 +118,12 @@
 
             <!-- 建有索引但不能用索引的字段查询条件排第3 start -->
             <!-- id -->
-            <if test="idNotEquals != null">AND id &lt;&gt; #{idNotEquals}</if>
+            <if test="criteria.idNotEquals != null">AND id &lt;&gt; #{criteria.idNotEquals}</if>
             <!-- 建有索引但不能用索引的字段查询条件排第3 end -->
 
             <!-- 无索引且不能用索引的字段查询条件排第4 start -->
             <!-- 账号 -->
-            <if test="accountNotEquals != null">AND account &lt;&gt; #{accountNotEquals}</if>
+            <if test="criteria.accountNotEquals != null">AND account &lt;&gt; #{criteria.accountNotEquals}</if>
             <!-- 无索引且不能用索引的字段查询条件排第4 end -->
 
 
@@ -235,6 +235,34 @@
             <if test="modifyTime != null">modify_time = #{modifyTime}</if>
         </set>
         WHERE id = #{id}
+    </update>
+
+    <update id="updateAllColumnsByCriteria">
+        UPDATE
+            <include refid="_tableName"/>
+        SET
+            account = #{entity.account},
+            pwd = #{entity.pwd},
+            name = #{entity.name},
+            status = #{entity.status},
+            create_time = #{entity.createTime},
+            modify_time = #{entity.modifyTime},
+            is_deleted = #{entity.deleted}
+        <include refid="_whereCriteria"/>
+    </update>
+
+    <update id="updateExcludeNullFieldsByCriteria">
+        UPDATE
+            <include refid="_tableName"/>
+        <set>
+            <if test="entity.account != null">account = #{entity.account},</if>
+            <if test="entity.pwd != null">pwd = #{entity.pwd},</if>
+            <if test="entity.createTime != null">createTime = #{entity.createTime},</if>
+            <if test="entity.name != null">name = #{entity.name},</if>
+            <if test="entity.status != null">status = #{entity.status},</if>
+            <if test="entity.modifyTime != null">modify_time = #{entity.modifyTime}</if>
+        </set>
+        <include refid="_whereCriteria"/>
     </update>
 
     <select id="getById" parameterType="long" resultMap="userResultMap">

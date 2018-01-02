@@ -1,6 +1,7 @@
 package microavatar.framework.core.mvc;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Collection;
 import java.util.List;
@@ -76,6 +77,17 @@ public interface BaseDao<
      */
     int updateExcludeNullFieldsById(E entity);
 
+    /**
+     * 根据实体id更新所有字段值到数据库
+     * 字段值为null，也会更新到数据库
+     */
+    int updateAllColumnsByCriteria(@Param("entity") E entity, @Param("criteria") C criteria);
+
+    /**
+     * 改
+     */
+    int updateExcludeNullFieldsByCriteria(@Param("entity") E entity, @Param("criteria") C criteria);
+
     //********** 改 end **********
 
     //********** 查 start **********
@@ -94,9 +106,9 @@ public interface BaseDao<
      * @param criteria 查询条件
      * @return 结果列表
      */
-    List<E> findByCriteria(C criteria);
+    List<E> findByCriteria(@Param("criteria") C criteria);
 
-    long countByCriteria(C criteria);
+    long countByCriteria(@Param("criteria") C criteria);
 
     List<E> findAll();
 

@@ -47,7 +47,7 @@ public interface ServiceTest<
         E entity = genEntity();
         Assert.assertEquals(1, getService().add(entity));
 
-        Assert.assertEquals(1, getService().deleteById(entity.getId()));
+        Assert.assertEquals(1, getService().hardDeleteById(entity.getId()));
     }
 
     default void deleteByIds() {
@@ -60,7 +60,7 @@ public interface ServiceTest<
 
         Set<Long> ids = new HashSet<>();
         entitys.forEach(e -> ids.add(e.getId()));
-        Assert.assertEquals(ids.size(), getService().deleteByIds(ids));
+        Assert.assertEquals(ids.size(), getService().hardDeleteByIds(ids));
     }
 
     default void update() {
@@ -69,7 +69,7 @@ public interface ServiceTest<
 
         E newEntity = genEntity();
         newEntity.setId(entity.getId());
-        Assert.assertEquals(1, getService().update(newEntity));
+        Assert.assertEquals(1, getService().updateAllColumnsById(newEntity));
     }
 
     default void getById() {

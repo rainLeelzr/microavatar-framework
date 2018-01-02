@@ -206,6 +206,10 @@ public abstract class BaseCriteria {
         //optimizingIdCriteria();
     }
 
+    public boolean isNoCriteria() {
+
+    }
+
     /**
      * 如果 idGreaterThan = 2，idLessThan = 10
      * 则转换为 idBetweenStart = 3，idBetweenEnd = 9

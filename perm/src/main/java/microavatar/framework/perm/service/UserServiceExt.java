@@ -14,15 +14,17 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 @Service
-public class UserServiceExt extends UserService {
+public class UserServiceExt {
+
+    @Resource
+    private UserService userService;
 
     @Resource
     private UserDaoExt userDaoExt;
 
-    @Override
     @Cacheable("perm:id")
     public User getById(Long id) {
-        return super.getById(id);
+        return userService.getById(id);
     }
 
 

@@ -31,6 +31,13 @@ public abstract class BaseService<
             return 0;
         }
 
+        // 没有id的实体，设置一个id
+        for (E entity : entitys) {
+            if (entity.getId() == null) {
+                entity.randomId();
+            }
+        }
+
         // 一次性批量插入限制，防止因业务逻辑的不合理，而影响数据库性能
         int limit = 5000;
         if (entitys.size() <= limit) {
@@ -42,11 +49,6 @@ public abstract class BaseService<
                 .split(entitys instanceof List ? (List<E>) entitys : new ArrayList<>(entitys), limit);
 
         for (Collection<E> es : split) {
-            for (E entity : es) {
-                if (entity.getId() == null) {
-                    entity.randomId();
-                }
-            }
             insertCount += getDao().batchAdd(es);
         }
 
@@ -56,13 +58,17 @@ public abstract class BaseService<
     /**
      * 删
      */
-    public int deleteById(Long id) {
+    public int hardDeleteById(Long id) {
         return getDao().hardDeleteById(id);
     }
 
-    public int deleteByIds(Collection<Long> ids) {
+    public int hardDeleteByIds(Collection<Long> ids) {
         if (ids == null || ids.isEmpty()) {
             return 0;
+        }
+
+        if (ids.size() == 1) {
+            return hardDeleteById(ids.iterator().next());
         }
 
         // 一次性生成sql的in（）参数个数的限制，防止因业务逻辑的不合理，而影响数据库性能
@@ -82,10 +88,63 @@ public abstract class BaseService<
     }
 
     /**
+     * 根据id软删除记录
+     *
+     * @param id 需要软删除的实体的id
+     * @return 软删除成功的记录数量
+     */
+    public int softDeleteById(Long id) {
+        return getDao().softDeleteById(id);
+    }
+
+    /**
+     * 根据批量id软删除记录
+     *
+     * @param ids 需要软删除的实体的id集合
+     * @return 软删除成功的记录数量
+     */
+    public int softDeleteByIds(Collection<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return 0;
+        }
+
+        if (ids.size() == 1) {
+            return softDeleteById(ids.iterator().next());
+        }
+
+        // 一次性生成sql的in（）参数个数的限制，防止因业务逻辑的不合理，而影响数据库性能
+        int limit = 2000;
+
+        if (ids.size() <= limit) {
+            return getDao().softDeleteByIds(ids);
+        }
+
+        int count = 0;
+        Collection<Collection<Long>> split = CollectionUtil
+                .split(ids instanceof List ? (List<Long>) ids : new ArrayList<>(ids), limit);
+        for (Collection<Long> idArr : split) {
+            count += getDao().softDeleteByIds(idArr);
+        }
+        return count;
+    }
+
+    /**
      * 改
      */
-    public int update(E entity) {
+    public int updateAllColumnsById(E entity) {
         return getDao().updateAllColumnsById(entity);
+    }
+
+    public int updateExcludeNullFieldsById(E entity) {
+        return getDao().updateExcludeNullFieldsById(entity);
+    }
+
+    public int updateAllColumnsByCriteria(E entity, C criteria) {
+        return getDao().updateAllColumnsByCriteria(entity, criteria);
+    }
+
+    public int updateExcludeNullFieldsByCriteria(E entity, C criteria) {
+        return getDao().updateExcludeNullFieldsByCriteria(entity, criteria);
     }
 
     /**

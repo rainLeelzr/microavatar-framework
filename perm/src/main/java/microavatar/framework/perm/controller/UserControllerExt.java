@@ -7,9 +7,6 @@
 package microavatar.framework.perm.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import microavatar.framework.core.mvc.BaseController;
-import microavatar.framework.perm.criteria.UserCriteria;
-import microavatar.framework.perm.dao.UserDao;
 import microavatar.framework.perm.entity.User;
 import microavatar.framework.perm.service.UserService;
 import microavatar.framework.perm.service.UserServiceExt;
@@ -27,18 +24,13 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/perm/user")
 @Slf4j
-public class UserControllerExt extends BaseController<UserCriteria, UserDao, User, UserService> {
+public class UserControllerExt{
 
     @Resource
     private UserServiceExt userServiceExt;
 
     @Resource
     private UserService userService;
-
-    @Override
-    protected UserServiceExt getService() {
-        return userServiceExt;
-    }
 
     @RequestMapping("/name/{name}")
     public User getByName(@PathVariable String name) {
@@ -53,7 +45,7 @@ public class UserControllerExt extends BaseController<UserCriteria, UserDao, Use
         long insertStart = System.currentTimeMillis();
 
         for (int i = 0; i < insertCount; i++) {
-            userServiceExt.add(new User().randomEntity());
+            userService.add(new User().randomEntity());
         }
 
         long insertEnd = System.currentTimeMillis();

@@ -6,8 +6,10 @@
 package microavatar.framework.perm.dao;
 
 import microavatar.framework.perm.entity.User;
+import org.apache.ibatis.annotations.Mapper;
 
-public interface UserDaoExt extends UserDao {
+@Mapper
+public interface UserDaoExt {
 
     User getByAccount(String account);
 

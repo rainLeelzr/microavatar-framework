@@ -82,7 +82,7 @@
             <appender-ref ref="errorFile"/>
         </logger>
 
-        <logger name="microavatar.framework.core.database.listener.CanalClient" level="info" additivity="false">
+        <logger name="microavatar.framework.core.database.listener.CanalClient" level="debug" additivity="false">
             <appender-ref ref="console"/>
             <appender-ref ref="infoFile"/>
             <appender-ref ref="errorFile"/>
