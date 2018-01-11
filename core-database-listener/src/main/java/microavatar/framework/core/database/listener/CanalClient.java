@@ -8,26 +8,28 @@ import com.googlecode.protobuf.format.JsonFormat;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-//@Component
+@Component
 @Slf4j
-public class CanalClient implements InitializingBean, DisposableBean {
+public class CanalClient implements ApplicationListener<ContextRefreshedEvent>, DisposableBean {
 
-    //@Value("${canal.server.ip:192.168.0.31}")
-    @Value("${canal.server.ip:192.168.0.213}")
+    @Value("${canal.server.ip:192.168.0.31}")
     private String canalServerIp;
 
     @Value("${canal.server.port:11111}")
@@ -42,7 +44,6 @@ public class CanalClient implements InitializingBean, DisposableBean {
      * 5. 多个规则组合使用：canal\\..*,mysql.test1,mysql.test2 (逗号分隔)
      * 6  匹配多个类似库: canal_.*\\..*
      */
-    //@Value("${canal.server.subscribe:rain_boss.boss_perm.*}")
     @Value("${canal.server.subscribe:.*}")
     private String subscribe;
 
@@ -62,10 +63,12 @@ public class CanalClient implements InitializingBean, DisposableBean {
 
     private CanalConnector connector;
 
-    private List<EventBinding> eventBindings;
+    private Set<EventBinding> eventBindings;
 
     @Resource
     private ApplicationEventPublisher applicationEventPublisher;
+
+    private boolean isStart = false;
 
     private void start() {
         executor.submit(new CanalClientRunnable());
@@ -78,41 +81,6 @@ public class CanalClient implements InitializingBean, DisposableBean {
             connector.disconnect();
         }
     }
-
-    private class CanalClientRunnable implements Runnable {
-
-        @Override
-        public void run() {
-            // 创建链接
-            connector = CanalConnectors.newSingleConnector(
-                    new InetSocketAddress(canalServerIp, canalServerPort), "example", "", "");
-
-            Runtime.getRuntime().addShutdownHook(new Thread(connector::disconnect));
-            log.info("正在连接canalServer：{}:{},subscribe:{}", canalServerIp, canalServerPort, subscribe);
-            try {
-                connector.connect();
-                connector.subscribe(subscribe);
-                connector.rollback();
-                log.info("canalClient启动成功，正在监听的canalServerIp：{}:{}", canalServerIp, canalServerPort);
-                loopGetMessage();
-            } catch (Exception e) {
-                log.error(e.getMessage(), e);
-            } finally {
-                connector.disconnect();
-            }
-
-            log.info("连接canalServer：{}:{} 失败，{}毫秒后重试", canalServerIp, canalServerPort, reconnectMills);
-            try {
-                Thread.sleep(reconnectMills);
-            } catch (InterruptedException e) {
-                log.error(e.getMessage(), e);
-            }
-
-            // 此处应该提交新任务，而不能用死循环的方式来重连，因为采用死循环重连方案，以后用了热更技术，就会有越来越多的runnable执行死循环
-            executor.submit(new CanalClientRunnable());
-        }
-    }
-
 
     private void loopGetMessage() {
         int batchSize = 10000;
@@ -155,8 +123,8 @@ public class CanalClient implements InitializingBean, DisposableBean {
             String schemaName = entry.getHeader().getSchemaName();
             String tableName = entry.getHeader().getTableName();
 
-            if (log.isDebugEnabled()) {
-                log.debug(formatEventDetail(eventType, entry, rowChange));
+            if (log.isTraceEnabled()) {
+                log.trace(formatEventDetail(eventType, entry, rowChange));
             }
 
             publishEvent(schemaName, tableName, eventType, entry, rowChange);
@@ -278,16 +246,53 @@ public class CanalClient implements InitializingBean, DisposableBean {
             builder.setEventType(canalEventType);
         }
         if (this.eventBindings == null) {
-            this.eventBindings = new ArrayList<>();
+            this.eventBindings = new HashSet<>();
         }
         EventBinding eventBinding = builder.build();
-        this.eventBindings.remove(eventBinding);
         this.eventBindings.add(eventBinding);
         log.info("注册数据库事件：{}，总注册了{}个事件", databaseEventClass, this.eventBindings.size());
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
-        start();
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        if (!this.isStart) {
+            this.isStart = true;
+            start();
+        }
+    }
+
+    private class CanalClientRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            // 创建链接
+            connector = CanalConnectors.newSingleConnector(
+                    new InetSocketAddress(canalServerIp, canalServerPort), "example", "", "");
+
+            Runtime.getRuntime().addShutdownHook(new Thread(connector::disconnect));
+            log.info("正在连接canalServer：{}:{},subscribe:{}", canalServerIp, canalServerPort, subscribe);
+            try {
+                connector.connect();
+                connector.subscribe(subscribe);
+
+                connector.rollback();
+                log.info("canalClient启动成功，正在监听的canalServerIp：{}:{}", canalServerIp, canalServerPort);
+                loopGetMessage();
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            } finally {
+                connector.disconnect();
+            }
+
+            log.info("连接canalServer：{}:{} 失败，{}毫秒后重试", canalServerIp, canalServerPort, reconnectMills);
+            try {
+                Thread.sleep(reconnectMills);
+            } catch (InterruptedException e) {
+                log.error(e.getMessage(), e);
+            }
+
+            // 此处应该提交新任务，而不能用死循环的方式来重连，因为采用死循环重连方案，以后用了热更技术，就会有越来越多的runnable执行死循环
+            executor.submit(new CanalClientRunnable());
+        }
     }
 }
