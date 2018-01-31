@@ -9,8 +9,6 @@ spring:
       server:
         git:
           uri: https://github.com/rainLeelzr/microavatar-framework.git
-          username: lizhirong100@163.com
-          password: 5294539lzrmy
           searchPaths: config
 info:
   company: rain
