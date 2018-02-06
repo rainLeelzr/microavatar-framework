@@ -49,18 +49,14 @@
             </if>
             <if test="criteria.idIn != null and !criteria.idIn.isEmpty()">
                 AND id IN
-                <foreach collection="criteria.idIn" item="item" index="index" separator=",">
-                    (
-                        #{item,jdbcType=BIGINT}
-                    )
+                <foreach collection="criteria.idIn" item="item" index="index" separator="," open="(" close=")">
+                    #{item,jdbcType=BIGINT}
                 </foreach>
             </if>
             <if test="criteria.idNotIn != null and !criteria.idNotIn.isEmpty()">
                 AND id NOT IN
-                <foreach collection="criteria.idNotIn" item="item" index="index" separator=",">
-                    (
-                        #{item,jdbcType=BIGINT}
-                    )
+                <foreach collection="criteria.idNotIn" item="item" index="index" separator="," open="(" close=")">
+                    #{item,jdbcType=BIGINT}
                 </foreach>
             </if>
             <!-- 建有索引且能用索引的字段查询条件排第1 end -->
@@ -77,18 +73,14 @@
             </if>
             <if test="criteria.createTimeIn != null and !criteria.createTimeIn.isEmpty()">
                 AND create_time IN
-                <foreach collection="criteria.createTimeIn" item="item" index="index" separator=",">
-                    (
-                        #{item,jdbcType=BIGINT}
-                    )
+                <foreach collection="criteria.createTimeIn" item="item" index="index" separator="," open="(" close=")">
+                    #{item,jdbcType=BIGINT}
                 </foreach>
             </if>
             <if test="criteria.createTimeNotIn != null and !criteria.createTimeNotIn.isEmpty()">
                 AND create_time NOT IN
-                <foreach collection="criteria.createTimeNotIn" item="item" index="index" separator=",">
-                    (
-                        #{item,jdbcType=BIGINT}
-                    )
+                <foreach collection="criteria.createTimeNotIn" item="item" index="index" separator="," open="(" close=")">
+                    #{item,jdbcType=BIGINT}
                 </foreach>
             </if>
 
@@ -99,18 +91,14 @@
             <if test="criteria.accountNotLike != null">AND account instr(name, #{criteria.accountNotLike}) = 0</if>
             <if test="criteria.accountIn != null and !accountIn.isEmpty()">
                 AND account IN
-                <foreach collection="criteria.accountIn" item="item" index="index" separator=",">
-                    (
-                        #{item,jdbcType=VARCHAR}
-                    )
+                <foreach collection="criteria.accountIn" item="item" index="index" separator="," open="(" close=")">
+                    #{item,jdbcType=VARCHAR}
                 </foreach>
             </if>
             <if test="criteria.accountNotIn != null and !accountNotIn.isEmpty()">
                 AND account NOT IN
-                <foreach collection="criteria.accountNotIn" item="item" index="index" separator=",">
-                    (
-                        #{item,jdbcType=VARCHAR}
-                    )
+                <foreach collection="criteria.accountNotIn" item="item" index="index" separator="," open="(" close=")">
+                    #{item,jdbcType=VARCHAR}
                 </foreach>
             </if>
 
