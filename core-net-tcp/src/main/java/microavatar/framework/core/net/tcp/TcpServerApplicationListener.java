@@ -7,6 +7,9 @@ import org.springframework.context.event.ContextRefreshedEvent;
 
 import javax.annotation.Resource;
 
+/**
+ * @author Rain
+ */
 @Configuration
 @Conditional(TcpServerCondition.class)
 public class TcpServerApplicationListener implements ApplicationListener<ContextRefreshedEvent> {
@@ -14,23 +17,8 @@ public class TcpServerApplicationListener implements ApplicationListener<Context
     @Resource
     private TcpServer tcpServer;
 
-    private boolean alreadyInitialized = false;
-
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (alreadyInitialized) {
-            return;
-        }
-
-        new Thread("netty-starter") {
-
-            @Override
-            public void run() {
-                tcpServer.start();
-            }
-        }.start();
-
-        alreadyInitialized = true;
+        tcpServer.start();
     }
-
 }

@@ -1,10 +1,58 @@
 package microavatar.framework.core.net.tcp.netpackage;
 
-public class AcpPackage implements Package {
+import microavatar.framework.core.net.tcp.netpackage.item.*;
+
+import java.util.Arrays;
+
+public class HttpPackage implements Package {
+
+    private static final String FULL_LENGTH = "fullLength";
+    private static final String VERSION = "version";
+    private static final String URL_LENGTH = "urlLength";
+    private static final String URL = "url";
+    private static final String HTTP_METHOD = "httpMethod";
+    private static final String BODY_TYPE = "bodyType";
+    private static final String BODY = "body";
+
+    private static final Item[] ITEM_TEMPLATE = new Item[]{
+            IntItem.emptyItem(FULL_LENGTH),
+            ShortItem.emptyItem(VERSION),
+            IntItem.emptyItem(URL_LENGTH),
+            ByteArrayItem.emptyItem(URL),
+            ByteItem.emptyItem(HTTP_METHOD),
+            ByteItem.emptyItem(BODY_TYPE),
+            ByteArrayItem.emptyItem(BODY),
+    };
+
+    private Item[] items;
 
     @Override
-    public int getVersion() {
-        return 1;
+    public Item[] initItems() {
+        items = new Item[ITEM_TEMPLATE.length];
+        for (int i = 0; i < ITEM_TEMPLATE.length; i++) {
+            Item item = ITEM_TEMPLATE[i];
+            try {
+                Item newItem = item.getClass().newInstance();
+                newItem.setName(item.getName());
+                items[i] = newItem;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        items = Arrays.copyOf(ITEM_TEMPLATE, ITEM_TEMPLATE.length);
+        return this.items;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public short getVersion() {
+        ShortItem item = (ShortItem) getItem(VERSION);
+        return item.getData();
+    }
+
+    @Override
+    public int getLeastLength() {
+        return 0;
     }
 
     @Override
@@ -18,15 +66,32 @@ public class AcpPackage implements Package {
     }
 
     @Override
-    public Element[] getElements() {
-        return new Element[]{
-                new Element("fullLength", ElementEnum.INT),
-                new Element("httpMethod", ElementEnum.BYTE),
-                new Element("urlLength", ElementEnum.INT),
-                new Element("url", ElementEnum.BYTE_ARRAY),
-                new Element("bodyType", ElementEnum.BYTE),
-                new Element("body", ElementEnum.BYTE_ARRAY)
-        };
+    public Item[] getItems() {
+        if (items == null) {
+            throw new RuntimeException("items未初始化，请先初始化！");
+        }
+        return items;
+    }
+
+    @Override
+    public String getPackageStructure() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < ITEM_TEMPLATE.length; i++) {
+            Item item = ITEM_TEMPLATE[i];
+            sb.append("第").append(i + 1).append("个字段是")
+                    .append(item.getName())
+                    .append("，")
+                    .append(item.getItemTypeEnum())
+                    .append("\n");
+        }
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(new HttpPackage().getPackageStructure());
+        System.out.println(HttpPackage.ITEM_TEMPLATE);
+        System.out.println(new HttpPackage());
+        System.out.println(new HttpPackage().initItems());
     }
 
     public enum HttpMethodEnum {

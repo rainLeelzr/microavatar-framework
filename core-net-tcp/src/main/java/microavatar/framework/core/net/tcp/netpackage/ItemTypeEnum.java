@@ -1,9 +1,9 @@
 package microavatar.framework.core.net.tcp.netpackage;
 
 /**
- * 报文包的元素枚举
+ * 报文包的选项类型枚举
  */
-public enum ElementEnum {
+public enum ItemTypeEnum {
 
     BYTE(byte.class, Byte.SIZE, Byte.SIZE),
 
@@ -21,7 +21,7 @@ public enum ElementEnum {
 
     BOOLEAN(boolean.class, 1, 1),
 
-    BYTE_ARRAY(byte[].class, -1, 100);
+    BYTE_ARRAY(byte[].class, -1, 100 * 1024 * 1024 * 8);
 
     private Class clazz;
 
@@ -33,11 +33,11 @@ public enum ElementEnum {
 
     /**
      * 最大占用空间，单位：位。
-     * 如果是固定占用空间，则默认为0
+     * 如果是固定占用空间，则默认为固定占用空间
      */
     private int maxUsageSpace;
 
-    ElementEnum(Class clazz, int usageSpace, int maxUsageSpace) {
+    ItemTypeEnum(Class clazz, int usageSpace, int maxUsageSpace) {
         this.clazz = clazz;
         this.usageSpace = usageSpace;
         this.maxUsageSpace = maxUsageSpace;
@@ -55,5 +55,17 @@ public enum ElementEnum {
         return maxUsageSpace;
     }
 
+    @Override
+    public String toString() {
+        return new StringBuilder("{")
+                .append("\"字段类型\":\"")
+                .append(clazz.getSimpleName())
+                .append("\",\"固定占用空间\":")
+                .append(usageSpace)
+                .append(",\"最大占用空间\":")
+                .append(maxUsageSpace)
+                .append('}')
+                .toString();
+    }
 }
 
