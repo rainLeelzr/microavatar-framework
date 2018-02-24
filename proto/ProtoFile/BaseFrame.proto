@@ -1,0 +1,16 @@
+package Platform.Model;
+option java_package = "microavatar.framework.base.protobuf";
+option java_outer_classname = "Base";
+
+message Frame {
+    optional int32 c2sId = 1; // 客户端发送给服务端的消息自增id。服务端响应时，会复制这个值一并返回。客户端可以根据此值来判断服务端是响应客户端的哪次请求
+    optional int32 s2cId = 2; // 服务端发送给客户端的消息自增id。
+    optional string javaProtobufClassC2S = 3; // payload的proto对应的java类名。服务端响应时，会复制这个值一并返回
+    optional string javaProtobufClassS2C = 4; // 消息内容的proto s2c。服务端响应时，会复制这个值一并返回
+    optional bool heartbeat = 5; // 是否心跳包
+    optional bytes payload = 6; // 消息内容
+}
+
+message HttpPackage {
+    optional
+}
