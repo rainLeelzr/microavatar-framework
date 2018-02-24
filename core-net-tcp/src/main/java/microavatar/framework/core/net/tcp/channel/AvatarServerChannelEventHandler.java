@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
-import microavatar.framework.core.net.tcp.netpackage.TcpPacket;
+import microavatar.framework.core.net.tcp.netpackage.Package;
 import microavatar.framework.core.net.tcp.request.ATCPRequest;
 import microavatar.framework.core.net.tcp.request.AvatarServerRequestManager;
 import microavatar.framework.core.net.tcp.session.ATCPPSession;
@@ -14,6 +14,8 @@ import microavatar.framework.core.net.tcp.session.Session;
 
 /**
  * channel事件被触发时，执行此类对应的事件处理方法
+ *
+ * @author Rain
  */
 @Slf4j
 public class AvatarServerChannelEventHandler extends BaseChannelEventHandler {
@@ -50,11 +52,11 @@ public class AvatarServerChannelEventHandler extends BaseChannelEventHandler {
     public void channelRead(ChannelHandlerContext cx, Object object) {
         Session session = sessionManager.getSession(cx.channel());
         if (session == null) {
-            log.error("channelRead失败，channel对于的session为null");
+            log.error("channelRead失败，channel对应的session为null");
             return;
         }
 
-        TcpPacket packet = (TcpPacket) object;
+        Package packet = (Package) object;
 
         ATCPRequest bizRequest = new ATCPRequest(packet, session);
         requestManager.addRequest(bizRequest);

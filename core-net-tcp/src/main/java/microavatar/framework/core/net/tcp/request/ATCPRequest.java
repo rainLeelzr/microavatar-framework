@@ -1,14 +1,14 @@
 package microavatar.framework.core.net.tcp.request;
 
 import lombok.extern.slf4j.Slf4j;
-import microavatar.framework.core.net.tcp.netpackage.TcpPacket;
+import microavatar.framework.core.net.tcp.netpackage.Package;
 import microavatar.framework.core.net.tcp.session.Session;
 
 /**
  * 一个网络包请求就是一个系统的事件.类似一个task任务
  */
 @Slf4j
-public class ATCPRequest<P extends TcpPacket, S extends Session> {
+public class ATCPRequest<P extends Package, S extends Session> {
 
     private final P packet;
 

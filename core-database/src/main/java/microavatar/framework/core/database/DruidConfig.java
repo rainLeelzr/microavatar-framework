@@ -86,6 +86,10 @@ public class DruidConfig {
         filterRegistrationBean.addInitParameter("profileEnable", "true");
         filterRegistrationBean.addInitParameter("principalCookieName", "USER_COOKIE");
         filterRegistrationBean.addInitParameter("principalSessionName", "USER_SESSION");
+        //白名单：
+        // filterRegistrationBean.addInitParameter("allow","127.0.0.1");
+        //IP黑名单 (存在共同时，deny优先于allow) : 如果满足deny的话提示:Sorry, you are not permitted to view this page.
+        // filterRegistrationBean.addInitParameter("deny","192.168.1.73");
         return filterRegistrationBean;
     }
 

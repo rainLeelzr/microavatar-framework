@@ -2,35 +2,40 @@ package microavatar.framework.core.net.tcp.netpackage;
 
 import microavatar.framework.core.net.tcp.netpackage.item.*;
 
-import java.util.Arrays;
-
 public class HttpPackage implements Package {
 
-    private static final String FULL_LENGTH = "fullLength";
-    private static final String VERSION = "version";
-    private static final String URL_LENGTH = "urlLength";
-    private static final String URL = "url";
-    private static final String HTTP_METHOD = "httpMethod";
-    private static final String BODY_TYPE = "bodyType";
-    private static final String BODY = "body";
+    public static final String FULL_LENGTH = "fullLength";
+    public static final String VERSION = "version";
+    public static final String URL_LENGTH = "urlLength";
+    public static final String URL = "url";
+    public static final String HTTP_METHOD = "httpMethod";
+    public static final String BODY_TYPE = "bodyType";
+    public static final String BODY_LENGTH = "bodyLength";
+    public static final String BODY = "body";
 
-    private static final Item[] ITEM_TEMPLATE = new Item[]{
+    public static final String URL_CHART_SET = "UTF-8";
+
+    private static final Item[] PACKAGE_STRUCTURE = new Item[]{
             IntItem.emptyItem(FULL_LENGTH),
             ShortItem.emptyItem(VERSION),
             IntItem.emptyItem(URL_LENGTH),
             ByteArrayItem.emptyItem(URL),
             ByteItem.emptyItem(HTTP_METHOD),
             ByteItem.emptyItem(BODY_TYPE),
+            IntItem.emptyItem(BODY_LENGTH),
             ByteArrayItem.emptyItem(BODY),
     };
 
+    /**
+     * 储存真实的报文数据
+     */
     private Item[] items;
 
     @Override
     public Item[] initItems() {
-        items = new Item[ITEM_TEMPLATE.length];
-        for (int i = 0; i < ITEM_TEMPLATE.length; i++) {
-            Item item = ITEM_TEMPLATE[i];
+        this.items = new Item[PACKAGE_STRUCTURE.length];
+        for (int i = 0; i < PACKAGE_STRUCTURE.length; i++) {
+            Item item = PACKAGE_STRUCTURE[i];
             try {
                 Item newItem = item.getClass().newInstance();
                 newItem.setName(item.getName());
@@ -39,7 +44,6 @@ public class HttpPackage implements Package {
                 throw new RuntimeException(e);
             }
         }
-        items = Arrays.copyOf(ITEM_TEMPLATE, ITEM_TEMPLATE.length);
         return this.items;
     }
 
@@ -48,11 +52,6 @@ public class HttpPackage implements Package {
     public short getVersion() {
         ShortItem item = (ShortItem) getItem(VERSION);
         return item.getData();
-    }
-
-    @Override
-    public int getLeastLength() {
-        return 0;
     }
 
     @Override
@@ -76,8 +75,8 @@ public class HttpPackage implements Package {
     @Override
     public String getPackageStructure() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < ITEM_TEMPLATE.length; i++) {
-            Item item = ITEM_TEMPLATE[i];
+        for (int i = 0; i < PACKAGE_STRUCTURE.length; i++) {
+            Item item = PACKAGE_STRUCTURE[i];
             sb.append("第").append(i + 1).append("个字段是")
                     .append(item.getName())
                     .append("，")
@@ -89,7 +88,7 @@ public class HttpPackage implements Package {
 
     public static void main(String[] args) {
         System.out.println(new HttpPackage().getPackageStructure());
-        System.out.println(HttpPackage.ITEM_TEMPLATE);
+        System.out.println(HttpPackage.PACKAGE_STRUCTURE);
         System.out.println(new HttpPackage());
         System.out.println(new HttpPackage().initItems());
     }

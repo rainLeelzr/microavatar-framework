@@ -24,6 +24,10 @@
             <groupId>microavatar.framework</groupId>
             <artifactId>core-mvc</artifactId>
         </dependency>
+        <dependency>
+            <groupId>microavatar.framework</groupId>
+            <artifactId>common-protobuf</artifactId>
+        </dependency>
 
         <!-- netty -->
         <dependency>

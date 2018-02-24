@@ -21,13 +21,16 @@ public enum ItemTypeEnum {
 
     BOOLEAN(boolean.class, 1, 1),
 
-    BYTE_ARRAY(byte[].class, -1, 100 * 1024 * 1024 * 8);
+    /**
+     * 如果当前元素是字节数组，则前一个元素必须是标记当前数组的字节大小
+     */
+    BYTE_ARRAY(byte[].class, 0, 100 * 1024 * 1024 * 8);
 
     private Class clazz;
 
     /**
      * 占用空间，单位：位
-     * 如果无固定占用空间，则设置-1
+     * 如果无固定占用空间，则设置0
      */
     private int usageSpace;
 
@@ -60,9 +63,9 @@ public enum ItemTypeEnum {
         return new StringBuilder("{")
                 .append("\"字段类型\":\"")
                 .append(clazz.getSimpleName())
-                .append("\",\"固定占用空间\":")
+                .append("\",\"固定占用空间(bit)\":")
                 .append(usageSpace)
-                .append(",\"最大占用空间\":")
+                .append(",\"最大占用空间(bit)\":")
                 .append(maxUsageSpace)
                 .append('}')
                 .toString();

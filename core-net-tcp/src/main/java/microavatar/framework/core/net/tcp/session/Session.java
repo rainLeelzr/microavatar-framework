@@ -1,13 +1,16 @@
 package microavatar.framework.core.net.tcp.session;
 
-import microavatar.framework.core.net.tcp.netpackage.TcpPacket;
+import microavatar.framework.core.net.tcp.netpackage.Package;
 
 /**
  * session，Channel是代表一个具体的链接，例如在netty中，就代表是netty的channel
  */
 public abstract class Session<C> {
 
-    private volatile boolean locked = false;//锁状态
+    /**
+     * 锁状态
+     */
+    private volatile boolean locked = false;
 
     /**
      * 与客户端的链接通道
@@ -19,7 +22,10 @@ public abstract class Session<C> {
      */
     private String userId;
 
-    private String remoteServerName;//远程服务器名
+    /**
+     * 远程服务器名
+     */
+    private String remoteServerName;
 
     /**
      * 创建session的时间
@@ -74,7 +80,7 @@ public abstract class Session<C> {
 
     public abstract void sendMessage(String url, byte[] bodyBytes);
 
-    public abstract void sendMessage(TcpPacket tcpPacket);
+    public abstract void sendMessage(Package packet);
 
     public abstract String getRemoteIP();
 

@@ -13,22 +13,19 @@ public interface Package {
     short getVersion();
 
     /**
-     * 获取报文包至少的长度
-     */
-    int getLeastLength();
-
-    /**
-     * 获取当前报文包数据的完整长度
+     * 获取当前报文包数据的完整长度，单位：字节
      */
     int getFullLength();
 
     /**
-     * 获取当前报文包的body部分的长度
+     * 获取当前报文包的body部分的长度，单位：字节
      */
     int getBodyLength();
 
     /**
      * 初始化报文包
+     * 第0个元素必须定义为IntItem:fullLength
+     * 所有元素的总长度，必须为整数字节
      */
     Item[] initItems();
 
@@ -60,4 +57,5 @@ public interface Package {
     }
 
     String getPackageStructure();
+
 }

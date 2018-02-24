@@ -21,7 +21,7 @@ public interface Serializer<SOURCE, TARGET> {
     SOURCE deserialize(TARGET data) throws Exception;
 
     /**
-     * 获取序列化
+     * 序列化工具是否支持指定的序列化模式
      */
     boolean support(SerializationMode serializationMode);
 }

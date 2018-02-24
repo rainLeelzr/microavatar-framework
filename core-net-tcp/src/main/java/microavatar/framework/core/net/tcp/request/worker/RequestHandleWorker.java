@@ -1,10 +1,12 @@
 package microavatar.framework.core.net.tcp.request.worker;
 
+import com.google.protobuf.ByteString;
 import lombok.extern.slf4j.Slf4j;
-import microavatar.framework.core.api.MicroServerSearchService;
-import microavatar.framework.core.api.model.ServerApi;
-import microavatar.framework.core.api.model.Api;
-import microavatar.framework.core.net.tcp.netpackage.TcpPacket;
+import microavatar.framework.base.protobuf.Base;
+import microavatar.framework.core.net.tcp.netpackage.HttpPackage;
+import microavatar.framework.core.net.tcp.netpackage.Package;
+import microavatar.framework.core.net.tcp.netpackage.item.ByteArrayItem;
+import microavatar.framework.core.net.tcp.netpackage.item.ByteItem;
 import microavatar.framework.core.net.tcp.request.ATCPRequest;
 import microavatar.framework.core.serialization.SerializationMode;
 import microavatar.framework.core.serialization.Serializer;
@@ -15,26 +17,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 /**
- *
+ * @author Rain
  */
 @Slf4j
 public class RequestHandleWorker extends Thread {
 
-    private static final int MAX_QUEUE_SIZE = Math.min(1000, 1000);//要设置配置
+    private static final int MAX_QUEUE_SIZE = Math.min(1000, 1000);
 
     private volatile boolean running = true;
 
     private BlockingQueue<ATCPRequest> blockingQueue;
 
-    private long handledTimes = 0;//处理完的个数
-
-    private MicroServerSearchService microServerService;
+    /**
+     * 处理完的个数
+     */
+    private long handledTimes = 0;
 
     private Serializer serializer;
 
@@ -47,19 +49,18 @@ public class RequestHandleWorker extends Thread {
     private Map<String, String> serverNameMapping;
 
     public RequestHandleWorker(RestTemplate restTemplate,
-                               MicroServerSearchService microServerService,
                                Serializer serializer,
                                Map<String, String> serverNameMapping,
                                String workName) {
         super(workName);
         this.restTemplate = restTemplate;
-        this.microServerService = microServerService;
         this.serializer = serializer;
         this.serverNameMapping = serverNameMapping;
         this.blockingQueue = new ArrayBlockingQueue<>(MAX_QUEUE_SIZE);
         this.setDaemon(true);
     }
 
+    @Override
     public void run() {
         while (running) {
             ATCPRequest request = null;
@@ -80,139 +81,30 @@ public class RequestHandleWorker extends Thread {
         }
     }
 
+    /**
+     * 将客户端的请求转换成http请求，转发给http网关，并把http网关返回的结果，发送给客户端
+     */
     private void handle(ATCPRequest request) {
-        TcpPacket packet = request.getPacket();
-        String url = packet.getUrlStr();
+        Package packet = request.getPacket();
 
+        HttpPackage httpPackage = (HttpPackage) packet;
+
+        // 获取请求url
+        String url = getUrlString(httpPackage);
         if (url == null || url.length() == 0) {
-            log.debug("url为空，跳过请求的处理");
-            // todo 发送消息给客户端
-            return;
-        }
-
-        // 从url中获取微服务的名称
-        int first = url.indexOf("/");
-        if (first < 0) {
-            log.debug("url错误，没有包含/，跳过请求的处理: {}", url);
-            // todo 发送消息给客户端
-            return;
-        }
-
-        int second = url.indexOf("/", first + 1);
-        if (second < 0) {
-            log.debug("url错误，没有包含两个/，跳过请求的处理: {}", url);
-            // todo 发送消息给客户端
-            return;
-        }
-
-        String serverName = url.substring(first + 1, second);
-        String requestUrlWithoutServerName = url.substring(second);
-
-        // 获取微服务的api
-        ServerApi serverApi = microServerService.getMicroServerByServerName(serverName);
-        if (serverApi == null) {
-            String path = serverNameMapping.get(serverName);
-            if (path != null) {
-                url = path + requestUrlWithoutServerName;
-                serverApi = microServerService.getMicroServerByServerName(path.toUpperCase());
-            }
-        }
-
-        if (serverApi == null) {
-            log.error(
-                    "客户端[{}]请求不存在microServer的api！请检查url是否正确。{}",
-                    request.getSession().getRemoteIP(),
-                    request.getPacket().toString());
-            // todo 发送消息给客户端
-            return;
-        }
-
-        /*
-            /im/perm/{id}/mm/{ij}
-            /im/perm/xxx-xxxx/mm/uu
-         */
-        String[] split = requestUrlWithoutServerName.split("/");
-
-        // 成功匹配到的api
-        String matchUrl = "";
-        Api matchApi = null;
-
-        for (Map.Entry<String, List<Api>> entry : serverApi.getRequestMappingApis().entrySet()) {
-            List<Api> apisInUrl = entry.getValue();
-
-            boolean isMatchUrl = false;
-            boolean isMatchMethod = false;
-            Api acceptAllMethodApi = null;
-
-            for (Api tempApi : apisInUrl) {
-                String[] urlDivisions = tempApi.getUrlDivisions();
-                // 如果客户端请求的url和api的url在分割部分的数组长度不一致，则肯定不匹配
-                if (urlDivisions.length != split.length) {
-                    continue;
-                }
-
-                boolean isMatchUrlDivision = isMatchUrlDivision(split, urlDivisions);
-
-                // 如果url分段能匹配，则判断method是否匹配
-                if (isMatchUrlDivision) {
-                    isMatchUrl = true;
-
-                    // 判断并记录此api是否接受所有method
-                    if (tempApi.getRequestMethods().length == 0) {
-                        acceptAllMethodApi = tempApi;
-                    }
-
-                    // 判断输入的method是否存在于原始的可以接受的method中
-                    for (RequestMethod requestMethod : tempApi.getRequestMethods()) {
-                        if (isInputAndOriginalMethodEqual(requestMethod, packet.getMethod())) {
-                            isMatchMethod = true;
-                            break;
-                        }
-                    }
-
-                    // 如果method也匹配，则退出apisInUrl的循环
-                    if (isMatchMethod) {
-                        matchApi = tempApi;
-                        matchUrl = entry.getKey();
-                        break;
-                    }
-                }
-            }
-
-            // 如果已经找到匹配的api，则退出serverApi循环
-            if (matchApi != null) {
-                break;
-            }
-
-            // 如果已经匹配了url，则判断有没有接受所有method的api
-            if (isMatchUrl && acceptAllMethodApi != null) {
-                matchApi = acceptAllMethodApi;
-                matchUrl = entry.getKey();
-                break;
-            }
-
-        }
-
-        if (matchApi == null) {
-            log.error(
-                    "客户端[{}]请求不存在url的api！请检查url是否正确。{}",
-                    request.getSession().getRemoteIP(),
-                    request.getPacket().toString());
+            log.error("请求的url字符串为空，跳过请求！");
             // todo 发送消息给客户端
             return;
         }
 
         // 将body参数转为json，从tcp包中的body部分获取解析而来
-        String json = parseApiParameters(packet, matchApi);
-        if (json == null) {
-            log.error(
-                    "解析body参数，转换为json失败[{}]{}",
-                    request.getSession().getRemoteIP(),
-                    request.getPacket().toString());
-            // todo 发送消息给客户端
-            return;
-        }
-        log.debug("解析body得到的请求参数：{}", json);
+        String bodyJson = getBodyJson(httpPackage);
+
+        /*
+            /im/perm/{id}/mm/{ij}
+            /im/perm/xxx-xxxx/mm/uu
+         */
+        log.debug("解析得到的url：{}；body: {}", url, bodyJson);
         long start = System.currentTimeMillis();
         try {
             String requestUrl = "http://" + url;
@@ -262,97 +154,81 @@ public class RequestHandleWorker extends Thread {
         }
     }
 
-    /**
-     * 判断输入的url分段和原始的url分段是否匹配
-     */
-    private boolean isMatchUrlDivision(String[] inputDivisions, String[] originalDivisions) {
-        boolean isMatchUrlDivision = true;
+    private String getBodyJson(HttpPackage httpPackage) throws Exception {
+        String bodyJson = null;
 
-        // 遍历分割的每个部分
-        for (int i = 0; i < originalDivisions.length; i++) {
-            String u = originalDivisions[i];
-
-            // 如果是占位符，则此段url视为正确匹配
-            if (u.startsWith("{") && u.endsWith("}")) {
-                continue;
-            }
-
-            // 如果不是占位符，则此段url必须要全部相同
-            String requestU = inputDivisions[i];
-            if (!u.equals(requestU)) {
-                isMatchUrlDivision = false;
-                break;
+        // 获取body数据的类型
+        SerializationMode serializationMode = null;
+        ByteItem bodyTypeItem = (ByteItem) httpPackage.getItem(HttpPackage.BODY_TYPE);
+        byte bodyType = bodyTypeItem.getData();
+        for (SerializationMode tempMode : SerializationMode.values()) {
+            if (tempMode.geId() == bodyType) {
+                serializationMode = tempMode;
             }
         }
-        return isMatchUrlDivision;
-    }
-
-    /**
-     * 将客户端传递过来的参数，封装成api需要的参数类型
-     */
-    private String parseApiParameters(TcpPacket packet, Api api) {
-        String json = "";
-
-        // 如果不是post请求，则不解析body
-        if (packet.getMethod() != TcpPacket.MethodEnum.POST.geId()) {
-            return json;
+        if (serializationMode == null) {
+            throw new RuntimeException(String.format("给定的bodyType=%s，系统不支持该序列化类型。", bodyType));
         }
 
-        // 反序列化请求参数
-        byte bodyType = packet.getBodyType();
-        if (bodyType == SerializationMode.PROTOBUF2.geId()) {
-            json = parseApiParametersFromProtobuf(packet, api);
-        } else if (bodyType == SerializationMode.JSON.geId()) {
-            json = parseApiParametersFromJson(packet, api);
-        } else {
-            log.error("不支持tcp头信息中的包类型为[{}]的值: {}", packet.toString());
+        // 获取body字节数组
+        ByteArrayItem bodyArrayItem = (ByteArrayItem) httpPackage.getItem(HttpPackage.BODY);
+        byte[] bodyByteArray = bodyArrayItem.getData();
+
+        // 如果数组为null，则返回null
+        if (bodyByteArray == null) {
             return null;
-            // todo 发送消息给客户端
         }
-        return json;
+
+        // 根据body的类型，反序列化body字节数组
+        switch (serializationMode) {
+            case JSON:
+                bodyJson = new String(bodyByteArray, HttpPackage.URL_CHART_SET);
+                break;
+            case PROTOBUF2:
+                if (serializer.support(serializationMode)) {
+                    // 使用baseFrame反序列化body字节数组
+                    Base.Frame frame = Base.Frame.parseFrom(bodyByteArray);
+                    if (frame.getHeartbeat()) {
+
+                    }
+
+                    String javaProtobufClassC2S = frame.getJavaProtobufClassC2S();
+                    if (javaProtobufClassC2S == null || javaProtobufClassC2S.length() == 0) {
+
+                    }
+                    // 根据baseProto的javaProtobufClass内容，反序列化payload
+                    serializer.prepare(deserialize);
+                    serializer.deserialize(deserialize);
+
+                }
+                break;
+            case PROTOBUF3:
+                throw new RuntimeException(String.format("未实现类型为%s的反序列化方式！", serializationMode));
+                // break;
+            default:
+                throw new RuntimeException(String.format("未实现类型为%s的反序列化方式！", serializationMode));
+
+        }
+
+        return bodyJson;
     }
 
-    /**
-     * 将json格式的二进制数据封装成api需要的参数类型
-     */
-    private String parseApiParametersFromJson(TcpPacket packet, Api api) {
-        String jsonStr;
+    private String getUrlString(HttpPackage httpPackage) {
+        String url = null;
+        ByteArrayItem urlItem = (ByteArrayItem) httpPackage.getItem(HttpPackage.URL);
+        byte[] urlByteArray = urlItem.getData();
+        if (urlByteArray == null) {
+            log.error("请求的url字节数据为null，跳过请求！");
+            return null;
+        }
         try {
-            jsonStr = new String(packet.getBody(), "utf-8");
+            url = new String(urlByteArray, HttpPackage.URL_CHART_SET);
         } catch (UnsupportedEncodingException e) {
             log.error(e.getMessage(), e);
-            return null;
         }
-        return jsonStr;
+        return url;
     }
 
-    /**
-     * 将proto格式的二进制数据封装成api需要的参数类型
-     */
-    private String parseApiParametersFromProtobuf(TcpPacket packet, Api api) {
-        String protobufC2S = api.getProtobufC2S();
-        if (protobufC2S == null || protobufC2S.length() == 0) {
-            log.debug("api中无c2s信息，无需转换proto");
-            return "";
-        }
-
-        String jsonStr;
-        try {
-            serializer.prepare(api.getProtobufC2S());
-            jsonStr = (String) serializer.deserialize(packet.getBody());
-        } catch (Exception e) {
-            log.error(
-                    "反序列化protobuf格式的request Body失败: {}",
-                    packet.toString(),
-                    e);
-            // todo 发送消息给客户端
-            return null;
-        }
-
-        log.debug("proto转成json后的内容：{}", jsonStr);
-
-        return jsonStr;
-    }
 
     /**
      * 接收一个事件请求，放入队列中

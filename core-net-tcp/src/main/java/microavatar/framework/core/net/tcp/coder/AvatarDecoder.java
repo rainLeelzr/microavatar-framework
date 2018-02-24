@@ -4,7 +4,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import lombok.extern.slf4j.Slf4j;
-import microavatar.framework.core.net.tcp.netpackage.TcpPacket;
+import microavatar.framework.core.net.tcp.netpackage.HttpPackage;
+import microavatar.framework.core.net.tcp.netpackage.ItemTypeEnum;
+import microavatar.framework.core.net.tcp.netpackage.Package;
+import microavatar.framework.core.net.tcp.netpackage.item.*;
 
 import java.util.List;
 
@@ -27,69 +30,141 @@ public class AvatarDecoder extends ByteToMessageDecoder {
      * └╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┘
      */
     @Override
-    public void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-        log.debug("收到网络包，长度：{}", in.readableBytes());
-        // 一个完整的tcp包的数据长度至少为10字节
-        if (in.readableBytes() < TcpPacket.MIN_LENGTH) {
+    public void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) {
+        int readableBytes = in.readableBytes();
+
+        log.debug("收到网络包，长度：{}", readableBytes);
+
+        // 获取网络包的前4个字节，作为一个完整报文包的数据长度
+        if (readableBytes < Integer.BYTES) {
             return;
         }
 
         in.markReaderIndex();
 
         // 整个包的长度（字节）
-        int length = in.readInt();
-
-        if (length < 0) {
-            log.warn("tcp数据包的length值为负数[{}], 将强制关闭tcp链接！", length);
+        int fullLength = in.readInt();
+        if (fullLength < 0) {
+            log.error("tcp数据包的length值为负数[{}], 将强制关闭此tcp链接！{}", fullLength, ctx);
             ctx.close();
             return;
         }
 
-        if (length > TcpPacket.MAX_LENGTH) {
-            log.warn("tcp数据包的length值[{}]超过最大值[{}], 将强制关闭tcp链接！", length, TcpPacket.MAX_LENGTH);
-            ctx.close();
-            return;
-        }
-
-        if (in.readableBytes() < length - 4) {
+        // 整包的长度小于可读字节数，说明数据未完全接收。返回，等待下次读取
+        if (fullLength < readableBytes) {
             in.resetReaderIndex();
             return;
         }
 
-        // method
-        byte method = in.readByte();
-
-        // url的长度（字节）
-        int urlLength = in.readInt();
-        if (urlLength < 0) {
-            log.warn("tcp数据包的urlLength值为负数[{}], 将强制关闭tcp链接！", urlLength);
-            ctx.close();
+        Package packageData = createPackage(ctx, in, fullLength);
+        if (packageData == null) {
             return;
         }
 
-        if (urlLength > TcpPacket.MAX_URL_LENGTH) {
-            log.warn("tcp数据包的urlLength值[{}]超过最大值[{}], 将强制关闭tcp链接！", urlLength, TcpPacket.MAX_URL_LENGTH);
-            ctx.close();
-            return;
+        out.add(packageData);
+    }
+
+    private Package createPackage(ChannelHandlerContext ctx, ByteBuf in, int fullLength) {
+        Package packageData = new HttpPackage();
+        Item[] items = packageData.initItems();
+        for (int i = 0; i < items.length; i++) {
+            Item item = items[i];
+            if (i == 0) {
+                ((IntItem) item).setData(fullLength);
+            } else {
+                ItemTypeEnum itemTypeEnum = item.getItemTypeEnum();
+                switch (itemTypeEnum) {
+                    case BYTE:
+                        ((ByteItem) item).setData(in.readByte());
+                        break;
+                    case SHORT:
+                        ((ShortItem) item).setData(in.readShort());
+                        break;
+                    case INT:
+                        ((IntItem) item).setData(in.readInt());
+                        break;
+                    case LONG:
+                        ((LongItem) item).setData(in.readLong());
+                        break;
+                    case FLOAT:
+                        ((FloatItem) item).setData(in.readFloat());
+                        break;
+                    case DOUBLE:
+                        ((DoubleItem) item).setData(in.readDouble());
+                        break;
+                    case CHAR:
+                        ((CharItem) item).setData(in.readChar());
+                        break;
+                    case BOOLEAN:
+                        ((BooleanItem) item).setData(in.readBoolean());
+                        break;
+                    case BYTE_ARRAY:
+                        ByteArrayItem thisItem = (ByteArrayItem) item;
+                        byte[] bytes = createByteArray(items[i - 1]);
+                        if (bytes == null) {
+                            log.error("无法为当前字节数组获取其的长度（上一个元素的值应该是本字节数据的长度），上一个元素是{}。将强制关闭此tcp链接！{}",
+                                    items[i - 1], ctx);
+                            ctx.close();
+                            return null;
+                        }
+                        in.readBytes(bytes);
+                        thisItem.setData(bytes);
+                        break;
+                    default:
+                        log.warn("未实现itemType为{}的解码，将强制关闭此tcp链接！{}", itemTypeEnum, ctx);
+                        ctx.close();
+                        return null;
+                }
+            }
+        }
+        return packageData;
+    }
+
+    /**
+     * 获取上一个元素的值，作为当前元素的字节数组大小
+     */
+    private byte[] createByteArray(Item lastItemInterface) {
+        byte[] bytes = null;
+        switch (lastItemInterface.getItemTypeEnum()) {
+            case BYTE:
+                ByteItem byteItem = (ByteItem) lastItemInterface;
+                if (byteItem.getData() < 0) {
+                    log.error("指定的长度[{]}少于0", byteItem.getData());
+                } else {
+                    bytes = new byte[byteItem.getData()];
+                }
+                break;
+            case SHORT:
+                ShortItem shortItem = (ShortItem) lastItemInterface;
+                if (shortItem.getData() < 0) {
+                    log.error("指定的长度[{]}少于0", shortItem.getData());
+                } else {
+                    bytes = new byte[shortItem.getData()];
+                }
+                break;
+            case INT:
+                IntItem intItem = (IntItem) lastItemInterface;
+                if (intItem.getData() < 0) {
+                    log.error("指定的长度[{]}少于0", intItem.getData());
+                } else {
+                    bytes = new byte[intItem.getData()];
+                }
+                break;
+            case LONG:
+                LongItem longItem = (LongItem) lastItemInterface;
+                if (longItem.getData() < 0) {
+                    log.error("指定的长度[{]}少于0", longItem.getData());
+                } else if (longItem.getData() > Integer.MAX_VALUE) {
+                    log.error("指定的长度[{]}超过new byte[]的最大长度Integer.MAX_VALUE[{}]",
+                            longItem.getData(), Integer.MAX_VALUE);
+                } else {
+                    bytes = new byte[(int) longItem.getData()];
+                }
+                break;
+            default:
+                break;
         }
 
-        // 请求的url
-        byte[] url = new byte[urlLength];
-        if (urlLength > 0) {
-            in.readBytes(url);
-        }
-
-        // body数据的格式
-        byte bodyType = in.readByte();
-
-        // body数据
-        int bodyLength = length - TcpPacket.MIN_LENGTH - urlLength;
-        byte[] body = new byte[bodyLength];
-        if (bodyLength > 0) {
-            in.readBytes(body);
-        }
-
-        // 将数据封装成一个完整的数据包
-        out.add(new TcpPacket(length, method, urlLength, url, bodyType, body));
+        return bytes;
     }
 }

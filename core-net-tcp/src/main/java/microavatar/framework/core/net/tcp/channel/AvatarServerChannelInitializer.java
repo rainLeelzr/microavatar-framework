@@ -29,6 +29,7 @@ public class AvatarServerChannelInitializer extends ChannelInitializer<NioSocket
     @Resource
     private AvatarServerRequestManager avatarServerRequestManager;
 
+    @Override
     protected void initChannel(NioSocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
 
