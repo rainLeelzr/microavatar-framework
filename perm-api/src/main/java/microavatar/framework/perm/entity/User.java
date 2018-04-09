@@ -65,10 +65,7 @@ public class User extends BaseEntity<User> {
 
     @Override
     public User randomEntity() {
-        this.randomId();
-        this.createTime = System.currentTimeMillis();
-        this.modifyTime = System.currentTimeMillis();
-        this.deleted = randomBoolean();
+        randomBaseEntity();
 
         this.account = randomString();
         this.pwd = randomString();

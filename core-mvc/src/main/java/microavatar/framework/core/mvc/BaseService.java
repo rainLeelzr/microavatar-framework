@@ -20,9 +20,7 @@ public abstract class BaseService<
      * 增
      */
     public int add(E entity) {
-        if (entity.getId() == null) {
-            entity.randomId();
-        }
+        entity.computeIdIfAbsent();
         return getDao().add(entity);
     }
 
@@ -33,9 +31,7 @@ public abstract class BaseService<
 
         // 没有id的实体，设置一个id
         for (E entity : entitys) {
-            if (entity.getId() == null) {
-                entity.randomId();
-            }
+            entity.computeIdIfAbsent();
         }
 
         // 一次性批量插入限制，防止因业务逻辑的不合理，而影响数据库性能

@@ -10,7 +10,7 @@ public interface Package {
     /**
      * 报文包的版本
      */
-    short getVersion();
+    int getVersion();
 
     /**
      * 获取当前报文包数据的完整长度，单位：字节
@@ -21,13 +21,6 @@ public interface Package {
      * 获取当前报文包的body部分的长度，单位：字节
      */
     int getBodyLength();
-
-    /**
-     * 初始化报文包
-     * 第0个元素必须定义为IntItem:fullLength
-     * 所有元素的总长度，必须为整数字节
-     */
-    Item[] initItems();
 
     /**
      * 获取报文的所有元素，元素顺序是真实报文包的数据顺序

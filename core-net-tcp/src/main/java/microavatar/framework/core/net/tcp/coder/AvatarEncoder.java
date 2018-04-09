@@ -9,6 +9,8 @@ import microavatar.framework.core.net.tcp.netpackage.item.*;
 
 /**
  * 发送数据给客户端的时，执行此类进行编码
+ *
+ * @author Rain
  */
 @Slf4j
 public class AvatarEncoder extends MessageToByteEncoder<Package> {
@@ -17,12 +19,6 @@ public class AvatarEncoder extends MessageToByteEncoder<Package> {
     protected void encode(ChannelHandlerContext ctx, Package packageData, ByteBuf out) throws Exception {
         for (Item item : packageData.getItems()) {
             switch (item.getItemTypeEnum()) {
-                case BYTE:
-                    out.writeByte(((ByteItem) item).getData());
-                    break;
-                case SHORT:
-                    out.writeShort(((ShortItem) item).getData());
-                    break;
                 case INT:
                     out.writeInt(((IntItem) item).getData());
                     break;
@@ -34,9 +30,6 @@ public class AvatarEncoder extends MessageToByteEncoder<Package> {
                     break;
                 case DOUBLE:
                     out.writeDouble(((DoubleItem) item).getData());
-                    break;
-                case CHAR:
-                    out.writeChar(((CharItem) item).getData());
                     break;
                 case BOOLEAN:
                     out.writeBoolean(((BooleanItem) item).isData());

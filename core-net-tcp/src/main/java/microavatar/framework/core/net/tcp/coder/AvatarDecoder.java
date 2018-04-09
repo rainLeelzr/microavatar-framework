@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import lombok.extern.slf4j.Slf4j;
-import microavatar.framework.core.net.tcp.netpackage.HttpPackage;
+import microavatar.framework.core.net.tcp.netpackage.impl.BluePackage;
 import microavatar.framework.core.net.tcp.netpackage.ItemTypeEnum;
 import microavatar.framework.core.net.tcp.netpackage.Package;
 import microavatar.framework.core.net.tcp.netpackage.item.*;
@@ -13,6 +13,8 @@ import java.util.List;
 
 /**
  * 收到客户端的数据后，执行此类进行数据解码
+ *
+ * @author Rain
  */
 @Slf4j
 public class AvatarDecoder extends ByteToMessageDecoder {
@@ -65,8 +67,8 @@ public class AvatarDecoder extends ByteToMessageDecoder {
     }
 
     private Package createPackage(ChannelHandlerContext ctx, ByteBuf in, int fullLength) {
-        Package packageData = new HttpPackage();
-        Item[] items = packageData.initItems();
+        Package packageData = new BluePackage();
+        Item[] items = packageData.getItems();
         for (int i = 0; i < items.length; i++) {
             Item item = items[i];
             if (i == 0) {
@@ -74,12 +76,6 @@ public class AvatarDecoder extends ByteToMessageDecoder {
             } else {
                 ItemTypeEnum itemTypeEnum = item.getItemTypeEnum();
                 switch (itemTypeEnum) {
-                    case BYTE:
-                        ((ByteItem) item).setData(in.readByte());
-                        break;
-                    case SHORT:
-                        ((ShortItem) item).setData(in.readShort());
-                        break;
                     case INT:
                         ((IntItem) item).setData(in.readInt());
                         break;
@@ -91,9 +87,6 @@ public class AvatarDecoder extends ByteToMessageDecoder {
                         break;
                     case DOUBLE:
                         ((DoubleItem) item).setData(in.readDouble());
-                        break;
-                    case CHAR:
-                        ((CharItem) item).setData(in.readChar());
                         break;
                     case BOOLEAN:
                         ((BooleanItem) item).setData(in.readBoolean());
@@ -123,27 +116,11 @@ public class AvatarDecoder extends ByteToMessageDecoder {
     /**
      * 获取上一个元素的值，作为当前元素的字节数组大小
      */
-    private byte[] createByteArray(Item lastItemInterface) {
+    private byte[] createByteArray(Item lastItem) {
         byte[] bytes = null;
-        switch (lastItemInterface.getItemTypeEnum()) {
-            case BYTE:
-                ByteItem byteItem = (ByteItem) lastItemInterface;
-                if (byteItem.getData() < 0) {
-                    log.error("指定的长度[{]}少于0", byteItem.getData());
-                } else {
-                    bytes = new byte[byteItem.getData()];
-                }
-                break;
-            case SHORT:
-                ShortItem shortItem = (ShortItem) lastItemInterface;
-                if (shortItem.getData() < 0) {
-                    log.error("指定的长度[{]}少于0", shortItem.getData());
-                } else {
-                    bytes = new byte[shortItem.getData()];
-                }
-                break;
+        switch (lastItem.getItemTypeEnum()) {
             case INT:
-                IntItem intItem = (IntItem) lastItemInterface;
+                IntItem intItem = (IntItem) lastItem;
                 if (intItem.getData() < 0) {
                     log.error("指定的长度[{]}少于0", intItem.getData());
                 } else {
@@ -151,7 +128,7 @@ public class AvatarDecoder extends ByteToMessageDecoder {
                 }
                 break;
             case LONG:
-                LongItem longItem = (LongItem) lastItemInterface;
+                LongItem longItem = (LongItem) lastItem;
                 if (longItem.getData() < 0) {
                     log.error("指定的长度[{]}少于0", longItem.getData());
                 } else if (longItem.getData() > Integer.MAX_VALUE) {
@@ -167,4 +144,5 @@ public class AvatarDecoder extends ByteToMessageDecoder {
 
         return bytes;
     }
+
 }

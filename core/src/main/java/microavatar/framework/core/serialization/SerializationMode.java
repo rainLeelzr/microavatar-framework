@@ -20,7 +20,12 @@ public enum SerializationMode {
     /**
      * protobuf3模式
      */
-    PROTOBUF3((byte) 3);
+    PROTOBUF3((byte) 3),
+
+    /**
+     * String --> bytes 模式
+     */
+    STRING_BYTES((byte) 4);
 
     private byte id;
 

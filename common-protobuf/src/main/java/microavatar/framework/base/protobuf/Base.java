@@ -11,19 +11,23 @@ public final class Base {
   public interface FrameOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // optional string javaProtobufClassC2S = 1;
+    // optional int64 c2sId = 1;
+    boolean hasC2SId();
+    long getC2SId();
+    
+    // optional int64 s2cId = 2;
+    boolean hasS2CId();
+    long getS2CId();
+    
+    // optional string javaProtobufClassC2S = 3;
     boolean hasJavaProtobufClassC2S();
     String getJavaProtobufClassC2S();
     
-    // optional string javaProtobufClassS2C = 2;
+    // optional string javaProtobufClassS2C = 4;
     boolean hasJavaProtobufClassS2C();
     String getJavaProtobufClassS2C();
     
-    // optional bool heartbeat = 3;
-    boolean hasHeartbeat();
-    boolean getHeartbeat();
-    
-    // optional bytes payload = 4;
+    // optional bytes payload = 5;
     boolean hasPayload();
     com.google.protobuf.ByteString getPayload();
   }
@@ -56,11 +60,31 @@ public final class Base {
     }
     
     private int bitField0_;
-    // optional string javaProtobufClassC2S = 1;
-    public static final int JAVAPROTOBUFCLASSC2S_FIELD_NUMBER = 1;
+    // optional int64 c2sId = 1;
+    public static final int C2SID_FIELD_NUMBER = 1;
+    private long c2SId_;
+    public boolean hasC2SId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public long getC2SId() {
+      return c2SId_;
+    }
+    
+    // optional int64 s2cId = 2;
+    public static final int S2CID_FIELD_NUMBER = 2;
+    private long s2CId_;
+    public boolean hasS2CId() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public long getS2CId() {
+      return s2CId_;
+    }
+    
+    // optional string javaProtobufClassC2S = 3;
+    public static final int JAVAPROTOBUFCLASSC2S_FIELD_NUMBER = 3;
     private java.lang.Object javaProtobufClassC2S_;
     public boolean hasJavaProtobufClassC2S() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     public String getJavaProtobufClassC2S() {
       java.lang.Object ref = javaProtobufClassC2S_;
@@ -88,11 +112,11 @@ public final class Base {
       }
     }
     
-    // optional string javaProtobufClassS2C = 2;
-    public static final int JAVAPROTOBUFCLASSS2C_FIELD_NUMBER = 2;
+    // optional string javaProtobufClassS2C = 4;
+    public static final int JAVAPROTOBUFCLASSS2C_FIELD_NUMBER = 4;
     private java.lang.Object javaProtobufClassS2C_;
     public boolean hasJavaProtobufClassS2C() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     public String getJavaProtobufClassS2C() {
       java.lang.Object ref = javaProtobufClassS2C_;
@@ -120,30 +144,21 @@ public final class Base {
       }
     }
     
-    // optional bool heartbeat = 3;
-    public static final int HEARTBEAT_FIELD_NUMBER = 3;
-    private boolean heartbeat_;
-    public boolean hasHeartbeat() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    public boolean getHeartbeat() {
-      return heartbeat_;
-    }
-    
-    // optional bytes payload = 4;
-    public static final int PAYLOAD_FIELD_NUMBER = 4;
+    // optional bytes payload = 5;
+    public static final int PAYLOAD_FIELD_NUMBER = 5;
     private com.google.protobuf.ByteString payload_;
     public boolean hasPayload() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     public com.google.protobuf.ByteString getPayload() {
       return payload_;
     }
     
     private void initFields() {
+      c2SId_ = 0L;
+      s2CId_ = 0L;
       javaProtobufClassC2S_ = "";
       javaProtobufClassS2C_ = "";
-      heartbeat_ = false;
       payload_ = com.google.protobuf.ByteString.EMPTY;
     }
     private byte memoizedIsInitialized = -1;
@@ -159,16 +174,19 @@ public final class Base {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getJavaProtobufClassC2SBytes());
+        output.writeInt64(1, c2SId_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getJavaProtobufClassS2CBytes());
+        output.writeInt64(2, s2CId_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBool(3, heartbeat_);
+        output.writeBytes(3, getJavaProtobufClassC2SBytes());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(4, payload_);
+        output.writeBytes(4, getJavaProtobufClassS2CBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBytes(5, payload_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -181,19 +199,23 @@ public final class Base {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getJavaProtobufClassC2SBytes());
+          .computeInt64Size(1, c2SId_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getJavaProtobufClassS2CBytes());
+          .computeInt64Size(2, s2CId_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(3, heartbeat_);
+          .computeBytesSize(3, getJavaProtobufClassC2SBytes());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, payload_);
+          .computeBytesSize(4, getJavaProtobufClassS2CBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(5, payload_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -319,14 +341,16 @@ public final class Base {
       
       public Builder clear() {
         super.clear();
-        javaProtobufClassC2S_ = "";
+        c2SId_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000001);
-        javaProtobufClassS2C_ = "";
+        s2CId_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000002);
-        heartbeat_ = false;
+        javaProtobufClassC2S_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
-        payload_ = com.google.protobuf.ByteString.EMPTY;
+        javaProtobufClassS2C_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
+        payload_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
       
@@ -368,17 +392,21 @@ public final class Base {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.javaProtobufClassC2S_ = javaProtobufClassC2S_;
+        result.c2SId_ = c2SId_;
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.javaProtobufClassS2C_ = javaProtobufClassS2C_;
+        result.s2CId_ = s2CId_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.heartbeat_ = heartbeat_;
+        result.javaProtobufClassC2S_ = javaProtobufClassC2S_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
+        }
+        result.javaProtobufClassS2C_ = javaProtobufClassS2C_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
         }
         result.payload_ = payload_;
         result.bitField0_ = to_bitField0_;
@@ -397,14 +425,17 @@ public final class Base {
       
       public Builder mergeFrom(microavatar.framework.base.protobuf.Base.Frame other) {
         if (other == microavatar.framework.base.protobuf.Base.Frame.getDefaultInstance()) return this;
+        if (other.hasC2SId()) {
+          setC2SId(other.getC2SId());
+        }
+        if (other.hasS2CId()) {
+          setS2CId(other.getS2CId());
+        }
         if (other.hasJavaProtobufClassC2S()) {
           setJavaProtobufClassC2S(other.getJavaProtobufClassC2S());
         }
         if (other.hasJavaProtobufClassS2C()) {
           setJavaProtobufClassS2C(other.getJavaProtobufClassS2C());
-        }
-        if (other.hasHeartbeat()) {
-          setHeartbeat(other.getHeartbeat());
         }
         if (other.hasPayload()) {
           setPayload(other.getPayload());
@@ -440,23 +471,28 @@ public final class Base {
               }
               break;
             }
-            case 10: {
+            case 8: {
               bitField0_ |= 0x00000001;
-              javaProtobufClassC2S_ = input.readBytes();
+              c2SId_ = input.readInt64();
               break;
             }
-            case 18: {
+            case 16: {
               bitField0_ |= 0x00000002;
-              javaProtobufClassS2C_ = input.readBytes();
+              s2CId_ = input.readInt64();
               break;
             }
-            case 24: {
+            case 26: {
               bitField0_ |= 0x00000004;
-              heartbeat_ = input.readBool();
+              javaProtobufClassC2S_ = input.readBytes();
               break;
             }
             case 34: {
               bitField0_ |= 0x00000008;
+              javaProtobufClassS2C_ = input.readBytes();
+              break;
+            }
+            case 42: {
+              bitField0_ |= 0x00000010;
               payload_ = input.readBytes();
               break;
             }
@@ -466,10 +502,52 @@ public final class Base {
       
       private int bitField0_;
       
-      // optional string javaProtobufClassC2S = 1;
+      // optional int64 c2sId = 1;
+      private long c2SId_ ;
+      public boolean hasC2SId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public long getC2SId() {
+        return c2SId_;
+      }
+      public Builder setC2SId(long value) {
+        bitField0_ |= 0x00000001;
+        c2SId_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearC2SId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        c2SId_ = 0L;
+        onChanged();
+        return this;
+      }
+      
+      // optional int64 s2cId = 2;
+      private long s2CId_ ;
+      public boolean hasS2CId() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public long getS2CId() {
+        return s2CId_;
+      }
+      public Builder setS2CId(long value) {
+        bitField0_ |= 0x00000002;
+        s2CId_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearS2CId() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        s2CId_ = 0L;
+        onChanged();
+        return this;
+      }
+      
+      // optional string javaProtobufClassC2S = 3;
       private java.lang.Object javaProtobufClassC2S_ = "";
       public boolean hasJavaProtobufClassC2S() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       public String getJavaProtobufClassC2S() {
         java.lang.Object ref = javaProtobufClassC2S_;
@@ -485,27 +563,27 @@ public final class Base {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000001;
+  bitField0_ |= 0x00000004;
         javaProtobufClassC2S_ = value;
         onChanged();
         return this;
       }
       public Builder clearJavaProtobufClassC2S() {
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = (bitField0_ & ~0x00000004);
         javaProtobufClassC2S_ = getDefaultInstance().getJavaProtobufClassC2S();
         onChanged();
         return this;
       }
       void setJavaProtobufClassC2S(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000001;
+        bitField0_ |= 0x00000004;
         javaProtobufClassC2S_ = value;
         onChanged();
       }
       
-      // optional string javaProtobufClassS2C = 2;
+      // optional string javaProtobufClassS2C = 4;
       private java.lang.Object javaProtobufClassS2C_ = "";
       public boolean hasJavaProtobufClassS2C() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       public String getJavaProtobufClassS2C() {
         java.lang.Object ref = javaProtobufClassS2C_;
@@ -521,48 +599,27 @@ public final class Base {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000002;
+  bitField0_ |= 0x00000008;
         javaProtobufClassS2C_ = value;
         onChanged();
         return this;
       }
       public Builder clearJavaProtobufClassS2C() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000008);
         javaProtobufClassS2C_ = getDefaultInstance().getJavaProtobufClassS2C();
         onChanged();
         return this;
       }
       void setJavaProtobufClassS2C(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000008;
         javaProtobufClassS2C_ = value;
         onChanged();
       }
       
-      // optional bool heartbeat = 3;
-      private boolean heartbeat_ ;
-      public boolean hasHeartbeat() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      public boolean getHeartbeat() {
-        return heartbeat_;
-      }
-      public Builder setHeartbeat(boolean value) {
-        bitField0_ |= 0x00000004;
-        heartbeat_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearHeartbeat() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        heartbeat_ = false;
-        onChanged();
-        return this;
-      }
-      
-      // optional bytes payload = 4;
+      // optional bytes payload = 5;
       private com.google.protobuf.ByteString payload_ = com.google.protobuf.ByteString.EMPTY;
       public boolean hasPayload() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       public com.google.protobuf.ByteString getPayload() {
         return payload_;
@@ -571,13 +628,13 @@ public final class Base {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000008;
+  bitField0_ |= 0x00000010;
         payload_ = value;
         onChanged();
         return this;
       }
       public Builder clearPayload() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000010);
         payload_ = getDefaultInstance().getPayload();
         onChanged();
         return this;
@@ -609,10 +666,11 @@ public final class Base {
   static {
     java.lang.String[] descriptorData = {
       "\n\031ProtoFile/BaseFrame.proto\022\016Platform.Mo" +
-      "del\"g\n\005Frame\022\034\n\024javaProtobufClassC2S\030\001 \001" +
-      "(\t\022\034\n\024javaProtobufClassS2C\030\002 \001(\t\022\021\n\thear" +
-      "tbeat\030\003 \001(\010\022\017\n\007payload\030\004 \001(\014B+\n#microava" +
-      "tar.framework.base.protobufB\004Base"
+      "del\"r\n\005Frame\022\r\n\005c2sId\030\001 \001(\003\022\r\n\005s2cId\030\002 \001" +
+      "(\003\022\034\n\024javaProtobufClassC2S\030\003 \001(\t\022\034\n\024java" +
+      "ProtobufClassS2C\030\004 \001(\t\022\017\n\007payload\030\005 \001(\014B" +
+      "+\n#microavatar.framework.base.protobufB\004" +
+      "Base"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -624,7 +682,7 @@ public final class Base {
           internal_static_Platform_Model_Frame_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Platform_Model_Frame_descriptor,
-              new java.lang.String[] { "JavaProtobufClassC2S", "JavaProtobufClassS2C", "Heartbeat", "Payload", },
+              new java.lang.String[] { "C2SId", "S2CId", "JavaProtobufClassC2S", "JavaProtobufClassS2C", "Payload", },
               microavatar.framework.base.protobuf.Base.Frame.class,
               microavatar.framework.base.protobuf.Base.Frame.Builder.class);
           return null;

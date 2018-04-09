@@ -1,17 +1,17 @@
 package microavatar.framework.core.net.tcp.request.worker;
 
 import microavatar.framework.core.net.tcp.TcpServerCondition;
-import microavatar.framework.core.net.tcp.request.ATCPRequest;
-import microavatar.framework.core.serialization.Serializer;
+import microavatar.framework.core.net.tcp.request.Request;
+import microavatar.framework.core.net.tcp.request.RequestHandler;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,10 +37,7 @@ public class RequestHandleWorkerPool implements InitializingBean {
     private RequestHandleWorker[] workers;
 
     @Resource
-    private RestTemplate restTemplate;
-
-    @Resource
-    private Serializer serializer;
+    private List<RequestHandler> requestHandlers;
 
     @Resource
     private ZuulProperties zuulProperties;
@@ -56,10 +53,8 @@ public class RequestHandleWorkerPool implements InitializingBean {
         }
         for (int i = 0; i < workers.length; i++) {
             RequestHandleWorker worker = new RequestHandleWorker(
-                    restTemplate,
-                    serializer,
-                    serverNameMapping,
-                    "worker-" + i);
+                    requestHandlers,
+                    "TcpRequestWorker-" + i);
             workers[i] = worker;
             worker.start();
         }
@@ -68,7 +63,7 @@ public class RequestHandleWorkerPool implements InitializingBean {
     /**
      * 将网络事件包分配到指定的
      */
-    public void putRequestInQueue(ATCPRequest request) {
+    public void putRequestInQueue(Request request) {
         int index = RandomUtils.nextInt(0, workers.length);
         RequestHandleWorker worker = workers[index];
         worker.acceptRequest(request);

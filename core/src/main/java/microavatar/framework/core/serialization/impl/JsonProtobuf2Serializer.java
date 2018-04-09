@@ -1,11 +1,13 @@
 package microavatar.framework.core.serialization.impl;
 
+import com.google.protobuf.ByteString;
 import com.google.protobuf.GeneratedMessage;
 import com.googlecode.protobuf.format.JsonFormat;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import microavatar.framework.core.serialization.SerializationMode;
 import microavatar.framework.core.serialization.Serializer;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -17,7 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Rain
  */
 @Slf4j
-public class Protobuf2Serializer implements Serializer<String, byte[]> {
+@Component
+public class JsonProtobuf2Serializer implements Serializer<String, ByteString> {
 
     /**
      * key: protobufC2S的类名
@@ -39,7 +42,12 @@ public class Protobuf2Serializer implements Serializer<String, byte[]> {
      */
     @Override
     public boolean support(SerializationMode serializationMode) {
-        return SerializationMode.PROTOBUF2 == serializationMode;
+        return getSupport() == serializationMode;
+    }
+
+    @Override
+    public SerializationMode getSupport() {
+        return SerializationMode.PROTOBUF2;
     }
 
     /**
@@ -57,7 +65,7 @@ public class Protobuf2Serializer implements Serializer<String, byte[]> {
      * @return 字节数组
      */
     @Override
-    public byte[] serialize(@NonNull String jsonStr) throws Exception {
+    public ByteString serialize(@NonNull String jsonStr) throws Exception {
         String protoClassStr = protobufClassStr.get();
         if (protoClassStr == null) {
             throw new NullPointerException("未设置protoClassStr");
@@ -72,7 +80,8 @@ public class Protobuf2Serializer implements Serializer<String, byte[]> {
 
         GeneratedMessage.Builder builder = (GeneratedMessage.Builder) builderMethod.invoke(builderMethod.getDeclaringClass());
         JsonFormat.merge(jsonStr, builder);
-        return builder.build().toByteArray();
+        protobufClassStr.remove();
+        return builder.build().toByteString();
     }
 
     /**
@@ -82,7 +91,7 @@ public class Protobuf2Serializer implements Serializer<String, byte[]> {
      * @return json字符串
      */
     @Override
-    public String deserialize(@NonNull byte[] data) throws Exception {
+    public String deserialize(@NonNull ByteString data) throws Exception {
         String protoClassStr = protobufClassStr.get();
         if (protoClassStr == null) {
             throw new NullPointerException("未设置protoClassStr");
@@ -96,6 +105,7 @@ public class Protobuf2Serializer implements Serializer<String, byte[]> {
         }
 
         GeneratedMessage protobufJavaBean = (GeneratedMessage) parseMethod.invoke(null, data);
+        protobufClassStr.remove();
         return JsonFormat.printToString(protobufJavaBean);
     }
 

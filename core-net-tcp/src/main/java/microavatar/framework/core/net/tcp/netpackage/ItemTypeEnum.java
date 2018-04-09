@@ -5,10 +5,6 @@ package microavatar.framework.core.net.tcp.netpackage;
  */
 public enum ItemTypeEnum {
 
-    BYTE(byte.class, Byte.SIZE, Byte.SIZE),
-
-    SHORT(short.class, Short.SIZE, Short.SIZE),
-
     INT(int.class, Integer.SIZE, Integer.SIZE),
 
     LONG(long.class, Long.SIZE, Long.SIZE),
@@ -16,8 +12,6 @@ public enum ItemTypeEnum {
     FLOAT(float.class, Float.SIZE, Float.SIZE),
 
     DOUBLE(double.class, Double.SIZE, Double.SIZE),
-
-    CHAR(char.class, Character.SIZE, Character.SIZE),
 
     BOOLEAN(boolean.class, 1, 1),
 

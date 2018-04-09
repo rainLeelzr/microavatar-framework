@@ -60,12 +60,17 @@ public abstract class BaseEntity<E> implements Serializable {
      */
     abstract public E randomEntity();
 
-    /**
-     * 生成新的id
-     */
-    public Long randomId() {
-        this.id = LongSequence.get();
-        return this.id;
+    protected void randomBaseEntity() {
+        this.computeIdIfAbsent();
+        this.createTime = System.currentTimeMillis();
+        this.modifyTime = System.currentTimeMillis();
+        this.deleted = randomBoolean();
+    }
+
+    public void computeIdIfAbsent() {
+        if (this.id == null) {
+            this.id = LongSequence.get();
+        }
     }
 
     protected String randomString() {

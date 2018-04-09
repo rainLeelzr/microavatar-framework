@@ -6,7 +6,7 @@ import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
 import microavatar.framework.core.net.tcp.netpackage.Package;
-import microavatar.framework.core.net.tcp.request.ATCPRequest;
+import microavatar.framework.core.net.tcp.request.Request;
 import microavatar.framework.core.net.tcp.request.AvatarServerRequestManager;
 import microavatar.framework.core.net.tcp.session.ATCPPSession;
 import microavatar.framework.core.net.tcp.session.AvatarSessionManager;
@@ -58,7 +58,7 @@ public class AvatarServerChannelEventHandler extends BaseChannelEventHandler {
 
         Package packet = (Package) object;
 
-        ATCPRequest bizRequest = new ATCPRequest(packet, session);
+        Request bizRequest = new Request(packet, session);
         requestManager.addRequest(bizRequest);
 
         // ReferenceCountUtil.release(byteBuf);

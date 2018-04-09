@@ -24,4 +24,9 @@ public interface Serializer<SOURCE, TARGET> {
      * 序列化工具是否支持指定的序列化模式
      */
     boolean support(SerializationMode serializationMode);
+
+    /**
+     * 获取序列化工具支持的序列化模式
+     */
+    SerializationMode getSupport();
 }
