@@ -1,10 +1,10 @@
 package microavatar.framework.core.mvc;
 
+import cn.hutool.core.util.RandomUtil;
 import lombok.Getter;
 import lombok.Setter;
 import microavatar.framework.core.support.sequence.impl.LongSequence;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang.math.RandomUtils;
 
 import java.io.Serializable;
 
@@ -74,11 +74,11 @@ public abstract class BaseEntity<E> implements Serializable {
     }
 
     protected String randomString() {
-        return RandomStringUtils.randomGraph(5);
+        return RandomUtil.randomString(6);
     }
 
     protected Byte randomByte() {
-        return (byte) RandomUtils.nextInt(0, 6);
+        return (byte) RandomUtil.randomInt(Byte.MAX_VALUE);
     }
 
     protected Boolean randomBoolean() {
@@ -86,11 +86,11 @@ public abstract class BaseEntity<E> implements Serializable {
     }
 
     protected Integer randomInteger() {
-        return RandomUtils.nextInt(1, 5);
+        return RandomUtil.randomInt();
     }
 
     protected Long randomLong() {
-        return RandomUtils.nextLong(1, 5);
+        return RandomUtil.randomLong();
     }
 
     @Override

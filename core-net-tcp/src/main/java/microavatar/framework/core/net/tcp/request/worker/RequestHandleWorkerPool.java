@@ -1,9 +1,9 @@
 package microavatar.framework.core.net.tcp.request.worker;
 
+import cn.hutool.core.util.RandomUtil;
 import microavatar.framework.core.net.tcp.TcpServerCondition;
 import microavatar.framework.core.net.tcp.request.Request;
 import microavatar.framework.core.net.tcp.request.RequestHandler;
-import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.cloud.netflix.zuul.filters.ZuulProperties;
 import org.springframework.context.annotation.Conditional;
@@ -64,7 +64,7 @@ public class RequestHandleWorkerPool implements InitializingBean {
      * 将网络事件包分配到指定的
      */
     public void putRequestInQueue(Request request) {
-        int index = RandomUtils.nextInt(0, workers.length);
+        int index = RandomUtil.randomInt(0, workers.length);
         RequestHandleWorker worker = workers[index];
         worker.acceptRequest(request);
     }

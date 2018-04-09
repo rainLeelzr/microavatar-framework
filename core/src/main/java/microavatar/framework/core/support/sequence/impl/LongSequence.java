@@ -1,10 +1,10 @@
 package microavatar.framework.core.support.sequence.impl;
 
+import cn.hutool.core.util.RandomUtil;
 import lombok.extern.slf4j.Slf4j;
 import microavatar.framework.core.support.SpringContextUtil;
 import microavatar.framework.core.support.sequence.Sequence;
-import org.apache.commons.lang3.RandomUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.core.env.Environment;
 
 /**
@@ -43,19 +43,19 @@ public class LongSequence implements Sequence<Long> {
         long dataCenterId;
 
         if (env == null) {
-            workId = RandomUtils.nextLong(0, 32);
-            dataCenterId = RandomUtils.nextLong(0, 32);
+            workId = RandomUtil.randomLong(0, 32);
+            dataCenterId = RandomUtil.randomLong(0, 32);
         } else {
             String workIdStr = env.getProperty("app.sequence.workId");
             if (StringUtils.isBlank(workIdStr)) {
-                workId = RandomUtils.nextLong(0, 32);
+                workId = RandomUtil.randomLong(0, 32);
             } else {
                 workId = Long.valueOf(workIdStr);
             }
 
             String dataCenterIdStr = env.getProperty("app.sequence.dataCenterId");
             if (StringUtils.isBlank(dataCenterIdStr)) {
-                dataCenterId = RandomUtils.nextLong(0, 32);
+                dataCenterId = RandomUtil.randomLong(0, 32);
             } else {
                 dataCenterId = Long.valueOf(dataCenterIdStr);
             }

@@ -4,22 +4,16 @@ import com.alibaba.otter.canal.client.CanalConnector;
 import com.alibaba.otter.canal.client.CanalConnectors;
 import com.alibaba.otter.canal.protocol.CanalEntry.*;
 import com.alibaba.otter.canal.protocol.Message;
-import com.googlecode.protobuf.format.JsonFormat;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -61,8 +55,6 @@ public class CanalClient implements ApplicationListener<ContextRefreshedEvent>, 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private CanalConnector connector;
-
-    private Set<EventBinding> eventBindings;
 
     @Resource
     private ApplicationEventPublisher applicationEventPublisher;
@@ -125,8 +117,6 @@ public class CanalClient implements ApplicationListener<ContextRefreshedEvent>, 
             if (log.isTraceEnabled()) {
                 log.trace(formatEventDetail(eventType, entry, rowChange));
             }
-
-            publishEvent(schemaName, tableName, eventType, entry, rowChange);
         }
     }
 
@@ -164,92 +154,6 @@ public class CanalClient implements ApplicationListener<ContextRefreshedEvent>, 
             }
         }
         return sb.toString();
-    }
-
-    /**
-     * 发布事件给spring容器
-     * <p>
-     * 根据数据库名、表名、canal事件类型，找到已经注册过的spring事件，并发布spring事件
-     */
-    private void publishEvent(String schemaName, String tableName, EventType eventType, Entry entry, RowChange rowChange) {
-        if (this.eventBindings == null) {
-            return;
-        }
-
-        for (EventBinding eventBinding : this.eventBindings) {
-            DatabaseEvent databaseEvent;
-
-            if (!eventBinding.isAlwaysPublish()) {
-                // 如果需要检查数据库名，则检查
-                if (eventBinding.isCheckSchemaName()) {
-                    if (!eventBinding.getSchemaName().equalsIgnoreCase(schemaName)) {
-                        continue;
-                    }
-                }
-
-                // 如果需要检查表名，则检查
-                if (eventBinding.isCheckTableName()) {
-                    if (!eventBinding.getTableName().equalsIgnoreCase(tableName)) {
-                        continue;
-                    }
-                }
-
-                // 如果需要检查canal事件类型，则检查
-                if (eventBinding.isCheckEventType()) {
-                    if (eventBinding.getEventType() != eventType) {
-                        continue;
-                    }
-                }
-            }
-
-            // 通过所有检查，发布事件
-            try {
-                databaseEvent = genDatabaseEvent(eventBinding.getDatabaseEventClass(), entry, rowChange);
-            } catch (Exception e) {
-                log.error("创建spring event失败，取消发布数据库事件", e);
-                return;
-            }
-            try {
-                applicationEventPublisher.publishEvent(databaseEvent);
-            } catch (Exception e) {
-                log.error("业务逻辑处理异常，请检查并手动处理事件。", e);
-                log.error("事件详细：");
-                log.error(JsonFormat.printToString(entry));
-                log.error(JsonFormat.printToString(rowChange));
-            }
-        }
-    }
-
-    private DatabaseEvent genDatabaseEvent(Class<? extends DatabaseEvent> databaseEventClass, Entry entry, RowChange rowChange)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        DatabaseEvent databaseEvent = databaseEventClass.getConstructor(Entry.class, RowChange.class).newInstance(entry, rowChange);
-        databaseEvent.setEntry(entry);
-        databaseEvent.setRowChange(rowChange);
-        return databaseEvent;
-    }
-
-    /**
-     * 添加事件监听，过滤重复事件
-     */
-    public void addEventListener(String schemaName, String tableName, EventType canalEventType, Class<? extends DatabaseEvent> databaseEventClass) {
-        Assert.notNull(databaseEventClass, "databaseEventClass 不能为null");
-
-        EventBinding.Builder builder = new EventBinding.Builder().setDatabaseEventClass(databaseEventClass);
-        if (StringUtils.isNotBlank(schemaName)) {
-            builder.setSchemaName(schemaName);
-        }
-        if (StringUtils.isNotBlank(tableName)) {
-            builder.setTableName(tableName);
-        }
-        if (canalEventType != null) {
-            builder.setEventType(canalEventType);
-        }
-        if (this.eventBindings == null) {
-            this.eventBindings = new HashSet<>();
-        }
-        EventBinding eventBinding = builder.build();
-        this.eventBindings.add(eventBinding);
-        log.info("注册数据库事件：{}，总注册了{}个事件", databaseEventClass, this.eventBindings.size());
     }
 
     @Override
